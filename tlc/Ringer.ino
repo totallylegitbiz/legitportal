@@ -1,5 +1,5 @@
 
-extern class Ringer {
+class Ringer {
    public:
     void setup() {
       Serial.print("set...");

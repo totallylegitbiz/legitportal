@@ -33,12 +33,12 @@ void setup() {
 
 }
 
-
 void loop() {
+  
   int button1State = digitalRead(BUTTON1_PIN);
   float pot1Percent = (float) analogRead(POT1_PIN) / 1024;
   
-  int cycleMs = 1 * 1000;
+  int cycleMs = 5 * 1000;
   int offset = millis() % cycleMs;
   
   float basePercent = (float) offset / cycleMs;
