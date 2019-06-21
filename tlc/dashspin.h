@@ -1,11 +1,12 @@
 
-extern class Dashspin {
+class Dashspin {
    public:
     void setup() {
       Serial.print("set...");
     }
 
     void loop(CRGB cleds[NUM_LEDS], float basePercent) {
+
 
       float widthPercent = .15;
       int dashNum = 1;

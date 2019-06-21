@@ -1,8 +1,11 @@
+#define NUM_LEDS 150
+
 #include <FastLED.h>
 #include <math.h>
-#include "tlc/Ringer.ino"
+#include "dashspin.h"
+
 #define LED_PIN 13
-#define NUM_LEDS 150
+
 #define POT1_PIN 0
 #define BUTTON1_PIN 12
 #define DEBUG 1
@@ -26,7 +29,7 @@ void setup() {
   
 //  tlc.setup();
 
-//  dashspin.set();
+//  dashspin.setup(NUM_LEDS);
 
 }
 
@@ -43,8 +46,6 @@ void loop() {
   CRGB cleds[NUM_LEDS];
 
   dashspin.loop(cleds, basePercent);
-  
-//  tlc.loop(cleds, basePercent);
   
   for (int i = 0; i < NUM_LEDS; i++) {  
     leds[i] = cleds[i];
