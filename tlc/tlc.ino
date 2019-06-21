@@ -3,6 +3,7 @@
 #include <FastLED.h>
 #include <math.h>
 #include "dashspin.h"
+#include "gamma.h";
 
 #define LED_PIN 13
 
@@ -34,26 +35,15 @@ void loop() {
 
   velocity = (pot1Percent-.5) * 500;
   
-  Serial.print("velocity...");
-  Serial.print(velocity);
-  Serial.print("\n");
-  
   int cycleMs = 5 * 1000;
   
   int nextOffset = velocity + offset;
 
-  if (nextOffset >= 0) {
+  if (nextOffset > 0) {
      offset = nextOffset % cycleMs;
   } else {
      offset = cycleMs - (nextOffset % cycleMs);
   }
-  
-
- 
-
-  Serial.print("offset...");
-  Serial.print(offset);
-  Serial.print("\n");
   
   float basePercent = (float) offset / cycleMs;
   
@@ -62,7 +52,9 @@ void loop() {
   dashspin.loop(cleds, basePercent);
   
   for (int i = 0; i < NUM_LEDS; i++) {  
-    leds[i] = cleds[i];
+    leds[i].r = pgm_read_byte(&gamma8[cleds[i].r]);
+    leds[i].g = pgm_read_byte(&gamma8[cleds[i].g]);
+    leds[i].b = pgm_read_byte(&gamma8[cleds[i].b]);
   }
 
   FastLED.show();

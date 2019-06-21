@@ -8,8 +8,8 @@ class Dashspin {
     void loop(CRGB cleds[NUM_LEDS], float basePercent) {
 
 
-      float widthPercent = .15;
-      int dashNum = 1;
+      float widthPercent = .10;
+      int dashNum = 3;
 
       int dashOffset = dashNum;
       float ledWidth = widthPercent * NUM_LEDS;
