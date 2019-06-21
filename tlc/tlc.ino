@@ -11,21 +11,22 @@
 #define BUTTON1_PIN 12
 #define DEBUG 1
 
+#define GAMMA 0
+
 CRGB leds[NUM_LEDS];
 
 //TotallyLegitController tlc;
-Dashspin dashspin;
+Dashspin dashspin(20, .05);
 
 int offset = 0;
 int velocity = 0;
 
 void setup() {
   FastLED.addLeds<WS2812, LED_PIN, GRB>(leds, NUM_LEDS);
-  Serial.begin(9600);
-  Serial.print("Starting...");
+//  Serial.begin(9600);
+//  Serial.print("Starting...");
 
-  pinMode(BUTTON1_PIN, INPUT);
-  
+  pinMode(BUTTON1_PIN, INPUT); 
 }
 
 void loop() {
@@ -52,9 +53,13 @@ void loop() {
   dashspin.loop(cleds, basePercent);
   
   for (int i = 0; i < NUM_LEDS; i++) {  
+    #if GAMMA
     leds[i].r = pgm_read_byte(&gamma8[cleds[i].r]);
     leds[i].g = pgm_read_byte(&gamma8[cleds[i].g]);
     leds[i].b = pgm_read_byte(&gamma8[cleds[i].b]);
+    #else
+    leds[i] = cleds[i];
+    #endif
   }
 
   FastLED.show();
