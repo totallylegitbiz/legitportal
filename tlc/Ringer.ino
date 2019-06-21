@@ -1,5 +1,5 @@
 
-class Ringer {
+extern class Ringer {
    public:
     void setup() {
       Serial.print("set...");
@@ -13,11 +13,8 @@ class Ringer {
       int dashOffset = dashNum;
       float ledWidth = widthPercent * NUM_LEDS;
     
-     
       for (int i = 0; i < NUM_LEDS; i++) {
         cleds[i] =  CHSV(0, 255, 255); 
        }
-
-      
     }
 };
