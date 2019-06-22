@@ -16,7 +16,7 @@
 CRGB leds[NUM_LEDS];
 
 //TotallyLegitController tlc;
-Dashspin dashspin(20, .05);
+Dashspin dashspin(2, .03);
 
 int offset = 0;
 int velocity = 0;
@@ -30,13 +30,18 @@ void setup() {
 }
 
 void loop() {
-  
+
+  int MAX_VELOCITY = 250;
   int button1State = digitalRead(BUTTON1_PIN);
-  float pot1Percent = (float) analogRead(POT1_PIN) / 1024;
+  float pot1Percent = 1-(float) analogRead(POT1_PIN) / 1024;
 
   CRGB cleds[NUM_LEDS];
   
-  velocity = (pot1Percent-.5) * 500;
+  velocity = (pot1Percent-.5) * MAX_VELOCITY;
+
+  if (velocity > MAX_VELOCITY) {
+    velocity = MAX_VELOCITY;
+  }
   
   int cycleMs = 5 * 1000;
   
@@ -47,6 +52,8 @@ void loop() {
   } else {
      offset = cycleMs - (nextOffset % cycleMs);
   }
+
+//  offset = (1-pot1Percent) * cycleMs;
   
   float basePercent = (float) offset / cycleMs;
  

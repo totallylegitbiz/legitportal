@@ -13,10 +13,10 @@ class Dashspin {
 
     void loop(CRGB cleds[NUM_LEDS], float basePercent) {
 
-     Serial.print("loop\n");
-     Serial.print(":_ledWidth:");
-     Serial.print(_ledWidth);
-     Serial.print("\n");
+//     Serial.print("loop\n");
+//     Serial.print(":_ledWidth:");
+//     Serial.print(_ledWidth);
+//     Serial.print("\n");
 
       int intensityMap[_ledWidth];
 
@@ -63,9 +63,8 @@ class Dashspin {
             + 
             ((float)intensityFloor * activeLedPercent);
 
-          int colorOffset = -1 * floor(offset);
-          int offSetHue = colorOffset;
-          cleds[activePixel] = CHSV(hue, 255,intensity);
+  
+          cleds[activePixel] = CHSV(offset+hue, 255,intensity);
           
         }
       }
