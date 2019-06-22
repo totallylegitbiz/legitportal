@@ -34,6 +34,8 @@ void loop() {
   int button1State = digitalRead(BUTTON1_PIN);
   float pot1Percent = (float) analogRead(POT1_PIN) / 1024;
 
+  CRGB cleds[NUM_LEDS];
+  
   velocity = (pot1Percent-.5) * 500;
   
   int cycleMs = 5 * 1000;
@@ -47,9 +49,7 @@ void loop() {
   }
   
   float basePercent = (float) offset / cycleMs;
-  
-  CRGB cleds[NUM_LEDS];
-
+ 
   dashspin.loop(cleds, basePercent);
   
   for (int i = 0; i < NUM_LEDS; i++) {  
