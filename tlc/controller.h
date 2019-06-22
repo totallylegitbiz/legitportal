@@ -13,7 +13,7 @@ class TotallyLegitController {
       int dashOffset = dashNum;
       float ledWidth = widthPercent * NUM_LEDS;
     
-     
+
       for (int i = 0; i < NUM_LEDS; i++) {
         int hue = (float)i/NUM_LEDS * 255;
 

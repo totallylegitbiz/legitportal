@@ -16,10 +16,10 @@
 CRGB leds[NUM_LEDS];
 
 //TotallyLegitController tlc;
-Dashspin dashspin(2, .03);
+Dashspin dashspin1(2, .03);
 
 int offset = 0;
-int velocity = 0;
+float velocity = 0;
 
 void setup() {
   FastLED.addLeds<WS2812, LED_PIN, GRB>(leds, NUM_LEDS);
@@ -31,7 +31,9 @@ void setup() {
 
 void loop() {
 
-  int MAX_VELOCITY = 250;
+  int cycleSteps = NUM_LEDS * 1024;
+  float MAX_VELOCITY = NUM_LEDS / 2;
+  
   int button1State = digitalRead(BUTTON1_PIN);
   float pot1Percent = 1-(float) analogRead(POT1_PIN) / 1024;
 
@@ -43,21 +45,17 @@ void loop() {
     velocity = MAX_VELOCITY;
   }
   
-  int cycleMs = 5 * 1000;
-  
   int nextOffset = velocity + offset;
 
   if (nextOffset > 0) {
-     offset = nextOffset % cycleMs;
+     offset = nextOffset % cycleSteps;
   } else {
-     offset = cycleMs - (nextOffset % cycleMs);
+     offset = cycleSteps - (nextOffset % cycleSteps);
   }
-
-//  offset = (1-pot1Percent) * cycleMs;
   
-  float basePercent = (float) offset / cycleMs;
+  float basePercent = (float) offset / cycleSteps;
  
-  dashspin.loop(cleds, basePercent);
+  dashspin1.loop(cleds, basePercent);
   
   for (int i = 0; i < NUM_LEDS; i++) {  
     #if GAMMA
@@ -72,3 +70,45 @@ void loop() {
   FastLED.show();
  
 }
+
+
+
+//struct DFData {
+
+/*
+struct DFData {
+  char* name;
+  byte dirCode;
+  int val1;
+  int val2;
+  int val3;
+  void print() {
+    Serial.print(F("{\""));
+    Serial.print(name);
+    Serial.print(F("\", 0x"));
+    if (dirCode < 16) {
+      Serial.write('0');
+    }
+    Serial.print(dirCode, HEX);
+    Serial.print(F(", "));
+    Serial.print(val1);
+    Serial.print(F(", "));
+    Serial.print(val2);
+    Serial.print(F(", "));
+    Serial.print(val3);
+    Serial.println(F("},"));
+  }
+} dfData[] = {
+  {"NAME1", 0x07, 10, 1, 58},
+  {"NAME2", 0x08, 7, 3, 20},
+  {"NAME3", 0x09, 12, 6, 12},
+};
+
+void setup() {
+  Serial.begin(250000);
+  for (byte i = 0; i < sizeof(dfData) / sizeof(dfData[0]); i++) {
+    dfData[i].print();
+  }
+}
+void loop() {}
+*/

@@ -32,11 +32,12 @@ class Dashspin {
 
         intensityMap[i] = intensity;
 
-
       }
       
-      float offset = basePercent * NUM_LEDS;
- 
+//      float offset = basePercent * NUM_LEDS;
+      float offset = basePercent * NUM_LEDS*10;
+      float realOffst = basePercent * NUM_LEDS;
+      
       for (int j = 0; j < _dashCount; j++) {
        
         int dashOffset = ((float) j / _dashCount) * NUM_LEDS;
@@ -50,12 +51,11 @@ class Dashspin {
             continue;
           }
 
-          int hue = (float) activeLed / NUM_LEDS * 255;
+          int hue = (float) (activeLed + realOffst) / NUM_LEDS * 255;
 
           int intensityFloor = intensityMap[i];
           int intensityCeil = intensityMap[i+1];
   
-           
           int activePixel = floor(activeLed);
 
           int intensity = 
@@ -63,8 +63,8 @@ class Dashspin {
             + 
             ((float)intensityFloor * activeLedPercent);
 
-  
-          cleds[activePixel] = CHSV(offset+hue, 255,intensity);
+          
+          cleds[activePixel] = CHSV(hue  % 255, 255,intensity);
           
         }
       }
