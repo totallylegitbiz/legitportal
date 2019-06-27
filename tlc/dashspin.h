@@ -2,22 +2,18 @@
 class Dashspin {
    private:
     int _dashCount;
-    float _dashWidthPercent;
-    int _ledWidth;
+    
    public:
     Dashspin(int dashCount, float dashWidthPercent) {
       _dashCount = dashCount;
-      _dashWidthPercent = dashWidthPercent;
-      _ledWidth = dashWidthPercent * NUM_LEDS;
     }
 
-    void loop(CRGB cleds[NUM_LEDS], float basePercent) {
+    void loop(CRGB cleds[NUM_LEDS], float basePercent, float twoPercent) {
 
-//     Serial.print("loop\n");
-//     Serial.print(":_ledWidth:");
-//     Serial.print(_ledWidth);
-//     Serial.print("\n");
 
+      float dashWidthPercent = twoPercent * 1/_dashCount;
+      int _ledWidth = dashWidthPercent * NUM_LEDS;
+      
       int intensityMap[_ledWidth];
 
       for (int i = 0; i < NUM_LEDS; i++) {
@@ -35,9 +31,10 @@ class Dashspin {
       }
       
 //      float offset = basePercent * NUM_LEDS;
-      float offset = basePercent * NUM_LEDS*10;
+      float offset = basePercent  * NUM_LEDS * 100;
       float realOffst = basePercent * NUM_LEDS;
-      
+
+ 
       for (int j = 0; j < _dashCount; j++) {
        
         int dashOffset = ((float) j / _dashCount) * NUM_LEDS;
@@ -64,7 +61,7 @@ class Dashspin {
             ((float)intensityFloor * activeLedPercent);
 
           
-          cleds[activePixel] = CHSV(hue  % 255, 255,intensity);
+          cleds[activePixel] = CHSV(hue  % 255, 0,intensity);
           
         }
       }
