@@ -2,6 +2,8 @@
 
 #include <FastLED.h>
 #include <math.h>
+
+#include "controller.h"
 #include "dashspin.h"
 #include "gamma.h"
 
@@ -40,12 +42,12 @@ float velocity = 0;
 float percent[2] = { .5, .5 };
 int lastButtonState[2] = { 0, 0 };
 
-struct RGB {
-  float percent[2]
-  int fields[EFFECT_FIELDS]
-  int buttonMode[2]
+struct InputState {
+  float percent[2];
+  int fields[EFFECT_FIELDS];
+  int buttonMode[2];
+  int buttonState[2];
 };
-
 
 void setup() {
   FastLED.addLeds<WS2812, LED_PIN, GRB>(leds, NUM_LEDS);
@@ -58,36 +60,43 @@ void setup() {
 
 void loop() {
 
-  CRGB cleds[NUM_LEDS];
+  int VELOCITY_POT = 0;
+  int EFFECT_POT = 1;
+  
+  CRGB cleds[2][NUM_LEDS];
   
   int buttonState[2] = {    
     digitalRead(BUTTON0_PIN), 
     digitalRead(BUTTON1_PIN)
   };
 
-  int buttonMode[2] = { 0, 0 };
+  float potPercent[2] = {
+    1-(float) analogRead(POT0_PIN) / 1024,
+    1-(float) analogRead(POT1_PIN) / 1024
+  };
   
+  int buttonMode[2] = { 0, 0 };
+
   for (int i = 0; i < 2; i++) {
     if (buttonState[i] != lastButtonState[i]) {
       lastButtonState[i] = buttonState[i];
       buttonMode[i] = buttonState[i];
-    }
-  }
+    };
+  };
   
   float potPercent[2] = {
     1-(float) analogRead(POT0_PIN) / 1024,
     1-(float) analogRead(POT1_PIN) / 1024
   };
 
-
-
-  
-  if (velocity > MAX_VELOCITY) {
-    velocity = MAX_VELOCITY /2;
-  }
-  
+  float velocity = (potPercent[VELOCITY_POT]-.5) * 500;
   int nextOffset = velocity + offset;
 
+  int effectCnt = sizeof(effectConfig);
+//  float effectPosition = (effectCnt - 1) * potPercent[EFFECT_POT];
+  int effectPosition = effectCnt * potPercent[EFFECT_POT];
+
+  // TODO(jorgelo): This could probably be done in one line.
   if (nextOffset > 0) {
      offset = nextOffset % cycleSteps;
   } else {
@@ -96,8 +105,7 @@ void loop() {
   
   float basePercent = (float) offset / cycleSteps;
 
-  
-  dashspin1.loop(cleds, basePercent,secondPercent);
+//  dashspin1.loop(cleds, basePercent,secondPercent);
   
   for (int i = 0; i < NUM_LEDS; i++) {  
     #if GAMMA
