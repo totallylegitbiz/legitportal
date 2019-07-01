@@ -28,8 +28,7 @@ float MAX_VELOCITY = NUM_LEDS;
 #define EFFECT_TYPE_DASHPIN 0
 
 int effectConfig[][EFFECT_FIELDS] = {
-  {EFFECT_TYPE_DASHPIN, 1}
-};
+    {EFFECT_TYPE_DASHPIN, 1}};
 
 TotallyLegitController tlc;
 //Dashspin dashspin1(1, .1);
@@ -39,89 +38,92 @@ int mode = 0;
 float velocity = 0;
 
 // Current state
-float percent[2] = { .5, .5 };
-int lastButtonState[2] = { 0, 0 };
+float percent[2] = {.5, .5};
+int lastButtonState[2] = {0, 0};
 
-struct InputState {
+struct InputState
+{
   float percent[2];
   int fields[EFFECT_FIELDS];
   int buttonMode[2];
   int buttonState[2];
 };
 
-void setup() {
+void setup()
+{
   FastLED.addLeds<WS2812, LED_PIN, GRB>(leds, NUM_LEDS);
   Serial.begin(9600);
   Serial.print("Starting...");
 
-  pinMode(BUTTON0_PIN, INPUT); 
-  pinMode(BUTTON1_PIN, INPUT); 
+  pinMode(BUTTON0_PIN, INPUT);
+  pinMode(BUTTON1_PIN, INPUT);
 }
 
-void loop() {
+void loop()
+{
 
   int VELOCITY_POT = 0;
   int EFFECT_POT = 1;
-  
+
   CRGB cleds[2][NUM_LEDS];
-  
-  int buttonState[2] = {    
-    digitalRead(BUTTON0_PIN), 
-    digitalRead(BUTTON1_PIN)
-  };
+
+  int buttonState[2] = {
+      digitalRead(BUTTON0_PIN),
+      digitalRead(BUTTON1_PIN)};
 
   float potPercent[2] = {
-    1-(float) analogRead(POT0_PIN) / 1024,
-    1-(float) analogRead(POT1_PIN) / 1024
-  };
-  
-  int buttonMode[2] = { 0, 0 };
+      1 - (float)analogRead(POT0_PIN) / 1024,
+      1 - (float)analogRead(POT1_PIN) / 1024};
 
-  for (int i = 0; i < 2; i++) {
-    if (buttonState[i] != lastButtonState[i]) {
+  int buttonMode[2] = {0, 0};
+
+  for (int i = 0; i < 2; i++)
+  {
+    if (buttonState[i] != lastButtonState[i])
+    {
       lastButtonState[i] = buttonState[i];
       buttonMode[i] = buttonState[i];
     };
   };
-  
-  float potPercent[2] = {
-    1-(float) analogRead(POT0_PIN) / 1024,
-    1-(float) analogRead(POT1_PIN) / 1024
-  };
 
-  float velocity = (potPercent[VELOCITY_POT]-.5) * 500;
+  float potPercent[2] = {
+      1 - (float)analogRead(POT0_PIN) / 1024,
+      1 - (float)analogRead(POT1_PIN) / 1024};
+
+  float velocity = (potPercent[VELOCITY_POT] - .5) * 500;
   int nextOffset = velocity + offset;
 
   int effectCnt = sizeof(effectConfig);
-//  float effectPosition = (effectCnt - 1) * potPercent[EFFECT_POT];
+  //  float effectPosition = (effectCnt - 1) * potPercent[EFFECT_POT];
   int effectPosition = effectCnt * potPercent[EFFECT_POT];
 
   // TODO(jorgelo): This could probably be done in one line.
-  if (nextOffset > 0) {
-     offset = nextOffset % cycleSteps;
-  } else {
-     offset = cycleSteps - (nextOffset % cycleSteps);
+  if (nextOffset > 0)
+  {
+    offset = nextOffset % cycleSteps;
   }
-  
-  float basePercent = (float) offset / cycleSteps;
+  else
+  {
+    offset = cycleSteps - (nextOffset % cycleSteps);
+  }
 
-//  dashspin1.loop(cleds, basePercent,secondPercent);
-  
-  for (int i = 0; i < NUM_LEDS; i++) {  
-    #if GAMMA
+  float basePercent = (float)offset / cycleSteps;
+
+  //  dashspin1.loop(cleds, basePercent,secondPercent);
+
+  for (int i = 0; i < NUM_LEDS; i++)
+  {
+#if GAMMA
     leds[i].r = pgm_read_byte(&gamma8[cleds[i].r]);
     leds[i].g = pgm_read_byte(&gamma8[cleds[i].g]);
     leds[i].b = pgm_read_byte(&gamma8[cleds[i].b]);
-    #else
+#else
     leds[i] = cleds[i];
-    #endif
+#endif
   }
 
   FastLED.show();
- 
 }
-
-
 
 //struct DFData {
 
