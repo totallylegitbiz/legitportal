@@ -3,6 +3,7 @@
 #include <FastLED.h>
 #include <math.h>
 
+#include "util.h"
 #include "controller.h"
 #include "dashspin.h"
 #include "gamma.h"
@@ -17,7 +18,7 @@
 
 #define DEBUG 1
 
-#define GAMMA 0
+#define GAMMA 1
 
 CRGB leds[NUM_LEDS];
 
@@ -31,7 +32,7 @@ int effectConfig[][EFFECT_FIELDS] = {
     {EFFECT_TYPE_DASHPIN, 1}};
 
 TotallyLegitController tlc;
-//Dashspin dashspin1(1, .1);
+Dashspin dashspin1(1, .1);
 
 int offset = 0;
 int mode = 0;
@@ -40,14 +41,6 @@ float velocity = 0;
 // Current state
 float percent[2] = {.5, .5};
 int lastButtonState[2] = {0, 0};
-
-struct InputState
-{
-  float percent[2];
-  int fields[EFFECT_FIELDS];
-  int buttonMode[2];
-  int buttonState[2];
-};
 
 void setup()
 {
@@ -86,13 +79,13 @@ void loop()
     };
   };
 
-  float potPercent[2] = {
-      1 - (float)analogRead(POT0_PIN) / 1024,
-      1 - (float)analogRead(POT1_PIN) / 1024};
-
   float velocity = (potPercent[VELOCITY_POT] - .5) * 500;
   int nextOffset = velocity + offset;
 
+  Serial.print("velocity");
+  Serial.print(velocity);
+  Serial.print("\n");
+  
   int effectCnt = sizeof(effectConfig);
   //  float effectPosition = (effectCnt - 1) * potPercent[EFFECT_POT];
   int effectPosition = effectCnt * potPercent[EFFECT_POT];
@@ -109,58 +102,28 @@ void loop()
 
   float basePercent = (float)offset / cycleSteps;
 
-  //  dashspin1.loop(cleds, basePercent,secondPercent);
+  InputState inputState = {
+    {potPercent[0], potPercent[1]},
+//    buttonMode,
+//    buttonState
+  };
+   
+  
+
+  dashspin1.loop(cleds[0], &inputState);
 
   for (int i = 0; i < NUM_LEDS; i++)
   {
-#if GAMMA
-    leds[i].r = pgm_read_byte(&gamma8[cleds[i].r]);
-    leds[i].g = pgm_read_byte(&gamma8[cleds[i].g]);
-    leds[i].b = pgm_read_byte(&gamma8[cleds[i].b]);
-#else
-    leds[i] = cleds[i];
-#endif
+    #if GAMMA
+      leds[i].r = pgm_read_byte(&gamma8[cleds[0][i].r]);
+      leds[i].g = pgm_read_byte(&gamma8[cleds[0][i].g]);
+      leds[i].b = pgm_read_byte(&gamma8[cleds[0][i].b]);
+      Serial.print(leds[i].r);
+      Serial.print("\n");
+    #else
+      leds[i] = cleds[i];
+    #endif
   }
 
   FastLED.show();
 }
-
-//struct DFData {
-
-/*
-struct DFData {
-  char* name;
-  byte dirCode;
-  int val1;
-  int val2;
-  int val3;
-  void print() {
-    Serial.print(F("{\""));
-    Serial.print(name);
-    Serial.print(F("\", 0x"));
-    if (dirCode < 16) {
-      Serial.write('0');
-    }
-    Serial.print(dirCode, HEX);
-    Serial.print(F(", "));
-    Serial.print(val1);
-    Serial.print(F(", "));
-    Serial.print(val2);
-    Serial.print(F(", "));
-    Serial.print(val3);
-    Serial.println(F("},"));
-  }
-} dfData[] = {
-  {"NAME1", 0x07, 10, 1, 58},
-  {"NAME2", 0x08, 7, 3, 20},
-  {"NAME3", 0x09, 12, 6, 12},
-};
-
-void setup() {
-  Serial.begin(250000);
-  for (byte i = 0; i < sizeof(dfData) / sizeof(dfData[0]); i++) {
-    dfData[i].print();
-  }
-}
-void loop() {}
-*/
