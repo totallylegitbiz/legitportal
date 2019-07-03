@@ -1,0 +1,6 @@
+{
+    "terminal.integrated.env.osx": {
+        "PATH": "/Users/jorge/.platformio/penv/bin:/Users/jorge/.platformio/penv:/Users/jorge/.nvm/versions/node/v10.15.3/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/jorge/Library/Android/sdk/platform-tools:/Users/jorge/Library/Android/sdk/tools/bin",
+        "PLATFORMIO_CALLER": "vscode"
+    }
+}
