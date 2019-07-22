@@ -4,15 +4,7 @@
 #include <printf.h>
 #include <FastLED.h>
 
-#define RECEIVER 1
-#define TRANSMITTER 2
-
 // Config
-
-#ifndef TYPE
-#error "Set TYPE!"
-#endif
-
 #define RED_LED_PIN 2
 #define GREEN_LED_PIN 3
 #define BLUE_LED_PIN 4
@@ -30,10 +22,7 @@ void blink(int pin)
   digitalWrite(pin, LOW);
 }
 
-// bool radioNumber = 1;
-
-//create an RF24 object
-RF24 radio(7, 8); // CE, CSN
+RF24 radio(7, 8); // CE, CSN pins
 
 //address through which two modules communicate.
 const byte address[6] = "00001";
@@ -53,7 +42,6 @@ void setup()
 
   Serial.begin(9600);
   radio.begin();
-
   // radio.setDataRate(RF24_250KBPS);
   radio.setPALevel(RF24_PA_MIN);
   radio.setAutoAck(false);
@@ -61,78 +49,74 @@ void setup()
   radio.disableDynamicPayloads();
   radio.setRetries(15, 15);
 
-#if TYPE == RECEIVER
-
-  digitalWrite(LED_BUILTIN, LOW);
-  Serial.println("RECEIVER");
   radio.openReadingPipe(0, address);
-
-  // radio.disableDynamicPayloads();
-  // radio.setAutoAck(true);
-  // radio.setRetries(15, 15);
-
-  //Set module as receiver
-  radio.startListening();
-#endif
-
-#if TYPE == TRANSMITTER
-  Serial.println("TRANSMITTER");
-  digitalWrite(LED_BUILTIN, HIGH);
-  // radio.disableDynamicPayloads();
-  // radio.setAutoAck(false);
-  // radio.setRetries(15, 15);
-
-  //set the address
   radio.openWritingPipe(address);
 
-  // radio.setPALevel(RF24_PA_MIN);
-  radio.stopListening();
-  // radio.printDetails();
-#endif
+  radio.startListening();
 
   printf_begin();
   radio.printDetails();
 
   Serial.println("READY!");
+  randomSeed(analogRead(0));
 }
 
+int pingOffset = 3000;
+bool lastOffset = pingOffset;
+int lastRecievedOffset = 0;
 void loop()
 {
-#if TYPE == RECEIVER
-  //Read the data if available in buffer
+
+  const long time = millis();
+
+  const int offset = time % pingOffset;
+
+  if (offset < lastOffset)
+  {
+    // Do the thing.
+    int pingOffset = random(1 * 1000, 3 * 1000);
+    radio.stopListening();
+    delay(100);
+    blink(GREEN_LED_PIN);
+
+    char newOffset[] = "supyo";
+    bool ok = radio.write(&newOffset, sizeof(newOffset));
+
+    if (ok)
+    {
+      Serial.print("sent: ");
+      Serial.println(newOffset);
+      blink(BLUE_LED_PIN);
+    }
+    else
+    {
+      Serial.println("failed...");
+      blink(RED_LED_PIN);
+    }
+
+    radio.startListening();
+  }
+  lastOffset = offset;
+
   if (radio.available())
   {
-    char text[32] = "";
-    radio.read(&text, sizeof(text));
-    Serial.println(text);
+    char nextOffset[32] = "";
+    radio.read(&nextOffset, sizeof(nextOffset));
+    Serial.print("GOT: ");
+    Serial.println(nextOffset);
     blink(GREEN_LED_PIN);
   }
 
-#endif
-
-#if TYPE == TRANSMITTER
-  //Send message to receiver
-  const char text[] = "Hello World";
-  bool ok = radio.write(&text, sizeof(text));
-
-  if (ok)
-  {
-    Serial.println("sent..");
-    blink(BLUE_LED_PIN);
-  }
-  else
-  {
-    Serial.println("failed...");
-
-    blink(RED_LED_PIN);
-  }
-
-  delay(250);
-#endif
-
   for (int i = 0; i < NUM_LEDS; i++)
   {
-    leds[i] = CHSV(50, 100, 100);
+    if (i < NUM_LEDS * offset / pingOffset)
+    {
+      leds[i] = CHSV(50, 100, 100);
+    }
+    else
+    {
+      leds[i] = CHSV(0, 200, 100);
+    }
   }
 
   FastLED.show();
