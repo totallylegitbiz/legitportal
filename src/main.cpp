@@ -61,25 +61,31 @@ void setup()
   randomSeed(analogRead(0));
 }
 
-int pingOffset = 3000;
-bool lastOffset = pingOffset;
+int pingIntervalMs = 3000;
+bool pingLastOffset = pingIntervalMs;
+
+int effectLoopIntervalMs = 5000;
+bool effectLoopLastOffset = effectLoopIntervalMs;
+
 int lastRecievedOffset = 0;
+int effectLoopClockOffset = 0;
+
 void loop()
 {
 
-  const long time = millis();
+  // This is the ping loop
+  const int pingOffset = millis() % pingIntervalMs;
 
-  const int offset = time % pingOffset;
-
-  if (offset < lastOffset)
+  if (pingOffset < pingLastOffset)
   {
-    // Do the thing.
-    int pingOffset = random(1 * 1000, 3 * 1000);
+    // This happenes every ping interval;
+    pingIntervalMs = random(1 * 1000, 3 * 1000); // Let's randomize it.
+
     radio.stopListening();
-    delay(100);
     blink(GREEN_LED_PIN);
 
-    char newOffset[] = "supyo";
+    int newOffset = (millis() + effectLoopClockOffset) % effectLoopIntervalMs;
+
     bool ok = radio.write(&newOffset, sizeof(newOffset));
 
     if (ok)
@@ -95,29 +101,45 @@ void loop()
     }
 
     radio.startListening();
-  }
-  lastOffset = offset;
 
-  if (radio.available())
-  {
-    char nextOffset[32] = "";
-    radio.read(&nextOffset, sizeof(nextOffset));
-    Serial.print("GOT: ");
-    Serial.println(nextOffset);
     blink(GREEN_LED_PIN);
   }
 
-  for (int i = 0; i < NUM_LEDS; i++)
+  if (radio.available())
   {
-    if (i < NUM_LEDS * offset / pingOffset)
-    {
-      leds[i] = CHSV(50, 100, 100);
-    }
-    else
-    {
-      leds[i] = CHSV(0, 200, 100);
-    }
+    int nextEffectOffset;
+    radio.read(&nextEffectOffset, sizeof(nextEffectOffset));
+    Serial.print("nextEffectOffset: ");
+    Serial.println(nextEffectOffset);
+
+    int nextEffectLoopClockOffset = nextEffectOffset - (millis() % effectLoopIntervalMs);
+
+    //  TODO(jorgelo): Some logic here incase the drift is too great.
+    effectLoopClockOffset = nextEffectLoopClockOffset;
+
+    Serial.print("effectLoopClockOffset: ");
+    Serial.println(effectLoopClockOffset);
+
+    blink(GREEN_LED_PIN);
   }
 
+  // Effect stuff
+
+  const int effectLoopOffset = (millis() + effectLoopClockOffset) % effectLoopIntervalMs;
+  const float effectLoopOffsetPercent = float(effectLoopOffset) / effectLoopIntervalMs;
+
+  for (int i = 0; i < NUM_LEDS; i++)
+  {
+    // if (i < (NUM_LEDS * effectLoopOffsetPercent))
+    // {
+    //   leds[i] = CHSV(50, 100, 100);
+    // }
+    // else
+    // {
+
+    // }
+
+    leds[i] = CHSV(effectLoopOffsetPercent * 255, 255, 100);
+  }
   FastLED.show();
 }
