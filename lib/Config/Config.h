@@ -8,9 +8,9 @@ const int BLUE_LED_PIN = 4;
 
 // // LED strip control pin
 const int LED_PIN = 6;
-const int LED_CNT = 104;
-const int LED_OFFSET = 25;
+const unsigned int LED_CNT = 104;
+const unsigned int LED_OFFSET = 25;
 
 // Effect Loop config
-const int EFFECT_LOOP_MS = 60 * 1000;
+const unsigned int EFFECT_LOOP_MS = 60 * 1000;
 #endif

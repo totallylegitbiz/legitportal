@@ -1,6 +1,8 @@
-#include <SPI.h>
+// #include <SPI.h>
 #include <Config.h>
 #include <Effects.h>
+
+EffectState currentEffectState;
 
 void setup()
 {
@@ -18,10 +20,9 @@ int effectLoopClockOffset = 0;
 void loop()
 {
 
-  // EFFECT_LOOP_MS
+  currentEffectState.loopPosition = millis() % EFFECT_LOOP_MS;
 
-  const int loopPosition = millis() % EFFECT_LOOP_MS;
-  effectLoop(loopPosition);
+  effectLoop(&currentEffectState);
 
   // const int effectLoopOffset = (millis() + effectLoopClockOffset) % effectLoopIntervalMs;
   // const float effectLoopOffsetPercent = float(effectLoopOffset) / effectLoopIntervalMs;

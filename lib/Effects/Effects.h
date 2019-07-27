@@ -1,12 +1,11 @@
-// #include <FastLED.h>
-#include <LEDStrip.h>
 
-// This is what is actually
-CRGB leds[LED_CNT];
+#include <LEDStrip.h>
+#include <EffectTypes.h>
+#include <Effects/All.h>
 
 void zeroOutStrip()
 {
-    for (int i = 0; i < LED_CNT + LED_OFFSET; i++)
+    for (int i = 0; i < LED_CNT + LED_OFFSET - 1; i++)
     {
         cleds[i] = CRGB(0, 0, 0);
     }
@@ -29,17 +28,9 @@ void copyLedsWithOffset()
 }
 
 // EFFECT_LOOP_MS
-void effectLoop(int loopPosition)
+void effectLoop(struct EffectState *effectState)
 {
-    for (int i = 0; i < LED_CNT; i++)
-    {
-        leds[i] = CRGB(0, 255, 0);
-    }
+    spinEffectLoop(effectState);
 
     copyLedsWithOffset();
-    // FastLED.show();
 }
-
-// void effectExample(*CRGB cleds)
-// {
-// }
