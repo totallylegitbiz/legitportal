@@ -1,64 +1,12 @@
 #include <SPI.h>
-#include <nRF24L01.h>
-#include <RF24.h>
-#include <printf.h>
-#include <FastLED.h>
-
-// Config
-#define RED_LED_PIN 2
-#define GREEN_LED_PIN 3
-#define BLUE_LED_PIN 4
-
-#define LED_PIN 6
-const int NUM_LEDS = 40;
-
-// LED stuff
-CRGB leds[NUM_LEDS];
-
-void blink(int pin)
-{
-  digitalWrite(pin, HIGH);
-  delay(50);
-  digitalWrite(pin, LOW);
-}
-
-RF24 radio(7, 8); // CE, CSN pins
+#include <Config.h>
 
 //address through which two modules communicate.
-const byte address[6] = "00001";
 
 void setup()
 {
-  FastLED.addLeds<WS2812, LED_PIN, GRB>(leds, NUM_LEDS);
-
-  pinMode(RED_LED_PIN, OUTPUT);
-  pinMode(GREEN_LED_PIN, OUTPUT);
-  pinMode(BLUE_LED_PIN, OUTPUT);
-  pinMode(LED_BUILTIN, OUTPUT);
-
-  blink(RED_LED_PIN);
-  blink(GREEN_LED_PIN);
-  blink(BLUE_LED_PIN);
 
   Serial.begin(9600);
-  radio.begin();
-  // radio.setDataRate(RF24_250KBPS);
-  // // radio.setPALevel(RF24_PA_MAX);
-  radio.setAutoAck(false);
-  // radio.setAutoAck(true);
-  radio.disableDynamicPayloads();
-  radio.setRetries(15, 15);
-
-  radio.openReadingPipe(0, address);
-  radio.openWritingPipe(address);
-
-  radio.startListening();
-
-  printf_begin();
-  radio.printDetails();
-
-  Serial.println("READY!");
-  randomSeed(analogRead(0));
 }
 
 int pingIntervalMs = 3000;
@@ -128,9 +76,9 @@ void loop()
   const int effectLoopOffset = (millis() + effectLoopClockOffset) % effectLoopIntervalMs;
   const float effectLoopOffsetPercent = float(effectLoopOffset) / effectLoopIntervalMs;
 
-  for (int i = 0; i < NUM_LEDS; i++)
+  for (int i = 0; i < LED_CNT; i++)
   {
-    // if (i < (NUM_LEDS * effectLoopOffsetPercent))
+    // if (i < (LED_CNT * effectLoopOffsetPercent))
     // {
     //   leds[i] = CHSV(50, 100, 100);
     // }
