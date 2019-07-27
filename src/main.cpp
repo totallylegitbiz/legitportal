@@ -10,7 +10,7 @@
 #define BLUE_LED_PIN 4
 
 #define LED_PIN 6
-const int NUM_LEDS = 10;
+const int NUM_LEDS = 40;
 
 // LED stuff
 CRGB leds[NUM_LEDS];
@@ -43,7 +43,7 @@ void setup()
   Serial.begin(9600);
   radio.begin();
   // radio.setDataRate(RF24_250KBPS);
-  radio.setPALevel(RF24_PA_MIN);
+  // // radio.setPALevel(RF24_PA_MAX);
   radio.setAutoAck(false);
   // radio.setAutoAck(true);
   radio.disableDynamicPayloads();
@@ -139,7 +139,7 @@ void loop()
 
     // }
 
-    leds[i] = CHSV(effectLoopOffsetPercent * 255, 255, 100);
+    leds[i] = CHSV(effectLoopOffsetPercent * 255, 255, 70);
   }
   FastLED.show();
 }
