@@ -4,6 +4,7 @@
 #include <printf.h>
 #include <RF24.h>
 
+//address through which two modules communicate.
 const byte address[6] = "00001";
 
 int pingIntervalMs = 3000;
