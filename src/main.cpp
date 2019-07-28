@@ -1,6 +1,7 @@
 #include <SPI.h>
 #include <Config.h>
 #include <Effects.h>
+#include <Transmitter.h>
 
 EffectState currentEffectState;
 
@@ -14,6 +15,8 @@ void setup()
 
   pinMode(EFFECT_BUTTON_PIN, INPUT);
   digitalWrite(EFFECT_BUTTON_PIN, HIGH);
+
+  transmitterSetup();
 }
 
 int effectLoopIntervalMs = 5000;
@@ -38,6 +41,10 @@ void loop()
   lastButtonState = currentButtonState;
 
   currentEffectState.loopPosition = millis() % EFFECT_LOOP_MS;
+
+  // Let's deal with transmission stuff;
+
+  // transmitterLoop(&currentEffectState);
 
   effectLoop(&currentEffectState);
 

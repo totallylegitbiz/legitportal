@@ -10,7 +10,7 @@ CRGB leds[LED_CNT];
 typedef struct EffectState
 {
     unsigned int loopPosition = 0;
-    int activeEffect = 0;
+    unsigned int activeEffect = 0;
 };
 
 #endif

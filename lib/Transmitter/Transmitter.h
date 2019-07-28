@@ -7,8 +7,8 @@
 //address through which two modules communicate.
 const byte address[6] = "00001";
 
-int pingIntervalMs = 3000;
-bool pingLastOffset = pingIntervalMs;
+int pingIntervalMs = 3000;            // How often will we ping.
+bool pingLastOffset = pingIntervalMs; // Time since last ping;
 
 RF24 radio(7, 8); // CE, CSN pins
 
@@ -31,16 +31,12 @@ void setupStatusLED()
     blink(BLUE_LED_PIN);
 }
 
-void transmitterSetup()
-{
-    setupStatusLED();
-}
-
 void radioSetup()
 {
+
     radio.begin();
     // radio.setDataRate(RF24_250KBPS);
-    radio.setPALevel(RF24_PA_MAX);
+    radio.setPALevel(RF24_PA_MIN);
     radio.setAutoAck(false);
     // radio.setAutoAck(true);
     radio.disableDynamicPayloads();
@@ -58,57 +54,68 @@ void radioSetup()
     randomSeed(analogRead(0));
 }
 
-void transmitterLoop()
+void transmitterSetup()
 {
-    // This is the ping loop
-    // const int pingOffset = millis() % pingIntervalMs;
-
-    // if (pingOffset < pingLastOffset)
-    // {
-    //     // This happenes every ping interval;
-    //     pingIntervalMs = random(1 * 1000, 3 * 1000); // Let's randomize it.
-
-    //     radio.stopListening();
-    //     blink(GREEN_LED_PIN);
-
-    //     int newOffset = (millis() + effectLoopClockOffset) % effectLoopIntervalMs;
-
-    //     bool ok = radio.write(&newOffset, sizeof(newOffset));
-
-    //     if (ok)
-    //     {
-    //         Serial.print("sent: ");
-    //         Serial.println(newOffset);
-    //         blink(BLUE_LED_PIN);
-    //     }
-    //     else
-    //     {
-    //         Serial.println("failed...");
-    //         blink(RED_LED_PIN);
-    //     }
-
-    //     radio.startListening();
-
-    //     blink(GREEN_LED_PIN);
-    // }
-
-    // if (radio.available())
-    // {
-    //     int nextEffectOffset;
-    //     radio.read(&nextEffectOffset, sizeof(nextEffectOffset));
-    //     Serial.print("nextEffectOffset: ");
-    //     Serial.println(nextEffectOffset);
-
-    //     int nextEffectLoopClockOffset = nextEffectOffset - (millis() % effectLoopIntervalMs);
-
-    //     //  TODO(jorgelo): Some logic here incase the drift is too great.
-    //     effectLoopClockOffset = nextEffectLoopClockOffset;
-
-    //     Serial.print("effectLoopClockOffset: ");
-    //     Serial.println(effectLoopClockOffset);
-
-    //     blink(GREEN_LED_PIN);
-    // }
-
-    // Effect stuff
+    setupStatusLED();
+    radioSetup();
 }
+
+EffectState nextEffectState;
+
+void transmitterLoop(struct EffectState *effectState)
+{
+
+    const int pingOffset = millis() % pingIntervalMs;
+
+    if (pingOffset < pingLastOffset)
+    {
+
+        Serial.print("WE BE BROADCASTING");
+        // We are broadcasting our data.
+
+        pingIntervalMs = random(1 * 1000, 3 * 1000); // Let's randomize it.
+
+        radio.stopListening(); // Stop the radio for a hot second.
+        blink(GREEN_LED_PIN);
+
+        bool ok = radio.write(&effectState, sizeof(effectState));
+
+        if (ok)
+        {
+            Serial.println("sent.");
+            // Serial.println(effectState);
+            // blink(BLUE_LED_PIN);
+        }
+        else
+        {
+            Serial.println("failed...");
+            // blink(RED_LED_PIN);
+        }
+
+        radio.startListening();
+
+        // blink(GREEN_LED_PIN);
+    }
+    else if (radio.available())
+    {
+
+        radio.read(&nextEffectState, sizeof(nextEffectState));
+        Serial.print("nextEffectState.:loopPosition:");
+        Serial.println(nextEffectState.loopPosition);
+
+        // int nextEffectLoopClockOffset = nextEffectState - (millis() % effectLoopIntervalMs);
+
+        // //  TODO(jorgelo): Some logic here incase the drift is too great.
+        // effectLoopClockOffset = nextEffectLoopClockOffset;
+
+        // Serial.print("effectLoopClockOffset: ");
+        // Serial.println(effectLoopClockOffset);
+
+        // blink(GREEN_LED_PIN);
+    }
+}
+
+// EffectState getTransmitterEffectState()
+// {
+//     return nextEffectState;
+// }
