@@ -2,7 +2,7 @@
 #include <EffectTypes.h>
 #include <Effects/All.h>
 
-const int EFFECT_CNT = 2;
+const int EFFECT_CNT = 3;
 
 int effectLoopClockOffset = 0;
 
@@ -38,18 +38,36 @@ void copyLedsWithOffset()
 //     }
 // }
 
+void recievedStatusEffect()
+{
+    for (int i = 0; i < LED_CNT; i++)
+    {
+        leds[i] = BlackLightFluorescent;
+    }
+    copyLedsWithOffset();
+    delay(50);
+}
+
 // EFFECT_LOOP_MS
 void effectLoop(struct EffectState *effectState)
 {
 
     switch (effectState->activeEffect)
     {
-    case 1:
-        spinEffectLoop(effectState);
+    case 255: // This is the loading one.
+        throbEffectLoop(effectState, 0);
         break;
     case 0:
-        strobeEffectLoop(effectState);
+        spinEffectLoop(effectState);
         break;
+    case 1:
+        strobeEffectLoop(effectState, CRGB(0, 0, 0), CRGB(100, 100, 100), 100);
+        break;
+    case 2:
+        strobeEffectLoop(effectState, CRGB(255, 0, 0), CRGB(0, 0, 255), 100);
+        break;
+    default:
+        Serial.println("Please set effect count correctly");
     }
 
     copyLedsWithOffset();

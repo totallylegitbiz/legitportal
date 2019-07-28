@@ -1,31 +1,14 @@
 #include <SPI.h>
 #include <Config.h>
 #include <Effects.h>
+EffectState currentEffectState;
 #include <Transmitter.h>
 
-EffectState currentEffectState;
-
-boolean lastButtonState = 0; // Default is not pressed.
-
+bool lastButtonState = false; // Default is not pressed.
 int lastRecievedOffset = 0;
 
-void setup()
+void setButtonState()
 {
-
-  Serial.begin(9600);
-  effectSetup();
-
-  pinMode(EFFECT_BUTTON_PIN, INPUT);
-  digitalWrite(EFFECT_BUTTON_PIN, HIGH);
-
-  transmitterSetup();
-
-  Serial.println("@@ SETUP COMPLETE");
-}
-
-void loop()
-{
-
   // Button Logic
   boolean currentButtonState = !digitalRead(EFFECT_BUTTON_PIN);
 
@@ -35,16 +18,43 @@ void loop()
     Serial.println("Click");
 
     currentEffectState.activeEffect = (currentEffectState.activeEffect + 1) % EFFECT_CNT;
-    transmitEffectState(&currentEffectState);
+
+    transmitEffectState(&currentEffectState); // Force a transmission loop
   }
 
   lastButtonState = currentButtonState;
+}
 
-  //
+void setup()
+{
+
+  Serial.begin(9600);
+  randomSeed(analogRead(0));
+
+  effectSetup();
+
+  pinMode(EFFECT_BUTTON_PIN, INPUT);
+  digitalWrite(EFFECT_BUTTON_PIN, HIGH);
+
+  transmitterSetup();
+
+  Serial.print("### SETUP COMPLETE for transmitter id: ");
+  Serial.println(currentEffectState.transmitterId);
+}
+
+void loop()
+{
   currentEffectState.loopPosition = (millis() + effectLoopClockOffset) % EFFECT_LOOP_MS;
 
-  // Let's deal with transmission stuff;
+  if (hasGottenSync)
+  {
+    // Button doesn't work until we get button sync
+    setButtonState();
+  }
 
-  transmitterLoop(&currentEffectState);
+  // Let's check for a new effect loop
+  transmitterReceiveLoop(&currentEffectState);
+  transmitterTransmitLoop(&currentEffectState);
+
   effectLoop(&currentEffectState);
 }
