@@ -1,14 +1,19 @@
-// #include <SPI.h>
+#include <SPI.h>
 #include <Config.h>
 #include <Effects.h>
 
 EffectState currentEffectState;
+
+boolean lastButtonState = 0; // Default is not pressed.
 
 void setup()
 {
 
   Serial.begin(9600);
   effectSetup();
+
+  pinMode(EFFECT_BUTTON_PIN, INPUT);
+  digitalWrite(EFFECT_BUTTON_PIN, HIGH);
 }
 
 int effectLoopIntervalMs = 5000;
@@ -19,6 +24,18 @@ int effectLoopClockOffset = 0;
 
 void loop()
 {
+
+  // Button Logic
+  boolean currentButtonState = !digitalRead(EFFECT_BUTTON_PIN);
+
+  if (lastButtonState && currentButtonState != lastButtonState)
+  {
+    // BUTTON WAS CLICKED
+    Serial.println("Click");
+
+    currentEffectState.activeEffect = (currentEffectState.activeEffect + 1) % EFFECT_CNT;
+  }
+  lastButtonState = currentButtonState;
 
   currentEffectState.loopPosition = millis() % EFFECT_LOOP_MS;
 

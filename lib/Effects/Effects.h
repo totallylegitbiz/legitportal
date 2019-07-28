@@ -1,7 +1,8 @@
-
 #include <LEDStrip.h>
 #include <EffectTypes.h>
 #include <Effects/All.h>
+
+const int EFFECT_CNT = 2;
 
 void zeroOutStrip()
 {
@@ -27,10 +28,27 @@ void copyLedsWithOffset()
     FastLED.show();
 }
 
+// void effectClearLeds()
+// {
+//     for (int i = 0; i < LED_CNT; i++)
+//     {
+//         leds[i] = BlackLightFluorescent;
+//     }
+// }
+
 // EFFECT_LOOP_MS
 void effectLoop(struct EffectState *effectState)
 {
-    spinEffectLoop(effectState);
+
+    switch (effectState->activeEffect)
+    {
+    case 0:
+        strobeEffectLoop(effectState);
+        break;
+    case 1:
+        spinEffectLoop(effectState);
+        break;
+    }
 
     copyLedsWithOffset();
 }
