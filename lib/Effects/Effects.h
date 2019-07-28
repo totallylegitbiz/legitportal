@@ -4,6 +4,8 @@
 
 const int EFFECT_CNT = 2;
 
+int effectLoopClockOffset = 0;
+
 void zeroOutStrip()
 {
     for (int i = 0; i < LED_CNT + LED_OFFSET - 1; i++)

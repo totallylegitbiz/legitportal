@@ -64,7 +64,40 @@ void transmitterSetup()
     radioSetup();
 }
 
-// unsigned int effectLoopClockOffset = 0;
+void transmitEffectState(struct EffectState *effectState)
+{
+    Serial.print("WE BE BROADCASTING");
+    // We are broadcasting our data.
+
+    pingIntervalMs = random(1 * 1000, 3 * 1000); // Let's randomize it.
+
+    radio.stopListening(); // Stop the radio for a hot second.
+    // blink(GREEN_LED_PIN);
+
+    EffectState objEffectState(*effectState);
+
+    // bool ok = radio.write(&effectState, sizeof(effectState));
+    bool ok = radio.write(&objEffectState, sizeof(objEffectState));
+
+    Serial.print("Sending: ");
+    Serial.println(objEffectState.loopPosition);
+    Serial.println(objEffectState.activeEffect);
+    if (ok)
+    {
+        Serial.println("sent.");
+        // Serial.println(effectState);
+        // blink(BLUE_LED_PIN);
+    }
+    else
+    {
+        Serial.println("failed...");
+        // blink(RED_LED_PIN);
+    }
+
+    radio.startListening();
+
+    // blink(GREEN_LED_PIN);
+}
 
 void transmitterLoop(struct EffectState *effectState)
 {
@@ -72,37 +105,7 @@ void transmitterLoop(struct EffectState *effectState)
 
     if (pingOffset < pingLastOffset)
     {
-
-        Serial.print("WE BE BROADCASTING");
-        // We are broadcasting our data.
-
-        pingIntervalMs = random(1 * 1000, 3 * 1000); // Let's randomize it.
-
-        radio.stopListening(); // Stop the radio for a hot second.
-        blink(GREEN_LED_PIN);
-
-        EffectState objEffectState(*effectState);
-
-        // bool ok = radio.write(&effectState, sizeof(effectState));
-        bool ok = radio.write(&objEffectState, sizeof(objEffectState));
-
-        Serial.print("Sending: ");
-        Serial.println(objEffectState.loopPosition);
-        if (ok)
-        {
-            Serial.println("sent.");
-            // Serial.println(effectState);
-            // blink(BLUE_LED_PIN);
-        }
-        else
-        {
-            Serial.println("failed...");
-            // blink(RED_LED_PIN);
-        }
-
-        radio.startListening();
-
-        // blink(GREEN_LED_PIN);
+        transmitEffectState(effectState);
     }
 
     if (radio.available())
@@ -111,8 +114,12 @@ void transmitterLoop(struct EffectState *effectState)
         radio.read(&nextEffectState, sizeof(nextEffectState));
         Serial.print("nextEffectState.:loopPosition:");
         Serial.println(nextEffectState.loopPosition);
+        Serial.print("nextEffectState.:loopPosition:");
+        Serial.println(nextEffectState.loopPosition);
 
         int nextEffectLoopClockOffset = nextEffectState.loopPosition - (millis() % EFFECT_LOOP_MS);
+
+        effectState->activeEffect = nextEffectState.activeEffect;
 
         // //  TODO(jorgelo): Some logic here incase the drift is too great.
         effectLoopClockOffset = nextEffectLoopClockOffset;

@@ -7,6 +7,8 @@ EffectState currentEffectState;
 
 boolean lastButtonState = 0; // Default is not pressed.
 
+int lastRecievedOffset = 0;
+
 void setup()
 {
 
@@ -21,12 +23,6 @@ void setup()
   Serial.println("@@ SETUP COMPLETE");
 }
 
-// int effectLoopIntervalMs = 5000;
-// bool effectLoopLastOffset = effectLoopIntervalMs;
-
-int lastRecievedOffset = 0;
-unsigned int effectLoopClockOffset = 0;
-
 void loop()
 {
 
@@ -39,7 +35,9 @@ void loop()
     Serial.println("Click");
 
     currentEffectState.activeEffect = (currentEffectState.activeEffect + 1) % EFFECT_CNT;
+    transmitEffectState(&currentEffectState);
   }
+
   lastButtonState = currentButtonState;
 
   //

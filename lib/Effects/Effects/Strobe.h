@@ -23,13 +23,15 @@
 
 void strobeEffectLoop(struct EffectState *effectState)
 {
-    const unsigned int loopMs = 1000;
+    const unsigned int loopMs = 10000;
     const unsigned int loopPosition = effectState->loopPosition % loopMs;
 
-    const int avgPosition = (loopPosition / 10) * 10;
+    const float loopPercent = float(loopPosition) / loopMs;
+
+    const int hue = floor((loopPercent * 255) / 5) * 5;
 
     for (int i = 0; i < LED_CNT; i++)
     {
-        leds[i] = CHSV(avgPosition, 255, 50);
+        leds[i] = CHSV(hue, 255, 50);
     }
 }
