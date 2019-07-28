@@ -9,7 +9,11 @@ const int BLUE_LED_PIN = 4;
 // // LED strip control pin
 const int LED_PIN = 6;
 const unsigned int LED_CNT = 104;
-const unsigned int LED_OFFSET = 25;
+const unsigned int LED_OFFSET = 0; //25;
+
+// RADIO
+const int RADIO_CE_PIN = 7;
+const int RADIO_CSN_PIN = 8;
 
 // EFFECT BUTTON
 const int EFFECT_BUTTON_PIN = 9;

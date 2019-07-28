@@ -42,11 +42,11 @@ void effectLoop(struct EffectState *effectState)
 
     switch (effectState->activeEffect)
     {
-    case 0:
-        strobeEffectLoop(effectState);
-        break;
     case 1:
         spinEffectLoop(effectState);
+        break;
+    case 0:
+        strobeEffectLoop(effectState);
         break;
     }
 

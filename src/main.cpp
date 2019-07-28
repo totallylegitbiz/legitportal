@@ -17,13 +17,15 @@ void setup()
   digitalWrite(EFFECT_BUTTON_PIN, HIGH);
 
   transmitterSetup();
+
+  Serial.println("@@ SETUP COMPLETE");
 }
 
-int effectLoopIntervalMs = 5000;
-bool effectLoopLastOffset = effectLoopIntervalMs;
+// int effectLoopIntervalMs = 5000;
+// bool effectLoopLastOffset = effectLoopIntervalMs;
 
 int lastRecievedOffset = 0;
-int effectLoopClockOffset = 0;
+unsigned int effectLoopClockOffset = 0;
 
 void loop()
 {
@@ -40,29 +42,11 @@ void loop()
   }
   lastButtonState = currentButtonState;
 
-  currentEffectState.loopPosition = millis() % EFFECT_LOOP_MS;
+  //
+  currentEffectState.loopPosition = (millis() + effectLoopClockOffset) % EFFECT_LOOP_MS;
 
   // Let's deal with transmission stuff;
 
-  // transmitterLoop(&currentEffectState);
-
+  transmitterLoop(&currentEffectState);
   effectLoop(&currentEffectState);
-
-  // const int effectLoopOffset = (millis() + effectLoopClockOffset) % effectLoopIntervalMs;
-  // const float effectLoopOffsetPercent = float(effectLoopOffset) / effectLoopIntervalMs;
-
-  // for (int i = 0; i < LED_CNT; i++)
-  // {
-  //   // if (i < (LED_CNT * effectLoopOffsetPercent))
-  //   // {
-  //   //   leds[i] = CHSV(50, 100, 100);
-  //   // }
-  //   // else
-  //   // {
-
-  //   // }
-
-  //   leds[i] = CHSV(effectLoopOffsetPercent * 255, 255, 70);
-  // }
-  // FastLED.show();
 }
