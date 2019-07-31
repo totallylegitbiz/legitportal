@@ -5,6 +5,7 @@
 // const int RED_LED_PIN = 2;
 // const int GREEN_LED_PIN = 3;
 // const int BLUE_LED_PIN = 4;
+const boolean DIAGNOSTIC_MODE = true;
 
 const int RED_LED_PIN = A0;
 const int GREEN_LED_PIN = A1;
@@ -36,3 +37,9 @@ const int EFFECT_BUTTON_PIN = 6;
 // Effect Loop config
 const unsigned int EFFECT_LOOP_MS = 60 * 1000;
 #endif
+
+/*
+
+
+
+ */
