@@ -8,9 +8,13 @@
 //address through which two modules communicate.
 const byte address[6] = "00001";
 
-const unsigned int pingIntervalMs = random(500, 1500); // How often will we ping.
-unsigned long pingLastPingMs = 0;                      // Time of the last ping
+const unsigned int pingIntervalMin = 500;
+const unsigned int pingIntervalMax = 1000;
+unsigned int pingIntervalMs = random(pingIntervalMin, pingIntervalMax); // How often will we ping.
+unsigned long pingLastPingMs = 0;                                       // Time of the last ping
 unsigned long dataLastReceived = 0;
+const unsigned int txFailureResetMs = 10 * 1000; // After 10 seconds of failures, reset
+unsigned long lastSuccessfulTx = 0;
 
 RF24 radio(RADIO_CE_PIN, RADIO_CSN_PIN); // CE, CSN pins
 EffectState nextEffectState;
@@ -45,7 +49,7 @@ void radioSetup()
     radio.setDataRate(RF24_250KBPS);
     radio.setPALevel(RF24_PA_MIN);
     radio.setAutoAck(false);
-    // radio.setAutoAck(true);
+
     radio.disableDynamicPayloads();
     radio.setRetries(15, 15);
 
@@ -65,7 +69,7 @@ void radioSetup()
 
 void transmitterSetId()
 {
-    currentEffectState.transmitterId = random(0, 255);
+    currentEffectState.transmitterId = random(1, 65535);
 }
 
 void transmitterSetup()
@@ -78,12 +82,11 @@ void transmitterSetup()
     setupStatusLED();
     radioSetup();
 }
+void (*resetFunc)(void) = 0;
 
 void transmitEffectState(struct EffectState *effectState)
 {
     // We are broadcasting our data.
-
-    // pingIntervalMs = random(1 * 1000, 3 * 1000); // Let's randomize it.
 
     radio.stopListening(); // Stop the radio for a hot second.
     // blink(GREEN_LED_PIN);
@@ -93,27 +96,40 @@ void transmitEffectState(struct EffectState *effectState)
     // bool ok = radio.write(&effectState, sizeof(effectState));
     bool ok = radio.write(&objEffectState, sizeof(objEffectState));
 
+    Serial.print("TX ");
     Serial.print(effectState->transmitterId);
-    Serial.print(" -> * loopPosition");
+    Serial.print(" -> * loopPosition: ");
     Serial.print(objEffectState.loopPosition);
     Serial.print(" activeEffect: ");
     Serial.print(objEffectState.activeEffect);
+
+    pingIntervalMs = random(pingIntervalMin, pingIntervalMax);
 
     if (ok)
     {
         Serial.println(": sent");
         // Serial.println(effectState);
         // blink(BLUE_LED_PIN);
+        pingLastPingMs = millis(); // Successfully sent..
+        lastSuccessfulTx = millis();
     }
     else
     {
-        Serial.println("; failed");
+        Serial.println(": failed!!!!");
+        recievedStatusEffect(BlackLightFluorescent, 250);
+        pingLastPingMs = millis() + (pingIntervalMs * 2); // Delay for another two intervals;
         // blink(RED_LED_PIN);
+
+        if (millis() > lastSuccessfulTx + txFailureResetMs)
+        {
+            resetFunc();
+        }
     }
 
     radio.startListening();
 
-    pingLastPingMs = millis();
+    pingIntervalMs = random(pingIntervalMin, pingIntervalMax);
+
     // blink(GREEN_LED_PIN);
 }
 
@@ -122,11 +138,21 @@ void transmitterReceiveLoop(struct EffectState *effectState)
 
     if (radio.available())
     {
-        hasGottenSync = true; // We got a sync!
+
         radio.read(&nextEffectState, sizeof(nextEffectState));
 
+        if (nextEffectState.transmitterId == 0)
+        {
+            // Somehow we have an invalid transmitterId, ignore it.
+            Serial.println("Ignoring invalid transmission ");
+
+            return;
+        }
+
+        hasGottenSync = true; // We got a sync!
         int nextEffectLoopClockOffset = nextEffectState.loopPosition - (millis() % EFFECT_LOOP_MS);
 
+        Serial.print("RX ");
         Serial.print(nextEffectState.transmitterId);
         Serial.print(" -> ");
         Serial.print(effectState->transmitterId);
@@ -141,7 +167,7 @@ void transmitterReceiveLoop(struct EffectState *effectState)
         {
             // This is from me, ignore it.
             Serial.print("Ignoring my own relayed transmssion. Diff: ");
-            Serial.println(nextEffectLoopClockOffset - effectLoopClockOffset);
+            Serial.println(effectLoopClockOffset - nextEffectLoopClockOffset);
             return;
         }
 
@@ -155,11 +181,6 @@ void transmitterReceiveLoop(struct EffectState *effectState)
 
         // We gotta relay this only if it differs from our ac
 
-        if (shouldRelay)
-        {
-            transmitEffectState(effectState);
-        }
-
         // //  TODO(jorgelo): Some logic here incase the drift is too great.
         effectLoopClockOffset = nextEffectLoopClockOffset;
 
@@ -169,6 +190,11 @@ void transmitterReceiveLoop(struct EffectState *effectState)
         // blink(GREEN_LED_PIN);
 
         dataLastReceived = millis();
+
+        if (shouldRelay)
+        {
+            transmitEffectState(effectState);
+        }
     }
 
     if (!hasGottenSync && millis() > syncTimeout)
@@ -186,23 +212,18 @@ void transmitterReceiveLoop(struct EffectState *effectState)
 void transmitterTransmitLoop(struct EffectState *effectState)
 {
 
-    const bool isDataFresh = millis() > dataLastReceived + pingIntervalMs;
-    const bool withinPingInterval = millis() > (pingIntervalMs + pingLastPingMs);
-    const bool shouldPing = withinPingInterval && isDataFresh;
+    const unsigned int dataGracePeriod = pingIntervalMs * 3;
 
-    if (withinPingInterval && !isDataFresh)
-    {
-        Serial.println("data is stale.");
-    }
+    const bool isWithinGracePeriod = millis() < dataLastReceived + dataGracePeriod;
+    const bool isDataFresh = millis() < (dataLastReceived + pingIntervalMax);
+    const bool isWithinPingInterval = millis() > (pingIntervalMs + pingLastPingMs);
 
-    // Serial.print("Should ping? ");
-    // Serial.println(shouldPing);
-    // Serial.print("millis() ");
-    // Serial.println(millis());
-    // Serial.print("pingLastPingMs");
-    // Serial.println(pingLastPingMs);
-    // Serial.print("pingIntervalMs");
-    // Serial.println(pingIntervalMs);
+    const bool shouldPing = isWithinPingInterval && (isDataFresh || !isWithinGracePeriod);
+
+    // if (!isDataFresh)
+    // {
+    //     Serial.println("Has stale data...");
+    // }
 
     if (hasGottenSync && shouldPing)
     {

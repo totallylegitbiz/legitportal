@@ -12,7 +12,7 @@ typedef struct EffectState
     unsigned int loopPosition = 0;
     unsigned int activeEffect = 0;
     unsigned int transmitterId = 0;
-    unsigned int sourceTransmitterId = 0;
+    int16_t sourceTransmitterId = 0;
 };
 
 #endif
