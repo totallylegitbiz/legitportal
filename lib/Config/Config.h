@@ -39,7 +39,6 @@ const unsigned int EFFECT_LOOP_MS = 60 * 1000;
 #endif
 
 /*
-
 D12 -> RF24 MISO 
 D11 -> RF24 MOSI
 D10 - RF24 CSN
@@ -68,4 +67,14 @@ A7 -
 5V - 
 GND -
 VIN - 
+
+
+
+
+LIST TO CHECK
+ - RF2F Pin - CHECK
+ - Pwr in
+ - DIP
+ - LED OUT
+ - Pulse Sensor ( 5v? )
  */
