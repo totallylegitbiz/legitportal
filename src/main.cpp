@@ -69,8 +69,11 @@ void diagnoticModeLoop()
   Serial.print("DIP: ");
   Serial.println(getDipValue());
 
+  Serial.println("LIGHTSTRIP LED: red");
   recievedStatusEffect(CRGB(255, 0, 0), 500);
+  Serial.println("LIGHTSTRIP LED: green");
   recievedStatusEffect(CRGB(0, 255, 0), 500);
+  Serial.println("LIGHTSTRIP LED: blue");
   recievedStatusEffect(CRGB(0, 0, 255), 500);
 
   analogWrite(RED_LED_PIN, 255);

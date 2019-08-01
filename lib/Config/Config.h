@@ -40,6 +40,27 @@ const unsigned int EFFECT_LOOP_MS = 60 * 1000;
 
 /*
 
+MISO connects to pin 12 of the NANO
+
+MOSI connects to pin 11 of the NANO
+
+SCK  connects to pin 13 of the NANO
+
+CE connects to pin 9 of the NANO
+
+CSN connects to pin 10 of the NANO
+
+D13 -> RF24 SCK
+D12 -> RF24 MISO 
+D11 -> RF24 MOSI
+D10 - RF24 CSN
+D9 -> RF24 CE
+D8 -
+D6 - 
+D5 - 
+D5 - 
+D5 - 
+D5 - 
 
 
  */
