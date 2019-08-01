@@ -1,0 +1,39 @@
+*Pick And Place List
+*Company=
+*Author=
+*eMail=
+*
+*Project=TLCv1
+*Date=10:28:09
+*CreatedBy=Fritzing 0.9.3b.04.19.5c895d327c44a3114e5fcc9d8260daf0cbb52806
+*
+*
+*Coordinates in mm, always center of component
+*Origin 0/0=Lower left corner of PCB
+*Rotation in degree (0-360, math. pos.)
+*
+*No;Value;Package;X;Y;Rotation;Side;Name
+1;;;54.9425;-24.7644;0;Bottom;Via7
+2;;;50.6753;-15.6205;0;Bottom;Via1
+3;;THT;58.296;-17.4385;0;Bottom;nRF24L01
+4;220;THT;18.799;-16.1685;90;Bottom;R3
+5;;molex-1x3_lock;46.612;-16.1685;-90;Bottom;Sensor ->
+6;;molex-1x2_lock;27.562;-5.75448;180;Bottom;Pwr Swtch
+7;;;34.2161;-10.1341;0;Bottom;Via5
+8;;molex-1x3_lock;44.199;-5.88148;180;Bottom;LED Strip
+9;;;28.9505;-31.4085;90;Bottom;Nano
+10;;molex-1x2_lock;19.942;-5.75448;180;Bottom;Power 5-12v
+11;;dipswitch-04;58.207;-35.1621;90;Bottom;Config
+12;220;THT;8.63899;-16.1685;90;Bottom;R1
+13;;;53.242;-1.4656;0;Bottom;TXT2
+14;;THT;3.55899;-31.4085;0;Bottom;J2
+15;;;20.1953;-35.7372;0;Bottom;Via2
+16;;;7.39372;-31.47;0;Bottom;Via3
+17;;molex-1x2_lock;35.182;-5.75448;180;Bottom;Effect Toggle
+18;;5 mm [THT];6.48291;-6.00848;0;Bottom;<-- Status
+19;;THT;56.899;-6.00848;90;Bottom;5v or 3.3v
+20;;cpol-radial-100uf-25v;28.959;-14.8986;-90;Bottom;100uf
+21;;;29.3278;-42.3136;0;Bottom;TXT1
+22;;;25.0721;-16.2301;0;Bottom;Via6
+23;220;THT;13.719;-13.6285;90;Bottom;R2
+24;;;22.6337;-1.5997;0;Bottom;Via4
