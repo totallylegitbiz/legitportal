@@ -161,8 +161,6 @@ void transmitterReceiveLoop(struct EffectState *effectState)
         Serial.print(" activeEffect: ");
         Serial.println(nextEffectState.activeEffect);
 
-        // recievedStatusEffect();
-
         if (nextEffectState.sourceTransmitterId == effectState->transmitterId)
         {
             // This is from me, ignore it.
@@ -172,22 +170,14 @@ void transmitterReceiveLoop(struct EffectState *effectState)
         }
 
         // We only relay if the activeEffect has changed or the souce changed;
-
-        bool shouldRelay = effectState->activeEffect != nextEffectState.activeEffect || effectState->sourceTransmitterId != nextEffectState.sourceTransmitterId;
+        bool shouldRelay = effectState->shouldRelay && (effectState->activeEffect != nextEffectState.activeEffect || effectState->sourceTransmitterId != nextEffectState.sourceTransmitterId);
 
         // Copy over the state to our local state.
         effectState->activeEffect = nextEffectState.activeEffect;
         effectState->sourceTransmitterId = nextEffectState.sourceTransmitterId;
 
-        // We gotta relay this only if it differs from our ac
-
-        // //  TODO(jorgelo): Some logic here incase the drift is too great.
+        //  TODO(jorgelo): Some logic here incase the drift is too great.
         effectLoopClockOffset = nextEffectLoopClockOffset;
-
-        // Serial.print("effectLoopClockOffset: ");
-        // Serial.println(effectLoopClockOffset);
-
-        // blink(GREEN_LED_PIN);
 
         dataLastReceived = millis();
 

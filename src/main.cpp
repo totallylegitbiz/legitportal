@@ -63,41 +63,28 @@ unsigned int getDipValue()
 
   return !d0 + (!d1 * 2) + (!d2 * 4) + (!d3 * 8);
 }
+
 void diagnoticModeLoop()
 {
 
   Serial.print("DIP: ");
   Serial.println(getDipValue());
 
-  Serial.println("LIGHTSTRIP LED: red");
+  Serial.println("RED");
+  analogWrite(RED_LED_PIN, 255);
   recievedStatusEffect(CRGB(255, 0, 0), 500);
-  Serial.println("LIGHTSTRIP LED: green");
+
+  analogWrite(RED_LED_PIN, 0);
+  analogWrite(BLUE_LED_PIN, 0);
+
+  Serial.println("RED");
+  analogWrite(GREEN_LED_PIN, 255);
   recievedStatusEffect(CRGB(0, 255, 0), 500);
-  Serial.println("LIGHTSTRIP LED: blue");
+  analogWrite(GREEN_LED_PIN, 0);
+
+  Serial.println("BLUE");
+  analogWrite(BLUE_LED_PIN, 255);
   recievedStatusEffect(CRGB(0, 0, 255), 500);
-
-  analogWrite(RED_LED_PIN, 255);
-  Serial.println("STATUS LED: red");
-  delay(500);
-
-  Serial.println("STATUS LED: green");
-  analogWrite(RED_LED_PIN, 0);
-  analogWrite(GREEN_LED_PIN, 255);
-  delay(500);
-
-  Serial.println("STATUS LED: blue");
-  analogWrite(GREEN_LED_PIN, 0);
-  analogWrite(BLUE_LED_PIN, 255);
-  delay(500);
-
-  Serial.println("STATUS LED: white");
-  analogWrite(RED_LED_PIN, 255);
-  analogWrite(GREEN_LED_PIN, 255);
-  analogWrite(BLUE_LED_PIN, 255);
-  delay(500);
-
-  analogWrite(RED_LED_PIN, 0);
-  analogWrite(GREEN_LED_PIN, 0);
   analogWrite(BLUE_LED_PIN, 0);
 }
 

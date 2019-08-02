@@ -13,6 +13,7 @@ typedef struct EffectState
     unsigned int activeEffect = 0;
     unsigned int transmitterId = 0;
     int16_t sourceTransmitterId = 0;
+    bool shouldRelay = 0;
 };
 
 #endif
