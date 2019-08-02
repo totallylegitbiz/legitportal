@@ -10,4 +10,4 @@ list:
 watch-sketch:
 	onchange --await-write-finish 2000 sketches/TLCv1.fzz -- git commit -m "Auto Save" sketches/TLCv1.fzz
 default:
-	echo SDFASD
+	echo Sup.

@@ -1,11 +1,7 @@
 #ifndef INC_CONFIG
 #define INC_CONFIG
 
-// Pins for RGB status leds
-// const int RED_LED_PIN = 2;
-// const int GREEN_LED_PIN = 3;
-// const int BLUE_LED_PIN = 4;
-const boolean DIAGNOSTIC_MODE = true;
+const bool DIAGNOSTIC_MODE = false;
 
 const int RED_LED_PIN = A0;
 const int GREEN_LED_PIN = A1;
@@ -35,46 +31,19 @@ const int RADIO_CSN_PIN = 10;
 const int EFFECT_BUTTON_PIN = 6;
 
 // Effect Loop config
-const unsigned int EFFECT_LOOP_MS = 60 * 1000;
-#endif
+const unsigned int EFFECT_LOOP_MS = (unsigned int)60 * 1000;
 
-/*
-D12 -> RF24 MISO 
-D11 -> RF24 MOSI
-D10 - RF24 CSN
-D9 -> RF24 CE
-D8 -
-D6 - 
-D4 - 
-D3 - 
-D2 - 
-GND -
-RESET - 
-D0/RXD - 
-D1/TXD - 
-
-D13 -> RF24 SCK
-3v3 -> POWER SELECTOR
-REF
-A0 - RBG RED  
-A1 - RGB Green
-A2 - RGB BLUE
-A3 - J
-A4 - 
-A5 - 
-A6 -
-A7 -
-5V - 
-GND -
-VIN - 
-
-
-
-
-LIST TO CHECK
- - RF2F Pin - CHECK
- - Pwr in
- - DIP
- - LED OUT
- - Pulse Sensor ( 5v? )
+/**
+ * 
+ *  This is the old configuration. CE/CSN/LED pins differ
+ * 
  */
+
+// // RADIO
+// RADIO_CE_PIN = 7;
+// RADIO_CSN_PIN = 8;
+
+// // EFFECT BUTTON
+// EFFECT_BUTTON_PIN = 10;
+
+#endif

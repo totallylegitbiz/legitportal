@@ -170,7 +170,8 @@ void transmitterReceiveLoop(struct EffectState *effectState)
         }
 
         // We only relay if the activeEffect has changed or the souce changed;
-        bool shouldRelay = effectState->shouldRelay && (effectState->activeEffect != nextEffectState.activeEffect || effectState->sourceTransmitterId != nextEffectState.sourceTransmitterId);
+        // effectState->shouldRelay &&
+        bool shouldRelay = (effectState->activeEffect != nextEffectState.activeEffect || effectState->sourceTransmitterId != nextEffectState.sourceTransmitterId);
 
         // Copy over the state to our local state.
         effectState->activeEffect = nextEffectState.activeEffect;
