@@ -18,6 +18,8 @@ void setButtonState()
     Serial.println("Click");
 
     currentEffectState.activeEffect = (currentEffectState.activeEffect + 1) % EFFECT_CNT;
+    currentEffectState.age = 0;
+    lastDataCreationTs = 0;
     currentEffectState.sourceTransmitterId = currentEffectState.transmitterId; // Set it to us, this ain't a relay.
     transmitEffectState(&currentEffectState);                                  // Force a transmission loop
   }

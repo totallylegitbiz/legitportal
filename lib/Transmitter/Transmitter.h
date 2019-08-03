@@ -15,7 +15,7 @@ unsigned long pingLastPingMs = 0;                                       // Time 
 unsigned long dataLastReceived = 0;
 const unsigned int txFailureResetMs = 10 * 1000; // After 10 seconds of failures, reset
 unsigned long lastSuccessfulTx = 0;
-unsigned long ageOfCurrentData = 0;
+unsigned long lastDataCreationTs = 0;
 
 RF24 radio(RADIO_CE_PIN, RADIO_CSN_PIN); // CE, CSN pins
 EffectState nextEffectState;
@@ -77,7 +77,7 @@ void transmitterSetup()
 {
 
     // Setup Effect State
-    currentEffectState.activeEffect = 255; // Special loading state
+    // currentEffectState.activeEffect = 255; // Special loading state
     transmitterSetId();
 
     setupStatusLED();
@@ -90,27 +90,29 @@ void transmitEffectState(struct EffectState *effectState)
     // We are broadcasting our data.
 
     radio.stopListening(); // Stop the radio for a hot second.
-    // blink(GREEN_LED_PIN);
 
-    EffectState objEffectState(*effectState);
+    // EffectState objEffectState(*effectState);
 
-    // bool ok = radio.write(&effectState, sizeof(effectState));
+    EffectState objEffectState = *effectState;
+
+    objEffectState.age = millis() - lastDataCreationTs;
+
     bool ok = radio.write(&objEffectState, sizeof(objEffectState));
 
-    Serial.print("TX ");
-    Serial.print(effectState->transmitterId);
-    Serial.print(" -> * loopPosition: ");
-    Serial.print(objEffectState.loopPosition);
-    Serial.print(" activeEffect: ");
-    Serial.print(objEffectState.activeEffect);
+    // Serial.print("TX ");
+    // Serial.print(effectState->transmitterId);
+    // Serial.print(" -> * loopPosition: ");
+    // Serial.print(objEffectState.loopPosition);
+    // Serial.print(" activeEffect: ");
+    // Serial.print(objEffectState.activeEffect);
+    // Serial.print(" age: ");
+    // Serial.print(objEffectState.age);
 
     pingIntervalMs = random(pingIntervalMin, pingIntervalMax);
 
     if (ok)
     {
         Serial.println(": sent");
-        // Serial.println(effectState);
-        // blink(BLUE_LED_PIN);
         pingLastPingMs = millis(); // Successfully sent..
         lastSuccessfulTx = millis();
     }
@@ -119,8 +121,6 @@ void transmitEffectState(struct EffectState *effectState)
         Serial.println(": failed!!!!");
         recievedStatusEffect(BlackLightFluorescent, 250);
         pingLastPingMs = millis() + (pingIntervalMs * 2); // Delay for another two intervals;
-        // blink(RED_LED_PIN);
-
         if (millis() > lastSuccessfulTx + txFailureResetMs)
         {
             resetFunc();
@@ -130,8 +130,6 @@ void transmitEffectState(struct EffectState *effectState)
     radio.startListening();
 
     pingIntervalMs = random(pingIntervalMin, pingIntervalMax);
-
-    // blink(GREEN_LED_PIN);
 }
 
 void transmitterReceiveLoop(struct EffectState *effectState)
@@ -139,7 +137,7 @@ void transmitterReceiveLoop(struct EffectState *effectState)
 
     if (radio.available())
     {
-
+        Serial.println("INCOMING");
         radio.read(&nextEffectState, sizeof(nextEffectState));
 
         if (nextEffectState.transmitterId == 0)
@@ -153,16 +151,30 @@ void transmitterReceiveLoop(struct EffectState *effectState)
         hasGottenSync = true; // We got a sync!
         int nextEffectLoopClockOffset = nextEffectState.loopPosition - (millis() % EFFECT_LOOP_MS);
 
-        Serial.print("RX ");
-        Serial.print(nextEffectState.transmitterId);
-        Serial.print(" -> ");
-        Serial.print(effectState->transmitterId);
-        Serial.print(" loopPosition: ");
-        Serial.print(nextEffectState.loopPosition);
-        Serial.print(" activeEffect: ");
-        Serial.println(nextEffectState.activeEffect);
+        Serial.println("RX ");
+        // Serial.print(nextEffectState.transmitterId);
+        // Serial.print(" -> ");
+        // Serial.print(effectState->transmitterId);
+        // Serial.print(" loopPosition: ");
+        // Serial.print(nextEffectState.loopPosition);
+        // Serial.print(" activeEffect: ");
+        // Serial.println(nextEffectState.activeEffect);
 
-        if (nextEffectState.sourceTransmitterId == effectState->transmitterId)
+        bool hasEffectChanged = effectState->activeEffect != nextEffectState.activeEffect;
+        bool hasSourceChanged = effectState->sourceTransmitterId != nextEffectState.sourceTransmitterId;
+        bool isFromMe = nextEffectState.sourceTransmitterId == effectState->transmitterId;
+
+        bool shouldRelay = (hasEffectChanged || hasSourceChanged);
+
+        if (hasEffectChanged)
+        {
+            Serial.print("EFFECT CHANGE! from: ");
+            Serial.print(effectState->activeEffect);
+            Serial.print(" to ");
+            Serial.println(nextEffectState.activeEffect);
+        }
+
+        if (isFromMe)
         {
             // This is from me, ignore it.
             Serial.print("Ignoring my own relayed transmssion. Diff: ");
@@ -170,18 +182,40 @@ void transmitterReceiveLoop(struct EffectState *effectState)
             return;
         }
 
+        if (millis() - nextEffectState.age < lastDataCreationTs)
+        {
+            // This new data is older than mine, not applying, but relaying.
+            Serial.print("Marked stale. age: ");
+            Serial.print(nextEffectState.age);
+            Serial.print(" lastDataCreationTs ago ");
+            Serial.println(millis() - lastDataCreationTs);
+            // Serial.print(" diff ");
+            // Serial.println((millis() - nextEffectState.age) - lastDataCreationTs);
+            // Serial.print(" diff ");
+            // Serial.println((millis() - nextEffectState.age) - lastDataCreationTs);
+
+            // if (shouldRelay)
+            // {
+            //     transmitEffectState(effectState);
+            // }
+            // return;
+        }
+
         // We only relay if the activeEffect has changed or the souce changed;
-        // effectState->shouldRelay &&
-        bool shouldRelay = (effectState->activeEffect != nextEffectState.activeEffect || effectState->sourceTransmitterId != nextEffectState.sourceTransmitterId);
 
         // Copy over the state to our local state.
         effectState->activeEffect = nextEffectState.activeEffect;
         effectState->sourceTransmitterId = nextEffectState.sourceTransmitterId;
+        effectState->age = nextEffectState.age;
 
         //  TODO(jorgelo): Some logic here incase the drift is too great.
         effectLoopClockOffset = nextEffectLoopClockOffset;
 
+        lastDataCreationTs = millis() - effectState->age;
         dataLastReceived = millis();
+
+        Serial.print("EFFECT");
+        Serial.println(nextEffectState.activeEffect);
 
         if (shouldRelay)
         {
