@@ -15,6 +15,7 @@ unsigned long pingLastPingMs = 0;                                       // Time 
 unsigned long dataLastReceived = 0;
 const unsigned int txFailureResetMs = 10 * 1000; // After 10 seconds of failures, reset
 unsigned long lastSuccessfulTx = 0;
+unsigned long ageOfCurrentData = 0;
 
 RF24 radio(RADIO_CE_PIN, RADIO_CSN_PIN); // CE, CSN pins
 EffectState nextEffectState;

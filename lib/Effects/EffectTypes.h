@@ -14,6 +14,7 @@ typedef struct EffectState
     unsigned int transmitterId = 0;
     int16_t sourceTransmitterId = 0;
     bool shouldRelay = 0;
+    bool age = 0;
 };
 
 #endif
