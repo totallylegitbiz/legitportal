@@ -2,7 +2,6 @@
 
 const CRGB RED = CRGB(255, 0, 0);
 const CRGB BLUE = CRGB(255, 0, 0);
-const int BLINK_CNT = 2;
 
 void policeEffectLoop(struct EffectState *effectState)
 {
@@ -11,7 +10,7 @@ void policeEffectLoop(struct EffectState *effectState)
 
     for (int i = 0; i < LED_CNT; i++)
     {
-        leds[i] = BlackLightFluorescent;
+        leds[i] = CHSV(60,255,255);
     }
 
     // const float loopPerfect = float(effectState.loopPosition) / EFFECT_LOOP_MS;

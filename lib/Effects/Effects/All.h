@@ -6,4 +6,5 @@
 #include <Effects/Strobe.h>
 #include <Effects/Throb.h>
 #include <Effects/HueSpin.h>
+#include <Effects/HueBars.h>
 #endif

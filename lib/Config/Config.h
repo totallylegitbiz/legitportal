@@ -4,7 +4,7 @@
 const bool DIAGNOSTIC_MODE = false;
 // Effect Loop config
 const unsigned int EFFECT_LOOP_MS = (unsigned int)60 * 1000;
-const uint8_t LED_BRIGHTNESS = 50; // 0-255 for overall brightness.
+const uint8_t LED_BRIGHTNESS = 20; // 0-255 for overall brightness.
 
 #ifndef BUILD_TARGET
 #define BUILD_TARGET 0

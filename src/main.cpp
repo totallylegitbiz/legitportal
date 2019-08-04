@@ -108,8 +108,12 @@ void loop()
   }
 
   // Let's check for a new effect loop
-  transmitterReceiveLoop(&currentEffectState);
-  transmitterTransmitLoop(&currentEffectState);
+  // transmitterReceiveLoop(&currentEffectState);
+  // transmitterTransmitLoop(&currentEffectState);
 
-  effectLoop(&currentEffectState);
+  // effectLoop(&currentEffectState);
+
+  // hueBarsEffectLoop(&currentEffectState, 1000);
+  policeEffectLoop(&currentEffectState);
+  copyLedsWithOffset();
 }
