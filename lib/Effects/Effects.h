@@ -1,3 +1,5 @@
+int ledOffsets[LED_CNT] = {};
+
 #include <LEDStrip.h>
 #include <EffectTypes.h>
 #include <Effects/All.h>
@@ -10,17 +12,23 @@ unsigned long lastRefreshMs = 0;
 
 void zeroOutStrip()
 {
-  for (int i = 0; i < LED_CNT + LED_OFFSET - 1; i++)
-  {
+  for (int i = 0; i < LED_CNT + LED_OFFSET - 1; i++) {
     cleds[i] = CRGB(0, 0, 0);
   }
   FastLED.show();
+}
+
+void generateRandom() {
+  for (int i = 0; i < LED_CNT; i++) {
+    ledOffsets[i] = random(0, LED_CNT);
+  }
 }
 
 void effectSetup()
 {
   ledStripSetup();
   zeroOutStrip();
+  generateRandom();
 }
 
 void copyLedsWithOffset()

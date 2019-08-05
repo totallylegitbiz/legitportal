@@ -4,6 +4,7 @@
 EffectState currentEffectState;
 #include <Transmitter.h>
 
+
 bool lastButtonState = false; // Default is not pressed.
 int lastRecievedOffset = 0;
 
