@@ -2,6 +2,7 @@ int ledOffsets[LED_CNT] = {};
 
 #include <LEDStrip.h>
 #include <EffectTypes.h>
+#include <Helpers.h>
 #include <Effects/All.h>
 
 const int EFFECT_CNT = 5;

@@ -1,22 +1,6 @@
 #include <EffectTypes.h>
 #include <FastLED.h>
 
-    // const unsigned int loopMs = 1000;
-    // const unsigned int loopPosition = effectState->loopPosition % loopMs;
-
-
-void drawDash(int width, int idx, CRGB color)
-{
-  for (int i = (-width  / 2); i < (width / 2); i++)
-  {
-    const unsigned int currIdx = (idx + i) % LED_CNT;
-
-    Serial.println(currIdx);
-    
-    leds[currIdx] += color;    
-  }
-}
-
 void hueBarsEffectLoop(struct EffectState *effectState, unsigned int loopMs) {
 
   const float loopPercent = float(effectState->loopPosition % loopMs) / loopMs;
