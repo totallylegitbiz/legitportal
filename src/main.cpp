@@ -114,6 +114,7 @@ void loop()
 
   // candleEffectLoop(&currentEffectState);
   // policeEffectLoop(&currentEffectState);
-  hueSparkleEffectLoop(&currentEffectState);
+  // hueSparkleEffectLoop(&currentEffectState);
+  hueBarsEffectLoop(&currentEffectState, 100);
   copyLedsWithOffset();
 }

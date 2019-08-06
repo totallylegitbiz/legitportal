@@ -6,13 +6,12 @@ void hueBarsEffectLoop(struct EffectState *effectState, unsigned int loopMs) {
   const float loopPercent = float(effectState->loopPosition % loopMs) / loopMs;
   const float huePercent = float(effectState->loopPosition) / EFFECT_LOOP_MS;
 
-  for (int i = 0; i < LED_CNT; i++)
-  {
+  // for (int i = 0; i < LED_CNT; i++)
+  // {
 
-    leds[i] = CHSV(0, 0, 0);
-  }
+  //   leds[i] = CHSV(0, 0, 0);
+  // }
 
-  // lines
   const unsigned int lines = 1;
 
   const int h = huePercent * 255;
