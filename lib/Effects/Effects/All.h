@@ -2,6 +2,7 @@
 #define INC_EFFECTS
 
 #include <Effects/PatternLoop.h>
+#include <Effects/HueSparkle.h>
 #include <Effects/Spin.h>
 #include <Effects/Police.h>
 #include <Effects/Strobe.h>
@@ -10,4 +11,5 @@
 #include <Effects/HueBars.h>
 #include <Effects/Candle.h>
 #include <Effects/ColorStrobe.h>
+
 #endif

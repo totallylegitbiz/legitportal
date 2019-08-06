@@ -113,6 +113,7 @@ void loop()
   // transmitterTransmitLoop(&currentEffectState);
 
   // candleEffectLoop(&currentEffectState);
-  policeEffectLoop(&currentEffectState);
+  // policeEffectLoop(&currentEffectState);
+  hueSparkleEffectLoop(&currentEffectState);
   copyLedsWithOffset();
 }
