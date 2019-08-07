@@ -24,7 +24,7 @@ void fadeSparkleEffectLoop(struct EffectState *effectState, bool isFadeDown)
     if (millis() > lastSparkleRefreshMs + (1000 / sparkleRefreshHz))
     {
 
-      const unsigned int blinkIdx = random(0,LED_CNT - 1);
+      const unsigned int blinkIdx = notRandom(0,LED_CNT - 1, effectState->loopPosition);
       
       leds[blinkIdx] = CHSV(hue, 255,255);
   

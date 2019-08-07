@@ -21,3 +21,13 @@ void fadeUp(unsigned int by) {
     leds[i].addToRGB( by );
   }
 }
+
+
+int notRandom(int from, int to, int seed) {
+
+  randomSeed(seed);
+  const int rand = random(from, to);
+  randomSeed(analogRead(0));
+
+  return rand;
+}
