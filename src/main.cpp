@@ -4,7 +4,6 @@
 EffectState currentEffectState;
 #include <Transmitter.h>
 
-
 bool lastButtonState = false; // Default is not pressed.
 int lastRecievedOffset = 0;
 
@@ -112,9 +111,12 @@ void loop()
   // transmitterReceiveLoop(&currentEffectState);
   // transmitterTransmitLoop(&currentEffectState);
 
+  fadeSparkleEffectLoop(&currentEffectState, false);
   // candleEffectLoop(&currentEffectState);
   // policeEffectLoop(&currentEffectState);
   // hueSparkleEffectLoop(&currentEffectState);
-  hueBarsEffectLoop(&currentEffectState, 100);
-  copyLedsWithOffset();
+  // hueBarsEffectLoop(&currentEffectState, 100);
+  // copyLedsWithOffset();
+
+  FastLED.show();
 }

@@ -27,4 +27,5 @@ void colorStrobeEffectLoop(struct EffectState *effectState)
     }
   
   }
+    copyLedsWithOffset();
 }

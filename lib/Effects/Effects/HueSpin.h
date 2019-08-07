@@ -14,4 +14,7 @@ void hueSpinEffectLoop(struct EffectState *effectState, unsigned int loopMs)
         const unsigned int idx = (i + loopOffset) % LED_CNT;
         leds[idx] = CHSV(hueOffset, 255, 255);
     }
+
+      copyLedsWithOffset();
+      
 }

@@ -26,7 +26,6 @@ void policeEffectLoop(struct EffectState *effectState)
   };
 
   patternLoopEffectLoop(effectState, stepDelays, stepColors, 8);
-
 }
 
 

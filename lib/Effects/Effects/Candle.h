@@ -14,14 +14,27 @@ void candleEffectLoop(struct EffectState *effectState)
 
     const int idx = loopPercent * candle2Size;
 
+    const unsigned int stepLoopMs = 500;
+    const unsigned int stepLoopPosition = effectState->loopPosition % stepLoopMs;
+    const float stepLoopPercent = float(stepLoopPosition) / stepLoopMs;
+  
+    const unsigned int steps = 3; // 3 is a good, 1 is none
+    const unsigned int step = stepLoopPercent * steps;
+
     for (int i = 0; i < LED_CNT; i++)
     {
       const unsigned int ledOffset = ledOffsets[i];
       const int candleIdx = (idx + ledOffset) % candle2Size;
       const uint8_t intensity = pgm_read_byte(&candle2[candleIdx]);
 
-      leds[i] = CHSV(hue, sat, intensity);
+      if (i % steps == step) {
+       leds[i] = CHSV(hue, sat, intensity);
+      } else {
+       leds[i] = CHSV(hue, sat, 0);
+      }
+     
     }
+    copyLedsWithOffset();
 }
 
 

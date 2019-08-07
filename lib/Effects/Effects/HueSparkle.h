@@ -19,4 +19,5 @@ void hueSparkleEffectLoop(struct EffectState *effectState)
     leds[idx % LED_CNT] = CHSV(hue, 255, 255);
   }
 
+  copyLedsWithOffset();
 }

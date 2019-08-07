@@ -18,4 +18,5 @@ void spinEffectLoop(struct EffectState *effectState)
     }
 
     leds[ledOffset] = CHSV(0, 0, 100);
+      copyLedsWithOffset();
 }

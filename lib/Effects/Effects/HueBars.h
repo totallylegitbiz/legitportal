@@ -22,4 +22,6 @@ void hueBarsEffectLoop(struct EffectState *effectState, unsigned int loopMs) {
     const int baseIdx = (int((linePercent)*LED_CNT)+offset)%255;
     drawDash(2, baseIdx, CHSV(int(h+(linePercent*255))%255, 255, 255));
   }
+
+    copyLedsWithOffset();
 }

@@ -1,6 +1,7 @@
 #ifndef INC_EFFECTS
 #define INC_EFFECTS
 
+#include <Effects/FadeSparkle.h>
 #include <Effects/PatternLoop.h>
 #include <Effects/HueSparkle.h>
 #include <Effects/Spin.h>

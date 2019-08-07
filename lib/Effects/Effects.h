@@ -3,7 +3,6 @@ int ledOffsets[LED_CNT] = {};
 #include <LEDStrip.h>
 #include <EffectTypes.h>
 #include <Helpers.h>
-#include <Effects/All.h>
 
 const int EFFECT_CNT = 5;
 
@@ -16,7 +15,7 @@ void zeroOutStrip()
   for (int i = 0; i < LED_CNT + LED_OFFSET - 1; i++) {
     cleds[i] = CRGB(0, 0, 0);
   }
-  FastLED.show();
+ 
 }
 
 void generateRandom() {
@@ -38,8 +37,22 @@ void copyLedsWithOffset()
   {
     cleds[i + LED_OFFSET] = leds[i];
   }
-  FastLED.show();
+
 }
+
+void copyLedsWithOffsetGamma()
+{
+  for (int i = 0; i < LED_CNT; i++)
+  {
+    const int idx = i + LED_OFFSET;
+    cleds[idx].r = dim8_video(leds[idx].r);
+    cleds[idx].g = dim8_video(leds[idx].g);
+    cleds[idx].b = dim8_video(leds[idx].b);
+    // cleds[i + LED_OFFSET] = leds[i];
+  }
+
+}
+
 
 // void effectClearLeds()
 // {
@@ -58,6 +71,8 @@ void recievedStatusEffect(CRGB color, int d)
   copyLedsWithOffset();
   delay(d);
 }
+
+#include <Effects/All.h>
 
 // EFFECT_LOOP_MS
 void effectLoop(struct EffectState *effectState)
@@ -95,5 +110,6 @@ void effectLoop(struct EffectState *effectState)
     Serial.println(effectState->activeEffect);
   }
 
-  copyLedsWithOffset();
+  Serial.println('dd');
+
 }

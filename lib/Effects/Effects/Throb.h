@@ -11,4 +11,5 @@ void throbEffectLoop(struct EffectState *effectState, int hue)
   {
     leds[i] = CHSV(hue, 255, intensity);
   }
+  copyLedsWithOffset();
 }

@@ -15,6 +15,7 @@ void strobeEffectLoop(struct EffectState *effectState, CRGB colorOff, CRGB color
             leds[i] = colorOn;
         }
     }
+      copyLedsWithOffset();
 }
 
 // void strobeEffectLoop(struct EffectState *effectState)

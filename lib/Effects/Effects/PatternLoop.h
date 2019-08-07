@@ -23,4 +23,5 @@ void patternLoopEffectLoop(struct EffectState *effectState, unsigned int stepDel
     leds[i] = stepColors[step];
   }
 
+  copyLedsWithOffset();
 }
