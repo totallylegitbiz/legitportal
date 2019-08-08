@@ -74,7 +74,57 @@ void recievedStatusEffect(CRGB color, int d)
 
 #include <Effects/All.h>
 
-// EFFECT_LOOP_MS
+const uint8_t LOADING_EFFECT = 255;
+const uint8_t DOT_SPIN_EFFECT = 0; 
+const uint8_t HUE_SPIN_EFFECT = 1;
+const uint8_t STOBE_FLASH_EFFECT = 2;
+const uint8_t BLUE_RED_FLASH_EFFECT = 3;
+const uint8_t STOBE_SLOW_EFFECT = 4;
+
+const uint8_t HUE_SPARKLE_LIGHT = 5;
+const uint8_t HUE_SPARKLE_DARK= 6;
+
+void effectRenderLoop(uint8_t effectId, struct EffectState *effectState)
+{
+
+#ifdef EFFECT_OVERIDE
+  const uint8_t selectedEffectId = EFFECT_OVERIDE;
+#else
+  const uint8_t selectedEffectId = effectId;
+#endif
+
+  switch (selectedEffectId)
+  {
+  case LOADING_EFFECT: // This is the loading one.
+    throbEffectLoop(effectState, 0);
+    break;
+  case DOT_SPIN_EFFECT:
+    spinEffectLoop(effectState);
+    break;
+  case HUE_SPIN_EFFECT:
+    hueSpinEffectLoop(effectState, 5000);
+    break;
+  case STOBE_FLASH_EFFECT:
+    strobeEffectLoop(effectState, CRGB(0, 0, 0), CRGB(100, 100, 100), 100);
+    break;
+  case BLUE_RED_FLASH_EFFECT:
+    strobeEffectLoop(effectState, CRGB(255, 0, 0), CRGB(0, 0, 255), 100);
+    break;
+  case STOBE_SLOW_EFFECT:
+    strobeEffectLoop(effectState, CRGB(0, 0, 0), CRGB(50, 50, 50), 500);
+    break;
+  case HUE_SPARKLE_LIGHT:
+    fadeSparkleEffectLoop(effectState, false);
+      break;
+  case HUE_SPARKLE_DARK:
+    fadeSparkleEffectLoop(effectState, true);
+      break;
+  default:
+    Serial.println("Please set effect count correctly");
+    Serial.println(effectState->activeEffect);
+  }
+}
+
 void effectLoop(struct EffectState *effectState)
 {
 
@@ -85,31 +135,5 @@ void effectLoop(struct EffectState *effectState)
 
   lastRefreshMs = millis();
 
-  switch (effectState->activeEffect)
-  {
-  case 255: // This is the loading one.
-    throbEffectLoop(effectState, 0);
-    break;
-  case 1:
-    hueSpinEffectLoop(effectState, 5000);
-    break;
-  case 0:
-    spinEffectLoop(effectState);
-    break;
-  case 2:
-    strobeEffectLoop(effectState, CRGB(0, 0, 0), CRGB(100, 100, 100), 100);
-    break;
-  case 3:
-    strobeEffectLoop(effectState, CRGB(255, 0, 0), CRGB(0, 0, 255), 100);
-    break;
-  case 4:
-    strobeEffectLoop(effectState, CRGB(0, 0, 0), CRGB(50, 50, 50), 500);
-    break;
-  default:
-    Serial.println("Please set effect count correctly");
-    Serial.println(effectState->activeEffect);
-  }
-
-  Serial.println('dd');
-
+  effectRenderLoop(effectState->activeEffect,effectState);
 }

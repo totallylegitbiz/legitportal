@@ -107,13 +107,16 @@ void loop()
     setButtonState();
   }
 
+
+  effectLoop(&currentEffectState);
+  
   // Let's check for a new effect loop
   // transmitterReceiveLoop(&currentEffectState);
   // transmitterTransmitLoop(&currentEffectState);
 
   // fadeSparkleEffectLoop(&currentEffectState, false);
   // candleEffectLoop(&currentEffectState);
-  policeEffectLoop(&currentEffectState);
+  // policeEffectLoop(&currentEffectState);
   // hueSparkleEffectLoop(&currentEffectState);
   // hueBarsEffectLoop(&currentEffectState, 100);
   // copyLedsWithOffset();
