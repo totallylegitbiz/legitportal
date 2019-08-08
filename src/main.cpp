@@ -111,12 +111,15 @@ void loop()
   // transmitterReceiveLoop(&currentEffectState);
   // transmitterTransmitLoop(&currentEffectState);
 
-  fadeSparkleEffectLoop(&currentEffectState, false);
+  // fadeSparkleEffectLoop(&currentEffectState, false);
   // candleEffectLoop(&currentEffectState);
-  // policeEffectLoop(&currentEffectState);
+  policeEffectLoop(&currentEffectState);
   // hueSparkleEffectLoop(&currentEffectState);
   // hueBarsEffectLoop(&currentEffectState, 100);
   // copyLedsWithOffset();
+
+  // zeroOutStrip();
+  // candyCaneEffectLoop(&currentEffectState);
 
   FastLED.show();
 }

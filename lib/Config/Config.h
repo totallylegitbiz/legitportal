@@ -64,7 +64,10 @@ const int PULSE_SENSOR_PIN = A7;
 // // LED strip control pin
 const int LED_PIN = 8;
 
-// Led strip
+// // Led strip
+// const unsigned int LED_CNT = 98;
+// const unsigned int LED_OFFSET = 0; //25;
+
 const unsigned int LED_CNT = 98;
 const unsigned int LED_OFFSET = 0; //25;
 

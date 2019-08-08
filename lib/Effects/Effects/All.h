@@ -12,5 +12,6 @@
 #include <Effects/HueBars.h>
 #include <Effects/Candle.h>
 #include <Effects/ColorStrobe.h>
+#include <Effects/CandyCane.h>
 
 #endif
