@@ -1,7 +1,7 @@
 #include <EffectTypes.h>
 #include <RealCandle.h>
 
-void candleEffectLoop(struct EffectState *effectState)
+void candleEffectLoop(struct EffectState *effectState, unsigned int steps)
 {
     const unsigned int loopMs = 60000; // 60 second loop
     const unsigned int loopPosition = effectState->loopPosition % loopMs;
@@ -18,7 +18,6 @@ void candleEffectLoop(struct EffectState *effectState)
     const unsigned int stepLoopPosition = effectState->loopPosition % stepLoopMs;
     const float stepLoopPercent = float(stepLoopPosition) / stepLoopMs;
   
-    const unsigned int steps = 3; // 3 is a good, 1 is none
     const unsigned int step = stepLoopPercent * steps;
 
     for (int i = 0; i < LED_CNT; i++)
@@ -34,6 +33,7 @@ void candleEffectLoop(struct EffectState *effectState)
       }
      
     }
+
     copyLedsWithOffset();
 }
 

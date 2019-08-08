@@ -80,9 +80,12 @@ const uint8_t HUE_SPIN_EFFECT = 1;
 const uint8_t STOBE_FLASH_EFFECT = 2;
 const uint8_t BLUE_RED_FLASH_EFFECT = 3;
 const uint8_t STOBE_SLOW_EFFECT = 4;
-
-const uint8_t HUE_SPARKLE_LIGHT = 5;
-const uint8_t HUE_SPARKLE_DARK= 6;
+const uint8_t HUE_SPARKLE_LIGHT_EFFECT = 5;
+const uint8_t HUE_SPARKLE_DARK_EFFECT = 6;
+const uint8_t CANDLE_EFFECT = 7;
+const uint8_t POLICE_EFFECT = 8;
+const uint8_t PURPLE_BLUES_EFFECT = 9;
+const uint8_t AA_EFFECT10 = 10;
 
 void effectRenderLoop(uint8_t effectId, struct EffectState *effectState)
 {
@@ -113,12 +116,24 @@ void effectRenderLoop(uint8_t effectId, struct EffectState *effectState)
   case STOBE_SLOW_EFFECT:
     strobeEffectLoop(effectState, CRGB(0, 0, 0), CRGB(50, 50, 50), 500);
     break;
-  case HUE_SPARKLE_LIGHT:
+  case HUE_SPARKLE_LIGHT_EFFECT:
     fadeSparkleEffectLoop(effectState, false);
-      break;
-  case HUE_SPARKLE_DARK:
+    break;
+  case HUE_SPARKLE_DARK_EFFECT:
     fadeSparkleEffectLoop(effectState, true);
-      break;
+    break;
+  case CANDLE_EFFECT:
+    candleEffectLoop(effectState, 1); // No steps
+    break;
+  case POLICE_EFFECT:
+    policeEffectLoop(effectState);
+    break;
+  case PURPLE_BLUES_EFFECT:
+    hueSparkleEffectLoop(effectState);
+    break;
+  case AA_EFFECT10:
+    hueBarsEffectLoop(effectState,100);
+    break;
   default:
     Serial.println("Please set effect count correctly");
     Serial.println(effectState->activeEffect);
