@@ -85,7 +85,7 @@ const uint8_t HUE_SPARKLE_DARK_EFFECT = 6;
 const uint8_t CANDLE_EFFECT = 7;
 const uint8_t POLICE_EFFECT = 8;
 const uint8_t PURPLE_BLUES_EFFECT = 9;
-const uint8_t AA_EFFECT10 = 10;
+const uint8_t HUE_BARS_EFFECT = 10;
 
 void effectRenderLoop(uint8_t effectId, struct EffectState *effectState)
 {
@@ -131,8 +131,8 @@ void effectRenderLoop(uint8_t effectId, struct EffectState *effectState)
   case PURPLE_BLUES_EFFECT:
     hueSparkleEffectLoop(effectState);
     break;
-  case AA_EFFECT10:
-    hueBarsEffectLoop(effectState,100);
+  case HUE_BARS_EFFECT:
+    hueBarsEffectLoop(effectState,10000);
     break;
   default:
     Serial.println("Please set effect count correctly");
