@@ -87,6 +87,19 @@ const uint8_t POLICE_EFFECT = 8;
 const uint8_t PURPLE_BLUES_EFFECT = 9;
 const uint8_t HUE_BARS_EFFECT = 10;
 
+// Solid colors
+const uint8_t SOLID_0_EFFECT = 100;
+const uint8_t SOLID_1_EFFECT = 101;
+const uint8_t SOLID_2_EFFECT = 102;
+const uint8_t SOLID_3_EFFECT = 103;
+const uint8_t SOLID_4_EFFECT = 104;
+const uint8_t SOLID_5_EFFECT = 105;
+const uint8_t SOLID_6_EFFECT = 106;
+const uint8_t SOLID_7_EFFECT = 107;
+const uint8_t SOLID_8_EFFECT = 108;
+const uint8_t SOLID_9_EFFECT = 109;
+const uint8_t SOLID_10_EFFECT = 110;
+
 void effectRenderLoop(uint8_t effectId, struct EffectState *effectState)
 {
 
@@ -133,6 +146,36 @@ void effectRenderLoop(uint8_t effectId, struct EffectState *effectState)
     break;
   case HUE_BARS_EFFECT:
     hueBarsEffectLoop(effectState,10000);
+    break;
+  case SOLID_0_EFFECT:
+    solidEffectLoop(effectState,CHSV(0,255,255));
+    break;
+  case SOLID_1_EFFECT:
+    solidEffectLoop(effectState,CHSV(25,255,255));
+    break;
+  case SOLID_2_EFFECT:
+    solidEffectLoop(effectState,CHSV(50,255,255));
+    break;
+  case SOLID_4_EFFECT:
+    solidEffectLoop(effectState,CHSV(75,255,255));
+    break;
+  case SOLID_5_EFFECT:
+    solidEffectLoop(effectState,CHSV(100,255,255));
+    break;
+  case SOLID_6_EFFECT:
+    solidEffectLoop(effectState,CHSV(125,255,255));
+    break;
+  case SOLID_7_EFFECT:
+    solidEffectLoop(effectState,CHSV(150,255,255));
+    break;
+  case SOLID_8_EFFECT:
+    solidEffectLoop(effectState,CHSV(175,255,255));
+    break;
+  case SOLID_9_EFFECT:
+    solidEffectLoop(effectState,CHSV(200,255,255));
+    break;
+  case SOLID_10_EFFECT:
+    solidEffectLoop(effectState,CHSV(0,0,255));
     break;
   default:
     Serial.println("Please set effect count correctly");

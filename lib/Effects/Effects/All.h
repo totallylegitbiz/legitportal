@@ -13,5 +13,6 @@
 #include <Effects/Candle.h>
 #include <Effects/ColorStrobe.h>
 #include <Effects/CandyCane.h>
+#include <Effects/Solid.h>
 
 #endif
