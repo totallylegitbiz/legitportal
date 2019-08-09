@@ -1,8 +1,8 @@
 #include <FastLED.h>
 #include <Config.h>
 
-#ifndef INC_EFFECT_TYPES
-#define INC_EFFECT_TYPES
+#ifndef EFFECT_TYPES_H
+#define EFFECT_TYPES_H
 
 // This is our local copy of leds.
 CRGB leds[LED_CNT];

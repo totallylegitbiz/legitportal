@@ -31,6 +31,7 @@ bool RunEvery::shouldRun()
 RunEvery runEvery(20);
 
 const int SPARKLE_BATCH_CNT = LED_CNT / 2;
+
 void sparkleEffectLoop(struct EffectState *effectState, int sat)
 {
 

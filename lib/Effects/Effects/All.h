@@ -1,5 +1,5 @@
-#ifndef INC_EFFECTS
-#define INC_EFFECTS
+#ifndef ALL_H
+#define ALL_H
 
 #include <Effects/FadeSparkle.h>
 #include <Effects/PatternLoop.h>
