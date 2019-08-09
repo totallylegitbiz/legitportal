@@ -54,7 +54,7 @@ const uint8_t SOLID_8_EFFECT = 108;
 const uint8_t SOLID_9_EFFECT = 109;
 const uint8_t SOLID_10_EFFECT = 110;
 
-void effectRenderLoop(uint8_t effectId, struct EffectState *effectState, struct Config *config)
+void effectRenderLoop(uint8_t effectId, struct EffectState *effectState)
 {
 
 #ifdef EFFECT_OVERIDE
@@ -143,7 +143,7 @@ void effectRenderLoop(uint8_t effectId, struct EffectState *effectState, struct 
   }
 }
 
-void effectLoop(struct EffectState *effectState, struct Config *config)
+void effectLoop(struct EffectState *effectState)
 {
 
   if (millis() < lastRefreshMs + (1000 / effectRefreshHz))
@@ -153,5 +153,5 @@ void effectLoop(struct EffectState *effectState, struct Config *config)
 
   lastRefreshMs = millis();
 
-  effectRenderLoop(effectState->activeEffect, effectState, config);
+  effectRenderLoop(effectState->activeEffect, effectState);
 }

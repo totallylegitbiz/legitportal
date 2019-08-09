@@ -22,7 +22,7 @@ void patternLoopEffectLoop(struct EffectState *effectState, unsigned int stepDel
     }
   }
 
-  for (int i = 0; i < LED_CNT; i++)
+  for (int i = 0; i < config.LED_CNT; i++)
   {
     leds[i] = stepColors[step];
   }

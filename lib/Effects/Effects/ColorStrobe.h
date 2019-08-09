@@ -1,14 +1,15 @@
 #include <EffectTypes.h>
 
-const CRGB RED = CRGB(255, 0, 0);
-const CRGB BLUE = CRGB(255, 0, 0);
-
-const unsigned int blinkTs = 20;
-const unsigned int steps = 10;
-const unsigned int loopMs = 1000;
-
 void colorStrobeEffectLoop(struct EffectState *effectState)
 {
+
+  const CRGB RED = CRGB(255, 0, 0);
+  const CRGB BLUE = CRGB(255, 0, 0);
+
+  const unsigned int blinkTs = 20;
+  const unsigned int steps = 10;
+  const unsigned int loopMs = 1000;
+
   const unsigned int loopPosition = effectState->loopPosition % loopMs;
   const float loopPercent = float(loopPosition) / loopMs;
   const unsigned int step = loopPercent * steps;
@@ -19,7 +20,7 @@ void colorStrobeEffectLoop(struct EffectState *effectState)
 
   const unsigned int hue = hueLow + (hueHigh - hueLow) * loopPercent;
 
-  for (int i = 0; i < LED_CNT; i++)
+  for (int i = 0; i < config.LED_CNT; i++)
   {
     if (loopPosition < stepBase + blinkTs)
     {

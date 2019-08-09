@@ -97,3 +97,31 @@ void copyLedsWithOffsetGamma()
     cleds[idx].b = dim8_video(leds[idx].b);
   }
 }
+
+class RunEvery
+{
+public:
+  RunEvery(unsigned int everyMs);
+  boolean shouldRun();
+
+private:
+  unsigned int _everyMs;
+  unsigned long _lastRunMs;
+};
+
+RunEvery::RunEvery(unsigned int everyMs)
+{
+  _everyMs = everyMs;
+  _lastRunMs = 0;
+}
+
+bool RunEvery::shouldRun()
+{
+  if (_lastRunMs + _everyMs < millis())
+  {
+    _lastRunMs = millis() - (millis() % _everyMs);
+    return true;
+  }
+
+  return false;
+}

@@ -1,22 +1,20 @@
 #include <EffectTypes.h>
 
-const unsigned int sparkleRefreshHz = LED_CNT * 5;
 unsigned int lastSparkleRefreshMs = 0;
-
-const unsigned int fadeRefreshHz = sparkleRefreshHz;
 unsigned int lastFadeRefreshMs = 0;
-
-const unsigned int fadeSparkleLoopMs = 600000;
 
 void fadeSparkleEffectLoop(struct EffectState *effectState, bool isFadeDown)
 {
 
+  const unsigned int sparkleRefreshHz = config.LED_CNT * 5;
+  const unsigned int fadeRefreshHz = sparkleRefreshHz;
+  const unsigned int fadeSparkleLoopMs = 600000;
   const unsigned int loopPosition = effectState->loopPosition % fadeSparkleLoopMs;
 
   const unsigned int hue1 = 128;
   const unsigned int hue2 = 224;
-  const float loopPercent = float(loopPosition) / fadeSparkleLoopMs;
 
+  const float loopPercent = float(loopPosition) / fadeSparkleLoopMs;
   const unsigned int hue = hue1 + (float(hue2 - hue1) * abs((loopPercent / .5) - 1.0));
 
   const int fadeAmt = 1;
@@ -24,7 +22,7 @@ void fadeSparkleEffectLoop(struct EffectState *effectState, bool isFadeDown)
   if (millis() > lastSparkleRefreshMs + (1000 / sparkleRefreshHz))
   {
 
-    const unsigned int blinkIdx = notRandom(0, LED_CNT - 1, effectState->loopPosition);
+    const unsigned int blinkIdx = notRandom(0, config.LED_CNT - 1, effectState->loopPosition);
 
     leds[blinkIdx] = CHSV(hue, 255, 255);
 
