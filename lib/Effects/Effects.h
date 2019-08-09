@@ -1,5 +1,3 @@
-int ledOffsets[LED_CNT] = {};
-
 #include <LEDStrip.h>
 #include <EffectTypes.h>
 #include <Helpers.h>
@@ -10,75 +8,15 @@ int effectLoopClockOffset = 0;
 const unsigned int effectRefreshHz = 60; // Updates 60 times a second.
 unsigned long lastRefreshMs = 0;
 
-void zeroOutOutputStrip()
-{
-  for (int i = 0; i < LED_CNT + LED_OFFSET; i++)
-  {
-    cleds[i] = CRGB(0, 0, 0);
-  }
-}
-
-void zeroOutStrip()
-{
-  for (int i = 0; i < LED_CNT; i++)
-  {
-    leds[i] = CRGB(0, 0, 0);
-  }
-}
-
-void colorOutStrip(CRGB color)
-{
-  for (int i = 0; i < LED_CNT; i++)
-  {
-    leds[i] = color;
-  }
-}
-
-void colorOutStrip(CHSV color)
-{
-  for (int i = 0; i < LED_CNT; i++)
-  {
-    leds[i] = color;
-  }
-}
-
-void generateRandom()
-{
-  for (int i = 0; i < LED_CNT; i++)
-  {
-    ledOffsets[i] = random(0, LED_CNT);
-  }
-}
-
 void effectSetup()
 {
   ledStripSetup();
   zeroOutStrip();
-  generateRandom();
-}
-
-void copyLedsWithOffset()
-{
-  for (int i = 0; i < LED_CNT; i++)
-  {
-    cleds[i + LED_OFFSET] = leds[i];
-  }
-}
-
-void copyLedsWithOffsetGamma()
-{
-  for (int i = 0; i < LED_CNT; i++)
-  {
-    const int idx = i + LED_OFFSET;
-    cleds[idx].r = dim8_video(leds[idx].r);
-    cleds[idx].g = dim8_video(leds[idx].g);
-    cleds[idx].b = dim8_video(leds[idx].b);
-  }
 }
 
 void recievedStatusEffect(CRGB color, int d)
 {
-  for (int i = 0; i < LED_CNT; i++)
+  for (int i = 0; i < config.LED_CNT; i++)
   {
     leds[i] = color;
   }
@@ -116,7 +54,7 @@ const uint8_t SOLID_8_EFFECT = 108;
 const uint8_t SOLID_9_EFFECT = 109;
 const uint8_t SOLID_10_EFFECT = 110;
 
-void effectRenderLoop(uint8_t effectId, struct EffectState *effectState)
+void effectRenderLoop(uint8_t effectId, struct EffectState *effectState, struct Config *config)
 {
 
 #ifdef EFFECT_OVERIDE
@@ -205,7 +143,7 @@ void effectRenderLoop(uint8_t effectId, struct EffectState *effectState)
   }
 }
 
-void effectLoop(struct EffectState *effectState)
+void effectLoop(struct EffectState *effectState, struct Config *config)
 {
 
   if (millis() < lastRefreshMs + (1000 / effectRefreshHz))
@@ -215,5 +153,5 @@ void effectLoop(struct EffectState *effectState)
 
   lastRefreshMs = millis();
 
-  effectRenderLoop(effectState->activeEffect, effectState);
+  effectRenderLoop(effectState->activeEffect, effectState, config);
 }

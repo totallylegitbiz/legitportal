@@ -2,7 +2,7 @@
 #include <Config.h>
 #include <Effects.h>
 EffectState currentEffectState;
-Config currentConfig = getConfig();
+Config config = getConfig();
 
 #include <Transmitter.h>
 
@@ -12,7 +12,7 @@ int lastRecievedOffset = 0;
 void setButtonState()
 {
   // Button Logic
-  boolean currentButtonState = !digitalRead(EFFECT_BUTTON_PIN);
+  boolean currentButtonState = !digitalRead(config.EFFECT_BUTTON_PIN);
 
   if (lastButtonState && currentButtonState != lastButtonState)
   {
@@ -39,20 +39,14 @@ void setup()
 
   effectSetup();
 
-  pinMode(EFFECT_BUTTON_PIN, INPUT);
-  digitalWrite(EFFECT_BUTTON_PIN, HIGH);
+  pinMode(config.EFFECT_BUTTON_PIN, INPUT);
+  digitalWrite(config.EFFECT_BUTTON_PIN, HIGH);
 
-  pinMode(RED_LED_PIN, OUTPUT);
-  pinMode(BLUE_LED_PIN, OUTPUT);
-  pinMode(GREEN_LED_PIN, OUTPUT);
+  pinMode(config.RED_LED_PIN, OUTPUT);
+  pinMode(config.BLUE_LED_PIN, OUTPUT);
+  pinMode(config.GREEN_LED_PIN, OUTPUT);
 
-  pinMode(PULSE_SENSOR_PIN, INPUT);
-
-  // DIP
-  pinMode(DIP_PIN_0, INPUT_PULLUP);
-  pinMode(DIP_PIN_1, INPUT_PULLUP);
-  pinMode(DIP_PIN_2, INPUT_PULLUP);
-  pinMode(DIP_PIN_3, INPUT_PULLUP);
+  pinMode(config.SENSOR_PIN, INPUT);
 
   transmitterSetup();
 
@@ -64,36 +58,36 @@ void diagnoticModeLoop()
 {
 
   Serial.print("DIP: ");
-  Serial.println(getDipValue());
+  Serial.println(getDipValue(config));
 
   Serial.println("RED");
-  analogWrite(RED_LED_PIN, 255);
+  analogWrite(config.RED_LED_PIN, 255);
   recievedStatusEffect(CRGB(255, 0, 0), 500);
 
-  analogWrite(RED_LED_PIN, 0);
-  analogWrite(BLUE_LED_PIN, 0);
+  analogWrite(config.RED_LED_PIN, 0);
+  analogWrite(config.BLUE_LED_PIN, 0);
 
   Serial.println("RED");
-  analogWrite(GREEN_LED_PIN, 255);
+  analogWrite(config.GREEN_LED_PIN, 255);
   recievedStatusEffect(CRGB(0, 255, 0), 500);
-  analogWrite(GREEN_LED_PIN, 0);
+  analogWrite(config.GREEN_LED_PIN, 0);
 
   Serial.println("BLUE");
-  analogWrite(BLUE_LED_PIN, 255);
+  analogWrite(config.BLUE_LED_PIN, 255);
   recievedStatusEffect(CRGB(0, 0, 255), 500);
-  analogWrite(BLUE_LED_PIN, 0);
+  analogWrite(config.BLUE_LED_PIN, 0);
 }
 
 void loop()
 {
 
-  if (DIAGNOSTIC_MODE)
+  if (config.DIAGNOSTIC_MODE)
   {
     diagnoticModeLoop();
     return;
   }
 
-  currentEffectState.loopPosition = (millis() + effectLoopClockOffset) % EFFECT_LOOP_MS;
+  currentEffectState.loopPosition = (millis() + effectLoopClockOffset) % config.EFFECT_LOOP_MS;
 
   if (hasGottenSync)
   {
@@ -101,7 +95,7 @@ void loop()
     setButtonState();
   }
 
-  effectLoop(&currentEffectState);
+  effectLoop(&currentEffectState, &config);
 
   FastLED.show();
 }

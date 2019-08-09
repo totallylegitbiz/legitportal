@@ -6,7 +6,7 @@ void candleEffectLoop(struct EffectState *effectState, unsigned int steps)
   const unsigned int loopMs = 60000; // 60 second loop
   const unsigned int loopPosition = effectState->loopPosition % loopMs;
   const float loopPercent = float(loopPosition) / loopMs;
-  const unsigned int ledOffset = LED_CNT * (float(loopPosition) / loopMs);
+  const unsigned int ledOffset = config.LED_CNT * (float(loopPosition) / loopMs);
 
   const unsigned int hue = 20;
   const unsigned int sat = 225;
@@ -20,9 +20,9 @@ void candleEffectLoop(struct EffectState *effectState, unsigned int steps)
 
   const unsigned int step = stepLoopPercent * steps;
 
-  for (int i = 0; i < LED_CNT; i++)
+  for (int i = 0; i < config.LED_CNT; i++)
   {
-    const unsigned int ledOffset = ledOffsets[i];
+    const unsigned int ledOffset = notRandom(0, config.LED_CNT - 1, i);
     const int candleIdx = (idx + ledOffset) % candle2Size;
     const uint8_t intensity = pgm_read_byte(&candle2[candleIdx]);
 

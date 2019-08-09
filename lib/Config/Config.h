@@ -1,22 +1,26 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-const bool DIAGNOSTIC_MODE = false;
+const uint8_t MAX_LEDS = 200; // The max
 
-// Effect Loop config
-const uint16_t EFFECT_LOOP_MS = (unsigned int)60 * 1000;
-const uint8_t LED_BRIGHTNESS = 20; // 0-255 for overall brightness.
-
-const int BIKE = 0;
-const int CHILL_DOME = 1;
-const int DEEP_PLAYA = 2;
-const int CAMP = 3;
-const int PULSE_REMOTE = 4;
+const uint8_t BIKE = 0;
+const uint8_t CHILL_DOME = 1;
+const uint8_t DEEP_PLAYA = 2;
+const uint8_t CAMP = 3;
+const uint8_t PULSE_REMOTE = 4;
+const uint8_t PORTAL = 5;
 
 // This is the base config.
 typedef struct Config
 {
-  uint8_t deviceType = BIKE;
+
+  uint8_t DEVICE_TYPE = BIKE;
+
+  bool DIAGNOSTIC_MODE = false;
+
+  // Effect Loop config
+  const uint16_t EFFECT_LOOP_MS = (unsigned int)60 * 1000;
+  const uint8_t LED_BRIGHTNESS = 20; // 0-255 for overall brightness.
 
   // RGB Status LED
   const int RED_LED_PIN = A0;
@@ -34,7 +38,7 @@ typedef struct Config
 
   // LED strip
   const int LED_PIN = 8;
-  unsigned int LED_CNT;
+  unsigned int LED_CNT; // Don't forget to set MAX_LEDS;
   unsigned int LED_OFFSET;
 
   // RADIO
@@ -47,6 +51,12 @@ typedef struct Config
 
 uint8_t getDipValue(Config config)
 {
+  // DIP
+  pinMode(config.DIP_PIN_0, INPUT_PULLUP);
+  pinMode(config.DIP_PIN_1, INPUT_PULLUP);
+  pinMode(config.DIP_PIN_2, INPUT_PULLUP);
+  pinMode(config.DIP_PIN_3, INPUT_PULLUP);
+
   const bool d0 = digitalRead(config.DIP_PIN_0);
   const bool d1 = digitalRead(config.DIP_PIN_1);
   const bool d2 = digitalRead(config.DIP_PIN_2);
@@ -60,16 +70,14 @@ Config getConfig()
 {
   Config outConfig;
 
-  outConfig.deviceType = getDipValue(outConfig);
+  outConfig.DEVICE_TYPE = getDipValue(outConfig);
 
-  switch (outConfig.deviceType)
+  switch (outConfig.DEVICE_TYPE)
   {
   case BIKE:
     outConfig.LED_CNT = 98;
     outConfig.LED_OFFSET = 0; //25;
 
-    break;
-  case CHILL_DOME:
     break;
   }
 
