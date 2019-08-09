@@ -1,22 +1,36 @@
 #include <EffectTypes.h>
 
-void spinEffectLoop(struct EffectState *effectState)
+void spinEffectLoop(struct EffectState *effectState, unsigned int loopMs)
 {
+    const uint16_t loopPosition = effectState->loopPosition % loopMs;
+    const uint16_t ledOffset = LED_CNT * (float(loopPosition) / loopMs);
 
-    // Time for this effect to loop;
+    zeroOutStrip();
 
-    const unsigned int loopMs = 1000;
-    const unsigned int loopPosition = effectState->loopPosition % loopMs;
+    // Red blue dash
+    // drawDash(LED_CNT/3, ledOffset, CRGB(0, 220, 255));
+    // drawDash(LED_CNT/3, LED_CNT - ledOffset, CRGB(255, 0, 0));
 
-    // const float loopPerfect = float(effectState.loopPosition) / EFFECT_LOOP_MS;
+    // Red blue dash
 
-    const int ledOffset = LED_CNT * (float(loopPosition) / loopMs);
+    const int lines = 5;
+    const int lineWidth = LED_CNT / 7;
+    const int lineIdx = LED_CNT / lines;
 
-    for (int i = 0; i < LED_CNT; i++)
-    {
-        leds[i] = CHSV(0, 0, 0);
+    for (int i = 0; i < lines; i++) {
+
+      const int offset = ledOffset + (i*lineIdx);
+
+      if (i % 2) {
+        drawDash(lineWidth, offset, CHSV( i * (255/lines), 255, 255));
+      } else {
+        drawDash(lineWidth, LED_CNT - offset, CHSV( i * (255/lines), 255, 255));
+      }
     }
 
-    leds[ledOffset] = CHSV(0, 0, 100);
+    // drawDash(lineWidth, ledOffset, CHSV(0, 255, 255));
+    // drawDash(lineWidth, LED_CNT - ledOffset, CHSV(85, 255, 255));
+    // drawDash(lineWidth, ledOffset + lineIdx, CHSV(171, 255, 255));
+    
     copyLedsWithOffset();
 }

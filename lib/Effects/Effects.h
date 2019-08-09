@@ -59,15 +59,6 @@ void copyLedsWithOffsetGamma()
 
 }
 
-
-// void effectClearLeds()
-// {
-//     for (int i = 0; i < LED_CNT; i++)
-//     {
-//         leds[i] = BlackLightFluorescent;
-//     }
-// }
-
 void recievedStatusEffect(CRGB color, int d)
 {
   for (int i = 0; i < LED_CNT; i++)
@@ -125,7 +116,7 @@ void effectRenderLoop(uint8_t effectId, struct EffectState *effectState)
     throbEffectLoop(effectState, 0);
     break;
   case DOT_SPIN_EFFECT:
-    spinEffectLoop(effectState);
+    spinEffectLoop(effectState, 2000);
     break;
   case HUE_SPIN_EFFECT:
     hueSpinEffectLoop(effectState, 5000);
