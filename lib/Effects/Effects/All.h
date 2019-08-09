@@ -14,5 +14,5 @@
 #include <Effects/ColorStrobe.h>
 #include <Effects/CandyCane.h>
 #include <Effects/Solid.h>
-
+#include <Effects/Sparkle.h>
 #endif

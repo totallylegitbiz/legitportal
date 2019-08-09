@@ -7,13 +7,20 @@ int ledOffsets[LED_CNT] = {};
 const int EFFECT_CNT = 5;
 
 int effectLoopClockOffset = 0;
-const unsigned int effectRefreshHz = 60; // Updates every 50mz (20hz);
+const unsigned int effectRefreshHz = 60; // Updates 60 times a second.
 unsigned long lastRefreshMs = 0;
 
-void zeroOutStrip()
+void zeroOutOutputStrip()
 {
   for (int i = 0; i < LED_CNT + LED_OFFSET; i++) {
     cleds[i] = CRGB(0, 0, 0);
+  }
+}
+
+void zeroOutStrip()
+{
+  for (int i = 0; i < LED_CNT; i++) {
+    leds[i] = CRGB(0, 0, 0);
   }
 }
 
@@ -85,6 +92,9 @@ const uint8_t CANDLE_EFFECT = 7;
 const uint8_t POLICE_EFFECT = 8;
 const uint8_t PURPLE_BLUES_EFFECT = 9;
 const uint8_t HUE_BARS_EFFECT = 10;
+const uint8_t SPARKLE_WHITE = 20;
+const uint8_t SPARKLE_RAINBOW = 21;
+
 
 // Solid colors
 const uint8_t SOLID_0_EFFECT = 100;
@@ -98,6 +108,7 @@ const uint8_t SOLID_7_EFFECT = 107;
 const uint8_t SOLID_8_EFFECT = 108;
 const uint8_t SOLID_9_EFFECT = 109;
 const uint8_t SOLID_10_EFFECT = 110;
+
 
 void effectRenderLoop(uint8_t effectId, struct EffectState *effectState)
 {
@@ -174,7 +185,13 @@ void effectRenderLoop(uint8_t effectId, struct EffectState *effectState)
     solidEffectLoop(effectState,CHSV(200,255,255));
     break;
   case SOLID_10_EFFECT:
-    solidEffectLoop(effectState,CHSV(0,0,255));
+    solidEffectLoop(effectState,CHSV(225,255,255));
+    break;
+  case SPARKLE_WHITE: 
+    sparkleEffectLoop(effectState, 0);
+    break;
+  case SPARKLE_RAINBOW: 
+    sparkleEffectLoop(effectState, 200);
     break;
   default:
     Serial.println("Please set effect count correctly");

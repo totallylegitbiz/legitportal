@@ -1,7 +1,8 @@
-#ifndef INC_CONFIG
-#define INC_CONFIG
+#ifndef CONFIG_H
+#define CONFIG_H
 
 const bool DIAGNOSTIC_MODE = false;
+
 // Effect Loop config
 const unsigned int EFFECT_LOOP_MS = (unsigned int)60 * 1000;
 const uint8_t LED_BRIGHTNESS = 20; // 0-255 for overall brightness.
@@ -65,9 +66,6 @@ const int PULSE_SENSOR_PIN = A7;
 const int LED_PIN = 8;
 
 // // Led strip
-// const unsigned int LED_CNT = 98;
-// const unsigned int LED_OFFSET = 0; //25;
-
 const unsigned int LED_CNT = 98;
 const unsigned int LED_OFFSET = 0; //25;
 
