@@ -2,6 +2,8 @@
 #include <Config.h>
 #include <Effects.h>
 EffectState currentEffectState;
+Config currentConfig = getConfig();
+
 #include <Transmitter.h>
 
 bool lastButtonState = false; // Default is not pressed.
@@ -30,6 +32,8 @@ void setButtonState()
 void setup()
 {
 
+  // Setup config.
+
   Serial.begin(9600);
   randomSeed(analogRead(0));
 
@@ -54,16 +58,6 @@ void setup()
 
   Serial.print("### SETUP COMPLETE for transmitter id: ");
   Serial.println(currentEffectState.transmitterId);
-}
-
-unsigned int getDipValue()
-{
-  const bool d0 = digitalRead(DIP_PIN_0);
-  const bool d1 = digitalRead(DIP_PIN_1);
-  const bool d2 = digitalRead(DIP_PIN_2);
-  const bool d3 = digitalRead(DIP_PIN_3);
-
-  return !d0 + (!d1 * 2) + (!d2 * 4) + (!d3 * 8);
 }
 
 void diagnoticModeLoop()
