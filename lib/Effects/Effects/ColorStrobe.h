@@ -16,16 +16,19 @@ void colorStrobeEffectLoop(struct EffectState *effectState)
 
   const unsigned int hueLow = 170;
   const unsigned int hueHigh = 300;
-  
+
   const unsigned int hue = hueLow + (hueHigh - hueLow) * loopPercent;
 
-  for (int i = 0; i < LED_CNT; i++) {
-    if (loopPosition < stepBase + blinkTs) {
-      leds[i] = CHSV(hue, 220,255);
-    } else {
-      leds[i] = CRGB(0,0,0);
+  for (int i = 0; i < LED_CNT; i++)
+  {
+    if (loopPosition < stepBase + blinkTs)
+    {
+      leds[i] = CHSV(hue, 220, 255);
     }
-  
+    else
+    {
+      leds[i] = CRGB(0, 0, 0);
+    }
   }
-    copyLedsWithOffset();
+  copyLedsWithOffset();
 }

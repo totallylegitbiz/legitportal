@@ -2,20 +2,20 @@
 
 void strobeEffectLoop(struct EffectState *effectState, CRGB colorOff, CRGB colorOn, int loopMs)
 {
-    const unsigned int loopPosition = effectState->loopPosition % loopMs;
+  const unsigned int loopPosition = effectState->loopPosition % loopMs;
 
-    for (int i = 0; i < LED_CNT; i++)
+  for (int i = 0; i < LED_CNT; i++)
+  {
+    if (loopPosition < loopMs / 2)
     {
-        if (loopPosition < loopMs / 2)
-        {
-            leds[i] = colorOff;
-        }
-        else
-        {
-            leds[i] = colorOn;
-        }
+      leds[i] = colorOff;
     }
-      copyLedsWithOffset();
+    else
+    {
+      leds[i] = colorOn;
+    }
+  }
+  copyLedsWithOffset();
 }
 
 // void strobeEffectLoop(struct EffectState *effectState)

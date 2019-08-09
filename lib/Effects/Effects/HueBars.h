@@ -1,8 +1,8 @@
 #include <EffectTypes.h>
 #include <FastLED.h>
 
-void hueBarsEffectLoop(struct EffectState *effectState, unsigned int loopMs) {
-
+void hueBarsEffectLoop(struct EffectState *effectState, unsigned int loopMs)
+{
 
   const float loopPercent = float(effectState->loopPosition % loopMs) / loopMs;
   const float huePercent = float(effectState->loopPosition) / EFFECT_LOOP_MS;
@@ -13,9 +13,10 @@ void hueBarsEffectLoop(struct EffectState *effectState, unsigned int loopMs) {
   const int offset = loopPercent * LED_CNT;
 
   // zeroOutStrip();
-  for (int i = 0; i < lines;i++) {
-    const float linePercent = float(i)/lines;
-    const int baseIdx = (int((linePercent)*LED_CNT)+offset)%255;
+  for (int i = 0; i < lines; i++)
+  {
+    const float linePercent = float(i) / lines;
+    const int baseIdx = (int((linePercent)*LED_CNT) + offset) % 255;
 
     Serial.print("baseIdx: ");
     Serial.println(baseIdx);

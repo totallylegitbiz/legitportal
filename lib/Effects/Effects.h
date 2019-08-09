@@ -12,20 +12,40 @@ unsigned long lastRefreshMs = 0;
 
 void zeroOutOutputStrip()
 {
-  for (int i = 0; i < LED_CNT + LED_OFFSET; i++) {
+  for (int i = 0; i < LED_CNT + LED_OFFSET; i++)
+  {
     cleds[i] = CRGB(0, 0, 0);
   }
 }
 
 void zeroOutStrip()
 {
-  for (int i = 0; i < LED_CNT; i++) {
+  for (int i = 0; i < LED_CNT; i++)
+  {
     leds[i] = CRGB(0, 0, 0);
   }
 }
 
-void generateRandom() {
-  for (int i = 0; i < LED_CNT; i++) {
+void colorOutStrip(CRGB color)
+{
+  for (int i = 0; i < LED_CNT; i++)
+  {
+    leds[i] = color;
+  }
+}
+
+void colorOutStrip(CHSV color)
+{
+  for (int i = 0; i < LED_CNT; i++)
+  {
+    leds[i] = color;
+  }
+}
+
+void generateRandom()
+{
+  for (int i = 0; i < LED_CNT; i++)
+  {
     ledOffsets[i] = random(0, LED_CNT);
   }
 }
@@ -43,7 +63,6 @@ void copyLedsWithOffset()
   {
     cleds[i + LED_OFFSET] = leds[i];
   }
-
 }
 
 void copyLedsWithOffsetGamma()
@@ -54,9 +73,7 @@ void copyLedsWithOffsetGamma()
     cleds[idx].r = dim8_video(leds[idx].r);
     cleds[idx].g = dim8_video(leds[idx].g);
     cleds[idx].b = dim8_video(leds[idx].b);
-    // cleds[i + LED_OFFSET] = leds[i];
   }
-
 }
 
 void recievedStatusEffect(CRGB color, int d)
@@ -72,7 +89,7 @@ void recievedStatusEffect(CRGB color, int d)
 #include <Effects/All.h>
 
 const uint8_t LOADING_EFFECT = 255;
-const uint8_t DOT_SPIN_EFFECT = 0; 
+const uint8_t DOT_SPIN_EFFECT = 0;
 const uint8_t HUE_SPIN_EFFECT = 1;
 const uint8_t STOBE_FLASH_EFFECT = 2;
 const uint8_t BLUE_RED_FLASH_EFFECT = 3;
@@ -86,7 +103,6 @@ const uint8_t HUE_BARS_EFFECT = 10;
 const uint8_t SPARKLE_WHITE = 20;
 const uint8_t SPARKLE_RAINBOW = 21;
 
-
 // Solid colors
 const uint8_t SOLID_0_EFFECT = 100;
 const uint8_t SOLID_1_EFFECT = 101;
@@ -99,7 +115,6 @@ const uint8_t SOLID_7_EFFECT = 107;
 const uint8_t SOLID_8_EFFECT = 108;
 const uint8_t SOLID_9_EFFECT = 109;
 const uint8_t SOLID_10_EFFECT = 110;
-
 
 void effectRenderLoop(uint8_t effectId, struct EffectState *effectState)
 {
@@ -146,42 +161,42 @@ void effectRenderLoop(uint8_t effectId, struct EffectState *effectState)
     hueSparkleEffectLoop(effectState);
     break;
   case HUE_BARS_EFFECT:
-    hueBarsEffectLoop(effectState,10000);
+    hueBarsEffectLoop(effectState, 10000);
     break;
   case SOLID_0_EFFECT:
-    solidEffectLoop(effectState,CHSV(0,255,255));
+    solidEffectLoop(effectState, CHSV(0, 255, 255));
     break;
   case SOLID_1_EFFECT:
-    solidEffectLoop(effectState,CHSV(25,255,255));
+    solidEffectLoop(effectState, CHSV(25, 255, 255));
     break;
   case SOLID_2_EFFECT:
-    solidEffectLoop(effectState,CHSV(50,255,255));
+    solidEffectLoop(effectState, CHSV(50, 255, 255));
     break;
   case SOLID_4_EFFECT:
-    solidEffectLoop(effectState,CHSV(75,255,255));
+    solidEffectLoop(effectState, CHSV(75, 255, 255));
     break;
   case SOLID_5_EFFECT:
-    solidEffectLoop(effectState,CHSV(100,255,255));
+    solidEffectLoop(effectState, CHSV(100, 255, 255));
     break;
   case SOLID_6_EFFECT:
-    solidEffectLoop(effectState,CHSV(125,255,255));
+    solidEffectLoop(effectState, CHSV(125, 255, 255));
     break;
   case SOLID_7_EFFECT:
-    solidEffectLoop(effectState,CHSV(150,255,255));
+    solidEffectLoop(effectState, CHSV(150, 255, 255));
     break;
   case SOLID_8_EFFECT:
-    solidEffectLoop(effectState,CHSV(175,255,255));
+    solidEffectLoop(effectState, CHSV(175, 255, 255));
     break;
   case SOLID_9_EFFECT:
-    solidEffectLoop(effectState,CHSV(200,255,255));
+    solidEffectLoop(effectState, CHSV(200, 255, 255));
     break;
   case SOLID_10_EFFECT:
-    solidEffectLoop(effectState,CHSV(225,255,255));
+    solidEffectLoop(effectState, CHSV(225, 255, 255));
     break;
-  case SPARKLE_WHITE: 
+  case SPARKLE_WHITE:
     sparkleEffectLoop(effectState, 0);
     break;
-  case SPARKLE_RAINBOW: 
+  case SPARKLE_RAINBOW:
     sparkleEffectLoop(effectState, 200);
     break;
   default:
@@ -200,5 +215,5 @@ void effectLoop(struct EffectState *effectState)
 
   lastRefreshMs = millis();
 
-  effectRenderLoop(effectState->activeEffect,effectState);
+  effectRenderLoop(effectState->activeEffect, effectState);
 }
