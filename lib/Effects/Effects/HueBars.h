@@ -1,4 +1,4 @@
-#include <EffectTypes.h>
+
 #include <FastLED.h>
 
 void hueBarsEffectLoop(struct EffectState *effectState, unsigned int loopMs)

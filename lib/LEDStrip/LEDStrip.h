@@ -1,10 +1,8 @@
 #include <FastLED.h>
 #include <Config.h>
 
-CRGB cleds[LED_CNT + LED_OFFSET];
-
 void ledStripSetup()
 {
-  FastLED.addLeds<WS2812, LED_PIN, GRB>(cleds, LED_CNT + LED_OFFSET);
-  FastLED.setBrightness(LED_BRIGHTNESS);
+  FastLED.addLeds<WS2812, config.LED_PIN, GRB>(cleds, MAX_LEDS);
+  FastLED.setBrightness(config.LED_BRIGHTNESS);
 }

@@ -1,4 +1,4 @@
-#include <EffectTypes.h>
+
 
 void policeEffectLoop(struct EffectState *effectState)
 {

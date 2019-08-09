@@ -1,4 +1,4 @@
-#include <EffectTypes.h>
+
 
 void candyCaneEffectLoop(struct EffectState *effectState)
 {

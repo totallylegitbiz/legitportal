@@ -1,4 +1,4 @@
-#include <EffectTypes.h>
+
 
 void spinEffectLoop(struct EffectState *effectState, unsigned int loopMs)
 {

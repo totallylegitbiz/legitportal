@@ -1,5 +1,4 @@
 
-#include <EffectTypes.h>
 
 void hueSparkleEffectLoop(struct EffectState *effectState)
 {

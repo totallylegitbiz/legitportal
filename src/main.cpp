@@ -1,10 +1,14 @@
 #include <SPI.h>
 #include <Config.h>
-#include <Effects.h>
-EffectState currentEffectState;
+
+EffectState effectState;
 Config config = getConfig();
 
+#include <Effects.h>
 #include <Transmitter.h>
+
+CRGB cleds[MAX_LEDS];
+CRGB leds[]; // This is our local copy of leds.
 
 bool lastButtonState = false; // Default is not pressed.
 int lastRecievedOffset = 0;
@@ -19,11 +23,11 @@ void setButtonState()
     // BUTTON WAS CLICKED
     Serial.println("Click");
 
-    currentEffectState.activeEffect = (currentEffectState.activeEffect + 1) % EFFECT_CNT;
-    currentEffectState.age = 0;
+    effectState.activeEffect = (effectState.activeEffect + 1) % EFFECT_CNT;
+    effectState.age = 0;
     lastDataCreationTs = 0;
-    currentEffectState.sourceTransmitterId = currentEffectState.transmitterId; // Set it to us, this ain't a relay.
-    transmitEffectState(&currentEffectState);                                  // Force a transmission loop
+    effectState.sourceTransmitterId = effectState.transmitterId; // Set it to us, this ain't a relay.
+    transmitEffectState(&effectState);                           // Force a transmission loop
   }
 
   lastButtonState = currentButtonState;
@@ -51,7 +55,7 @@ void setup()
   transmitterSetup();
 
   Serial.print("### SETUP COMPLETE for transmitter id: ");
-  Serial.println(currentEffectState.transmitterId);
+  Serial.println(effectState.transmitterId);
 }
 
 void diagnoticModeLoop()
@@ -87,7 +91,7 @@ void loop()
     return;
   }
 
-  currentEffectState.loopPosition = (millis() + effectLoopClockOffset) % config.EFFECT_LOOP_MS;
+  effectState.loopPosition = (millis() + effectLoopClockOffset) % config.EFFECT_LOOP_MS;
 
   if (hasGottenSync)
   {
@@ -95,7 +99,7 @@ void loop()
     setButtonState();
   }
 
-  effectLoop(&currentEffectState, &config);
+  effectLoop(&effectState);
 
   FastLED.show();
 }

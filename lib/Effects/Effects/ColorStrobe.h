@@ -1,4 +1,4 @@
-#include <EffectTypes.h>
+
 
 void colorStrobeEffectLoop(struct EffectState *effectState)
 {

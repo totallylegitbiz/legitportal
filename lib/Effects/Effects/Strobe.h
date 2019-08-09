@@ -1,4 +1,4 @@
-#include <EffectTypes.h>
+
 
 void strobeEffectLoop(struct EffectState *effectState, CRGB colorOff, CRGB colorOn, int loopMs)
 {

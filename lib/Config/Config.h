@@ -1,7 +1,7 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-const uint8_t MAX_LEDS = 200; // The max
+const uint8_t MAX_LEDS = 200; // This is the max number of LEDs for any target.
 
 const uint8_t BIKE = 0;
 const uint8_t CHILL_DOME = 1;
@@ -38,7 +38,7 @@ typedef struct Config
 
   // LED strip
   const int LED_PIN = 8;
-  unsigned int LED_CNT; // Don't forget to set MAX_LEDS;
+  unsigned int LED_CNT;
   unsigned int LED_OFFSET;
 
   // RADIO
@@ -83,5 +83,14 @@ Config getConfig()
 
   return outConfig;
 }
+
+typedef struct EffectState
+{
+  unsigned int loopPosition = 0;
+  unsigned int activeEffect = 0;
+  unsigned int transmitterId = 0;
+  int16_t sourceTransmitterId = 0;
+  unsigned long age = 0;
+};
 
 #endif

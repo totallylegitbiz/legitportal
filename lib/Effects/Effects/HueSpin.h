@@ -1,5 +1,3 @@
-#include <EffectTypes.h>
-
 void hueSpinEffectLoop(struct EffectState *effectState, unsigned int loopMs)
 {
   const unsigned int loopPosition = effectState->loopPosition % loopMs;

@@ -17,7 +17,7 @@ const unsigned int txFailureResetMs = 10 * 1000; // After 10 seconds of failures
 unsigned long lastSuccessfulTx = 0;
 unsigned long lastDataCreationTs = 0;
 
-RF24 radio(RADIO_CE_PIN, RADIO_CSN_PIN); // CE, CSN pins
+RF24 radio(config.RADIO_CE_PIN, config.RADIO_CSN_PIN); // CE, CSN pins
 EffectState nextEffectState;
 
 // Dealing with presync
@@ -33,14 +33,14 @@ void blink(int pin)
 
 void setupStatusLED()
 {
-  pinMode(RED_LED_PIN, OUTPUT);
-  pinMode(GREEN_LED_PIN, OUTPUT);
-  pinMode(BLUE_LED_PIN, OUTPUT);
+  pinMode(config.RED_LED_PIN, OUTPUT);
+  pinMode(config.GREEN_LED_PIN, OUTPUT);
+  pinMode(config.BLUE_LED_PIN, OUTPUT);
   pinMode(LED_BUILTIN, OUTPUT);
 
-  blink(RED_LED_PIN);
-  blink(GREEN_LED_PIN);
-  blink(BLUE_LED_PIN);
+  blink(config.RED_LED_PIN);
+  blink(config.GREEN_LED_PIN);
+  blink(config.BLUE_LED_PIN);
 }
 
 void radioSetup()
@@ -70,7 +70,7 @@ void radioSetup()
 
 void transmitterSetId()
 {
-  currentEffectState.transmitterId = random(1, 65535);
+  config.TRANSMITTER_ID = random(1, 65535);
 }
 
 void transmitterSetup()
@@ -149,7 +149,7 @@ void transmitterReceiveLoop(struct EffectState *effectState)
     }
 
     hasGottenSync = true; // We got a sync!
-    int nextEffectLoopClockOffset = nextEffectState.loopPosition - (millis() % EFFECT_LOOP_MS);
+    int nextEffectLoopClockOffset = nextEffectState.loopPosition - (millis() % config.EFFECT_LOOP_MS);
 
     Serial.println("RX ");
     // Serial.print(nextEffectState.transmitterId);

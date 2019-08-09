@@ -1,4 +1,3 @@
-#include <EffectTypes.h>
 
 void solidEffectLoop(struct EffectState *effectState, CHSV c)
 {

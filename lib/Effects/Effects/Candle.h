@@ -1,4 +1,4 @@
-#include <EffectTypes.h>
+
 #include <RealCandle.h>
 
 void candleEffectLoop(struct EffectState *effectState, unsigned int steps)

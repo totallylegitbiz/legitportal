@@ -1,5 +1,5 @@
 #include <LEDStrip.h>
-#include <EffectTypes.h>
+
 #include <Helpers.h>
 
 const int EFFECT_CNT = 5;
