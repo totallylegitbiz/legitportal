@@ -1,5 +1,3 @@
-
-
 RunEvery runEvery(20);
 
 void sparkleEffectLoop(struct EffectState *effectState, int sat)

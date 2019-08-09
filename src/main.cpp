@@ -4,11 +4,12 @@
 EffectState effectState;
 Config config = getConfig();
 
+CRGB cleds[MAX_LEDS];
+CRGB leds[MAX_LEDS]; // This is our local copy of leds.
+
+#include <LEDStrip.h>
 #include <Effects.h>
 #include <Transmitter.h>
-
-CRGB cleds[MAX_LEDS];
-CRGB leds[]; // This is our local copy of leds.
 
 bool lastButtonState = false; // Default is not pressed.
 int lastRecievedOffset = 0;
@@ -52,10 +53,12 @@ void setup()
 
   pinMode(config.SENSOR_PIN, INPUT);
 
+  ledStripSetup();
+
   transmitterSetup();
 
   Serial.print("### SETUP COMPLETE for transmitter id: ");
-  Serial.println(effectState.transmitterId);
+  Serial.println(config.TRANSMITTER_ID);
 }
 
 void diagnoticModeLoop()

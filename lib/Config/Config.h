@@ -47,6 +47,8 @@ typedef struct Config
 
   // EFFECT BUTTON
   const int EFFECT_BUTTON_PIN = 6;
+
+  int TRANSMITTER_ID;
 };
 
 uint8_t getDipValue(Config config)
@@ -76,8 +78,7 @@ Config getConfig()
   {
   case BIKE:
     outConfig.LED_CNT = 98;
-    outConfig.LED_OFFSET = 0; //25;
-
+    outConfig.LED_OFFSET = 0;
     break;
   }
 
@@ -88,7 +89,6 @@ typedef struct EffectState
 {
   unsigned int loopPosition = 0;
   unsigned int activeEffect = 0;
-  unsigned int transmitterId = 0;
   int16_t sourceTransmitterId = 0;
   unsigned long age = 0;
 };

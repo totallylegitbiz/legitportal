@@ -6,11 +6,9 @@ void candleEffectLoop(struct EffectState *effectState, unsigned int steps)
   const unsigned int loopMs = 60000; // 60 second loop
   const unsigned int loopPosition = effectState->loopPosition % loopMs;
   const float loopPercent = float(loopPosition) / loopMs;
-  const unsigned int ledOffset = config.LED_CNT * (float(loopPosition) / loopMs);
 
   const unsigned int hue = 20;
   const unsigned int sat = 225;
-  const unsigned int intensity = abs(cos(PI * .5 * loopPercent * 2) * 255);
 
   const int idx = loopPercent * candle2Size;
 

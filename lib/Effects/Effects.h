@@ -1,5 +1,3 @@
-#include <LEDStrip.h>
-
 #include <Helpers.h>
 
 const int EFFECT_CNT = 5;
@@ -10,7 +8,6 @@ unsigned long lastRefreshMs = 0;
 
 void effectSetup()
 {
-  ledStripSetup();
   zeroOutStrip();
 }
 
