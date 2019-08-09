@@ -12,10 +12,9 @@ unsigned long lastRefreshMs = 0;
 
 void zeroOutStrip()
 {
-  for (int i = 0; i < LED_CNT + LED_OFFSET - 1; i++) {
+  for (int i = 0; i < LED_CNT + LED_OFFSET; i++) {
     cleds[i] = CRGB(0, 0, 0);
   }
- 
 }
 
 void generateRandom() {
