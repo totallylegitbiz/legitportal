@@ -68,21 +68,12 @@ void radioSetup()
   nextEffectState.activeEffect = 0;
 }
 
-void transmitterSetId()
-{
-  config.TRANSMITTER_ID = random(1, 65535);
-}
-
 void transmitterSetup()
 {
-
-  // Setup Effect State
-  // currentEffectState.activeEffect = 255; // Special loading state
-  transmitterSetId();
-
   setupStatusLED();
   radioSetup();
 }
+
 void (*resetFunc)(void) = 0;
 
 void transmitEffectState(struct EffectState *effectState)
@@ -98,15 +89,6 @@ void transmitEffectState(struct EffectState *effectState)
   objEffectState.age = millis() - lastDataCreationTs;
 
   bool ok = radio.write(&objEffectState, sizeof(objEffectState));
-
-  // Serial.print("TX ");
-  // Serial.print(effectState->transmitterId);
-  // Serial.print(" -> * loopPosition: ");
-  // Serial.print(objEffectState.loopPosition);
-  // Serial.print(" activeEffect: ");
-  // Serial.print(objEffectState.activeEffect);
-  // Serial.print(" age: ");
-  // Serial.print(objEffectState.age);
 
   pingIntervalMs = random(pingIntervalMin, pingIntervalMax);
 
@@ -162,7 +144,7 @@ void transmitterReceiveLoop(struct EffectState *effectState)
 
     bool hasEffectChanged = effectState->activeEffect != nextEffectState.activeEffect;
     bool hasSourceChanged = effectState->sourceTransmitterId != nextEffectState.sourceTransmitterId;
-    bool isFromMe = nextEffectState.sourceTransmitterId == effectState->transmitterId;
+    bool isFromMe = nextEffectState.sourceTransmitterId == config.TRANSMITTER_ID;
 
     bool shouldRelay = (hasEffectChanged || hasSourceChanged);
 
@@ -228,7 +210,7 @@ void transmitterReceiveLoop(struct EffectState *effectState)
     Serial.println("Sync timeout reached, starting..");
     hasGottenSync = true;
     effectState->activeEffect = 0;
-    effectState->sourceTransmitterId = effectState->transmitterId; // Since we are assuming our own effect, we are the source now.
+    effectState->sourceTransmitterId = config.TRANSMITTER_ID; // Since we are assuming our own effect, we are the source now.
     transmitEffectState(effectState);
     pingLastPingMs = millis(); // reset the ping time.
     dataLastReceived = millis();

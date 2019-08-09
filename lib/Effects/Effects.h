@@ -54,13 +54,7 @@ const uint8_t SOLID_10_EFFECT = 110;
 void effectRenderLoop(uint8_t effectId, struct EffectState *effectState)
 {
 
-#ifdef EFFECT_OVERIDE
-  const uint8_t selectedEffectId = EFFECT_OVERIDE;
-#else
-  const uint8_t selectedEffectId = effectId;
-#endif
-
-  switch (selectedEffectId)
+  switch (effectId)
   {
   case LOADING_EFFECT: // This is the loading one.
     throbEffectLoop(effectState, 0);

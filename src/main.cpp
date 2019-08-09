@@ -1,8 +1,9 @@
 #include <SPI.h>
+#include <FastLED.h>
 #include <Config.h>
 
 EffectState effectState;
-Config config = getConfig();
+const Config config = getConfig();
 
 CRGB cleds[MAX_LEDS];
 CRGB leds[MAX_LEDS]; // This is our local copy of leds.
@@ -27,8 +28,8 @@ void setButtonState()
     effectState.activeEffect = (effectState.activeEffect + 1) % EFFECT_CNT;
     effectState.age = 0;
     lastDataCreationTs = 0;
-    effectState.sourceTransmitterId = effectState.transmitterId; // Set it to us, this ain't a relay.
-    transmitEffectState(&effectState);                           // Force a transmission loop
+    effectState.sourceTransmitterId = config.TRANSMITTER_ID; // Set it to us, this ain't a relay.
+    transmitEffectState(&effectState);                       // Force a transmission loop
   }
 
   lastButtonState = currentButtonState;

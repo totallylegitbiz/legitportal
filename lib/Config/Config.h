@@ -48,7 +48,7 @@ typedef struct Config
   // EFFECT BUTTON
   const int EFFECT_BUTTON_PIN = 6;
 
-  int TRANSMITTER_ID;
+  int TRANSMITTER_ID = random(1, 65535);
 };
 
 uint8_t getDipValue(Config config)
@@ -85,11 +85,19 @@ Config getConfig()
   return outConfig;
 }
 
+#ifdef EFFECT_OVERIDE
+const uint8_t DEFAULT_EFFECT = EFFECT_OVERIDE;
+#else
+const uint8_t DEFAULT_EFFECT = 0;
+#endif
+
 typedef struct EffectState
 {
   unsigned int loopPosition = 0;
-  unsigned int activeEffect = 0;
-  int16_t sourceTransmitterId = 0;
+  unsigned int activeEffect = DEFAULT_EFFECT;
+
+  int16_t sourceTransmitterId = 0; // If the sourceTransmitterId !== transmitterId it's a relay.
+  int16_t transmitterId = 0;
   unsigned long age = 0;
 };
 
