@@ -9,7 +9,7 @@ void policeEffectLoop(struct EffectState *effectState)
 
   const int blueHue = 160;
 
-  unsigned int stepDelays[] = {
+  uint8_t stepDelays[] = {
       shortDelay,
       medDelay,
       shortDelay,

@@ -1,26 +1,26 @@
 
 #include <RealCandle.h>
 
-void candleEffectLoop(struct EffectState *effectState, unsigned int steps)
+void candleEffectLoop(struct EffectState *effectState, uint8_t steps)
 {
-  const unsigned int loopMs = 60000; // 60 second loop
-  const unsigned int loopPosition = effectState->loopPosition % loopMs;
+  const uint8_t loopMs = 60000; // 60 second loop
+  const uint8_t loopPosition = effectState->loopPosition % loopMs;
   const float loopPercent = float(loopPosition) / loopMs;
 
-  const unsigned int hue = 20;
-  const unsigned int sat = 225;
+  const uint8_t hue = 20;
+  const uint8_t sat = 225;
 
   const int idx = loopPercent * candle2Size;
 
-  const unsigned int stepLoopMs = 500;
-  const unsigned int stepLoopPosition = effectState->loopPosition % stepLoopMs;
+  const uint8_t stepLoopMs = 500;
+  const uint8_t stepLoopPosition = effectState->loopPosition % stepLoopMs;
   const float stepLoopPercent = float(stepLoopPosition) / stepLoopMs;
 
-  const unsigned int step = stepLoopPercent * steps;
+  const uint8_t step = stepLoopPercent * steps;
 
-  for (int i = 0; i < config.LED_CNT; i++)
+  for (uint16_t i = 0; i < config.LED_CNT; i++)
   {
-    const unsigned int ledOffset = notRandom(0, config.LED_CNT - 1, i);
+    const uint8_t ledOffset = notRandom(0, config.LED_CNT - 1, i);
     const int candleIdx = (idx + ledOffset) % candle2Size;
     const uint8_t intensity = pgm_read_byte(&candle2[candleIdx]);
 

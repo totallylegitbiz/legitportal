@@ -8,21 +8,22 @@
 //address through which two modules communicate.
 const byte address[6] = "00001";
 
-const unsigned int pingIntervalMin = 500;
-const unsigned int pingIntervalMax = 1000;
-unsigned int pingIntervalMs = random(pingIntervalMin, pingIntervalMax); // How often will we ping.
-unsigned long pingLastPingMs = 0;                                       // Time of the last ping
-unsigned long dataLastReceived = 0;
-const unsigned int txFailureResetMs = 10 * 1000; // After 10 seconds of failures, reset
-unsigned long lastSuccessfulTx = 0;
-unsigned long lastDataCreationTs = 0;
+const uint16_t pingIntervalMin = 500;
+const uint16_t pingIntervalMax = 1000;
+
+uint8_t pingIntervalMs = random(pingIntervalMin, pingIntervalMax); // How often will we ping.
+uint32_t pingLastPingMs = 0;                                       // Time of the last ping
+uint32_t dataLastReceived = 0;
+const uint16_t txFailureResetMs = 10 * 1000; // After 10 seconds of failures, reset
+uint32_t lastSuccessfulTx = 0;
+uint32_t lastDataCreationTs = 0;
 
 RF24 radio(config.RADIO_CE_PIN, config.RADIO_CSN_PIN); // CE, CSN pins
 EffectState nextEffectState;
 
 // Dealing with presync
 bool hasGottenSync = false;
-const unsigned int syncTimeout = random(pingIntervalMs * 2, pingIntervalMs * 5); //Wait until at most double the timeout until starting to transmit.
+const uint8_t syncTimeout = random(pingIntervalMs * 2, pingIntervalMs * 5); //Wait until at most double the timeout until starting to transmit.
 
 void blink(int pin)
 {
@@ -220,7 +221,7 @@ void transmitterReceiveLoop(struct EffectState *effectState)
 void transmitterTransmitLoop(struct EffectState *effectState)
 {
 
-  const unsigned int dataGracePeriod = pingIntervalMs * 3;
+  const uint8_t dataGracePeriod = pingIntervalMs * 3;
 
   const bool isWithinGracePeriod = millis() < dataLastReceived + dataGracePeriod;
   const bool isDataFresh = millis() < (dataLastReceived + pingIntervalMax);

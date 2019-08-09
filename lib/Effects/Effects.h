@@ -3,8 +3,8 @@
 const int EFFECT_CNT = 5;
 
 int effectLoopClockOffset = 0;
-const unsigned int effectRefreshHz = 60; // Updates 60 times a second.
-unsigned long lastRefreshMs = 0;
+const uint8_t effectRefreshHz = 60; // Updates 60 times a second.
+uint32_t lastRefreshMs = 0;
 
 void effectSetup()
 {

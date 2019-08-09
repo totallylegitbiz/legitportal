@@ -19,7 +19,7 @@ typedef struct Config
   bool DIAGNOSTIC_MODE = false;
 
   // Effect Loop config
-  const uint16_t EFFECT_LOOP_MS = (unsigned int)60 * 1000;
+  const uint16_t EFFECT_LOOP_MS = (uint8_t)60 * 1000;
   const uint8_t LED_BRIGHTNESS = 20; // 0-255 for overall brightness.
 
   // RGB Status LED
@@ -38,8 +38,8 @@ typedef struct Config
 
   // LED strip
   const int LED_PIN = 8;
-  unsigned int LED_CNT;
-  unsigned int LED_OFFSET;
+  uint8_t LED_CNT;
+  uint8_t LED_OFFSET;
 
   // RADIO
   const int RADIO_CE_PIN = 9;
@@ -93,12 +93,12 @@ const uint8_t DEFAULT_EFFECT = 0;
 
 typedef struct EffectState
 {
-  unsigned int loopPosition = 0;
-  unsigned int activeEffect = DEFAULT_EFFECT;
+  uint8_t loopPosition = 0;
+  uint8_t activeEffect = DEFAULT_EFFECT;
 
   int16_t sourceTransmitterId = 0; // If the sourceTransmitterId !== transmitterId it's a relay.
   int16_t transmitterId = 0;
-  unsigned long age = 0;
+  uint32_t age = 0;
 };
 
 #endif

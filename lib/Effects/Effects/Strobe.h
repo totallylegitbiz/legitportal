@@ -1,8 +1,8 @@
 
 
-void strobeEffectLoop(struct EffectState *effectState, CRGB colorOff, CRGB colorOn, int loopMs)
+void strobeEffectLoop(struct EffectState *effectState, CRGB colorOff, CRGB colorOn, uint16_t loopMs)
 {
-  const unsigned int loopPosition = effectState->loopPosition % loopMs;
+  const uint8_t loopPosition = effectState->loopPosition % loopMs;
 
   for (int i = 0; i < config.LED_CNT; i++)
   {
@@ -20,8 +20,8 @@ void strobeEffectLoop(struct EffectState *effectState, CRGB colorOff, CRGB color
 
 // void strobeEffectLoop(struct EffectState *effectState)
 // {
-//     const unsigned int loopMs = 10000;
-//     const unsigned int loopPosition = effectState->loopPosition % loopMs;
+//     const uint8_t loopMs = 10000;
+//     const uint8_t loopPosition = effectState->loopPosition % loopMs;
 
 //     const float loopPercent = float(loopPosition) / loopMs;
 

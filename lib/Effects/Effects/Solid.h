@@ -2,7 +2,7 @@
 void solidEffectLoop(struct EffectState *effectState, CHSV c)
 {
 
-  for (int i = 0; i < config.LED_CNT; i++)
+  for (uint16_t i = 0; i < config.LED_CNT; i++)
   {
     leds[i] = c;
   }
@@ -13,7 +13,7 @@ void solidEffectLoop(struct EffectState *effectState, CHSV c)
 void solidEffectLoop(struct EffectState *effectState, CRGB c)
 {
 
-  for (int i = 0; i < config.LED_CNT; i++)
+  for (uint16_t i = 0; i < config.LED_CNT; i++)
   {
     leds[i] = c;
   }

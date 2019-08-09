@@ -5,8 +5,8 @@ void sparkleEffectLoop(struct EffectState *effectState, int sat)
 
   const int SPARKLE_BATCH_CNT = config.LED_CNT / 2;
 
-  const unsigned int loopMs = 60 * 1000;
-  const unsigned int loopPosition = effectState->loopPosition % loopMs;
+  const uint16_t loopMs = 60000;
+  const uint8_t loopPosition = effectState->loopPosition % loopMs;
 
   if (runEvery.shouldRun())
   {

@@ -22,26 +22,25 @@ void drawDashWithoutAdd(int width, uint16_t idx, CRGB color)
 }
 
 /* fade() 0-255 amount to keep (255 changes nothing) */
-void fadeDown(unsigned int by)
+void fadeDown(uint8_t by)
 {
-  for (int i = 0; i < config.LED_CNT; i++)
+  for (uint16_t i = 0; i < config.LED_CNT; i++)
   {
     leds[i].subtractFromRGB(by);
   }
 }
-void fadeUp(unsigned int by)
+void fadeUp(uint8_t by)
 {
-  for (int i = 0; i < config.LED_CNT; i++)
+  for (uint16_t i = 0; i < config.LED_CNT; i++)
   {
     leds[i].addToRGB(by);
   }
 }
 
-int notRandom(int from, int to, int seed)
+int notRandom(uint16_t from, uint16_t to, uint16_t seed)
 {
-
   randomSeed(seed);
-  const int rand = random(from, to);
+  const uint16_t rand = random(from, to);
   randomSeed(analogRead(0));
 
   return rand;
@@ -49,7 +48,7 @@ int notRandom(int from, int to, int seed)
 
 void zeroOutOutputStrip()
 {
-  for (int i = 0; i < config.LED_CNT + config.LED_OFFSET; i++)
+  for (uint16_t i = 0; i < config.LED_CNT + config.LED_OFFSET; i++)
   {
     cleds[i] = CRGB(0, 0, 0);
   }
@@ -57,7 +56,7 @@ void zeroOutOutputStrip()
 
 void zeroOutStrip()
 {
-  for (int i = 0; i < config.LED_CNT; i++)
+  for (uint16_t i = 0; i < config.LED_CNT; i++)
   {
     leds[i] = CRGB(0, 0, 0);
   }
@@ -65,7 +64,7 @@ void zeroOutStrip()
 
 void colorOutStrip(CRGB color)
 {
-  for (int i = 0; i < config.LED_CNT; i++)
+  for (uint16_t i = 0; i < config.LED_CNT; i++)
   {
     leds[i] = color;
   }
@@ -73,7 +72,7 @@ void colorOutStrip(CRGB color)
 
 void colorOutStrip(CHSV color)
 {
-  for (int i = 0; i < config.LED_CNT; i++)
+  for (uint16_t i = 0; i < config.LED_CNT; i++)
   {
     leds[i] = color;
   }
@@ -81,7 +80,7 @@ void colorOutStrip(CHSV color)
 
 void copyLedsWithOffset()
 {
-  for (int i = 0; i < config.LED_CNT; i++)
+  for (uint16_t i = 0; i < config.LED_CNT; i++)
   {
     cleds[i + config.LED_OFFSET] = leds[i];
   }
@@ -89,7 +88,7 @@ void copyLedsWithOffset()
 
 void copyLedsWithOffsetGamma()
 {
-  for (int i = 0; i < config.LED_CNT; i++)
+  for (uint16_t i = 0; i < config.LED_CNT; i++)
   {
     const int idx = i + config.LED_OFFSET;
     cleds[idx].r = dim8_video(leds[idx].r);
@@ -101,15 +100,15 @@ void copyLedsWithOffsetGamma()
 class RunEvery
 {
 public:
-  RunEvery(unsigned int everyMs);
+  RunEvery(uint8_t everyMs);
   boolean shouldRun();
 
 private:
-  unsigned int _everyMs;
-  unsigned long _lastRunMs;
+  uint8_t _everyMs;
+  uint32_t _lastRunMs;
 };
 
-RunEvery::RunEvery(unsigned int everyMs)
+RunEvery::RunEvery(uint8_t everyMs)
 {
   _everyMs = everyMs;
   _lastRunMs = 0;
