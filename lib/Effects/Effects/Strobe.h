@@ -20,7 +20,7 @@ void strobeEffectLoop(struct EffectState *effectState, CRGB colorOff, CRGB color
 
 // void strobeEffectLoop(struct EffectState *effectState)
 // {
-//     const uint8_t loopMs = 10000;
+//     const uint16_t loopMs = 10000;
 //     const uint8_t loopPosition = effectState->loopPosition % loopMs;
 
 //     const float loopPercent = float(loopPosition) / loopMs;

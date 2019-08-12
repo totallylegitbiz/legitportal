@@ -8,7 +8,7 @@ void colorStrobeEffectLoop(struct EffectState *effectState)
 
   const uint8_t blinkTs = 20;
   const uint8_t steps = 10;
-  const uint8_t loopMs = 1000;
+  const uint16_t loopMs = 1000;
 
   const uint8_t loopPosition = effectState->loopPosition % loopMs;
   const float loopPercent = float(loopPosition) / loopMs;

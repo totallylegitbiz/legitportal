@@ -1,6 +1,6 @@
 
 
-void spinEffectLoop(struct EffectState *effectState, uint8_t loopMs)
+void spinEffectLoop(struct EffectState *effectState, uint16_t loopMs)
 {
   const uint16_t loopPosition = effectState->loopPosition % loopMs;
   const uint16_t ledOffset = config.LED_CNT * (float(loopPosition) / loopMs);

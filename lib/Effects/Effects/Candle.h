@@ -3,7 +3,7 @@
 
 void candleEffectLoop(struct EffectState *effectState, uint8_t steps)
 {
-  const uint8_t loopMs = 60000; // 60 second loop
+  const uint16_t loopMs = 60000; // 60 second loop
   const uint8_t loopPosition = effectState->loopPosition % loopMs;
   const float loopPercent = float(loopPosition) / loopMs;
 

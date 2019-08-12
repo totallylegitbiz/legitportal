@@ -1,4 +1,4 @@
-void hueSpinEffectLoop(struct EffectState *effectState, uint8_t loopMs)
+void hueSpinEffectLoop(struct EffectState *effectState, uint16_t loopMs)
 {
   const uint8_t loopPosition = effectState->loopPosition % loopMs;
   const float loopPercent = float(loopPosition) / loopMs;

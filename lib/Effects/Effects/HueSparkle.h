@@ -2,7 +2,7 @@
 
 void hueSparkleEffectLoop(struct EffectState *effectState)
 {
-  const uint8_t loopMs = 60 * 1000;
+  const uint16_t loopMs = 60 * 1000;
   const uint8_t loopPosition = effectState->loopPosition % loopMs;
   const float loopPercent = float(loopPosition) / loopMs;
 
