@@ -1,5 +1,3 @@
-
-
 void colorStrobeEffectLoop(struct EffectDataPacket *effectState)
 {
 
@@ -16,11 +14,11 @@ void colorStrobeEffectLoop(struct EffectDataPacket *effectState)
   const uint8_t stepBase = (loopMs / steps) * step;
 
   const uint8_t hueLow = 170;
-  const uint8_t hueHigh = 300;
+  const uint16_t hueHigh = 300;
 
   const uint8_t hue = hueLow + (hueHigh - hueLow) * loopPercent;
 
-  for (uint16_t i = 0; i < config.LED_CNT; i++)
+  for (uint16_t i = 0; i < LED_CNT; i++)
   {
     if (loopPosition < stepBase + blinkTs)
     {

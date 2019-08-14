@@ -7,7 +7,7 @@ void throbEffectLoop(struct EffectDataPacket *effectState, int hue)
   const float loopPercent = float(loopPosition) / loopMs;
   const uint8_t intensity = abs(cos(PI * .5 * loopPercent * 2) * 255);
 
-  for (uint16_t i = 0; i < config.LED_CNT; i++)
+  for (uint16_t i = 0; i < LED_CNT; i++)
   {
     leds[i] = CHSV(hue, 255, intensity);
   }

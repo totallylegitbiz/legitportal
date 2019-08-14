@@ -13,7 +13,7 @@ void effectSetup()
 
 void recievedStatusEffect(CRGB color, int d)
 {
-  for (int i = 0; i < config.LED_CNT; i++)
+  for (int i = 0; i < LED_CNT; i++)
   {
     leds[i] = color;
   }

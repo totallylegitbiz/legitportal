@@ -3,13 +3,13 @@
 void policeEffectLoop(struct EffectDataPacket *effectState)
 {
 
-  const int shortDelay = 20;
-  const int medDelay = 100;
-  const int longDelay = 500;
+  const uint8_t shortDelay = 20;
+  const uint8_t medDelay = 100;
+  const uint16_t longDelay = 500;
 
-  const int blueHue = 160;
+  const uint8_t blueHue = 160;
 
-  uint8_t stepDelays[] = {
+  uint16_t stepDelays[] = {
       shortDelay,
       medDelay,
       shortDelay,

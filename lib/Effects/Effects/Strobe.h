@@ -4,7 +4,7 @@ void strobeEffectLoop(struct EffectDataPacket *effectState, CRGB colorOff, CRGB 
 {
   const uint8_t loopPosition = effectState->loopPosition % loopMs;
 
-  for (int i = 0; i < config.LED_CNT; i++)
+  for (uint16_t i = 0; i < LED_CNT; i++)
   {
     if (loopPosition < loopMs / 2)
     {

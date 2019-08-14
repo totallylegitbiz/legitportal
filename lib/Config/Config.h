@@ -1,6 +1,10 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
+#ifndef ELED_CNT
+#error SET ELED_CNT PLEASE
+#endif
+
 const uint8_t MAX_LEDS = 200; // This is the max number of LEDs for any target.
 
 const uint8_t BIKE = 0;
@@ -10,7 +14,9 @@ const uint8_t CAMP = 3;
 const uint8_t PULSE_REMOTE = 4;
 const uint8_t PORTAL = 5;
 
-#define LED_OFFSET 0;
+const uint8_t LED_OFFSET = 0;
+const uint16_t LED_CNT = ELED_CNT;
+const uint8_t LED_PIN = 8;
 
 CRGB cleds[LED_CNT];
 CRGB leds[LED_CNT]; // This is our local copy of leds.
@@ -24,7 +30,7 @@ typedef struct Config
   bool DIAGNOSTIC_MODE = false;
 
   // Effect Loop config
-  const uint16_t EFFECT_LOOP_MS = (uint8_t)60 * 1000;
+  const uint16_t EFFECT_LOOP_MS = 60 * 1000;
   const uint8_t LED_BRIGHTNESS = 20; // 0-255 for overall brightness.
 
   // RGB Status LED
@@ -40,9 +46,6 @@ typedef struct Config
 
   // Sensor Pin
   const int SENSOR_PIN = A7;
-
-  // LED strip
-  const int LED_PIN = 8;
 
   // RADIO
   const int RADIO_CE_PIN = 9;
@@ -94,7 +97,7 @@ Config getConfig()
 typedef struct EffectDataPacket
 {
   uint8_t loopPosition = 0;
-  uint8_t activeEffect DEFAULT_EFFECT;
+  uint8_t activeEffect = DEFAULT_EFFECT;
 
   int16_t sourceTransmitterId = 0; // If the sourceTransmitterId !== transmitterId it's a relay.
   int16_t transmitterId = 0;

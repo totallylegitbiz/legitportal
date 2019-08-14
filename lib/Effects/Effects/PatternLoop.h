@@ -1,5 +1,5 @@
 
-void patternLoopEffectLoop(struct EffectDataPacket *effectState, uint8_t stepDelays[], const CHSV stepColors[], uint8_t stepCnt)
+void patternLoopEffectLoop(struct EffectDataPacket *effectState, uint16_t stepDelays[], const CHSV stepColors[], uint8_t stepCnt)
 {
   uint16_t loopMs = 0;
   uint8_t step = 0;
@@ -22,7 +22,7 @@ void patternLoopEffectLoop(struct EffectDataPacket *effectState, uint8_t stepDel
     }
   }
 
-  for (int i = 0; i < config.LED_CNT; i++)
+  for (int i = 0; i < LED_CNT; i++)
   {
     leds[i] = stepColors[step];
   }

@@ -12,15 +12,15 @@ void candleEffectLoop(struct EffectDataPacket *effectState, uint8_t steps)
 
   const int idx = loopPercent * candle2Size;
 
-  const uint8_t stepLoopMs = 500;
+  const uint16_t stepLoopMs = 500;
   const uint8_t stepLoopPosition = effectState->loopPosition % stepLoopMs;
   const float stepLoopPercent = float(stepLoopPosition) / stepLoopMs;
 
   const uint8_t step = stepLoopPercent * steps;
 
-  for (uint16_t i = 0; i < config.LED_CNT; i++)
+  for (uint16_t i = 0; i < LED_CNT; i++)
   {
-    const uint8_t ledOffset = notRandom(0, config.LED_CNT - 1, i);
+    const uint8_t ledOffset = notRandom(0, LED_CNT - 1, i);
     const int candleIdx = (idx + ledOffset) % candle2Size;
     const uint8_t intensity = pgm_read_byte(&candle2[candleIdx]);
 
