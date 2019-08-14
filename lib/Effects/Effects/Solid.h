@@ -1,5 +1,5 @@
 
-void solidEffectLoop(struct EffectState *effectState, CHSV c)
+void solidEffectLoop(struct EffectDataPacket *effectState, CHSV c)
 {
 
   for (uint16_t i = 0; i < config.LED_CNT; i++)
@@ -10,7 +10,7 @@ void solidEffectLoop(struct EffectState *effectState, CHSV c)
   copyLedsWithOffset();
 }
 
-void solidEffectLoop(struct EffectState *effectState, CRGB c)
+void solidEffectLoop(struct EffectDataPacket *effectState, CRGB c)
 {
 
   for (uint16_t i = 0; i < config.LED_CNT; i++)

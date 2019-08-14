@@ -1,6 +1,6 @@
 
 
-void policeEffectLoop(struct EffectState *effectState)
+void policeEffectLoop(struct EffectDataPacket *effectState)
 {
 
   const int shortDelay = 20;

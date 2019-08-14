@@ -10,6 +10,11 @@ const uint8_t CAMP = 3;
 const uint8_t PULSE_REMOTE = 4;
 const uint8_t PORTAL = 5;
 
+#define LED_OFFSET 0;
+
+CRGB cleds[LED_CNT];
+CRGB leds[LED_CNT]; // This is our local copy of leds.
+
 // This is the base config.
 typedef struct Config
 {
@@ -38,8 +43,6 @@ typedef struct Config
 
   // LED strip
   const int LED_PIN = 8;
-  uint8_t LED_CNT;
-  uint8_t LED_OFFSET;
 
   // RADIO
   const int RADIO_CE_PIN = 9;
@@ -77,24 +80,21 @@ Config getConfig()
   switch (outConfig.DEVICE_TYPE)
   {
   case BIKE:
-    outConfig.LED_CNT = 98;
-    outConfig.LED_OFFSET = 0;
+    // Bike specific
     break;
   }
 
   return outConfig;
 }
 
-#ifdef EFFECT_OVERIDE
-const uint8_t DEFAULT_EFFECT = EFFECT_OVERIDE;
-#else
-const uint8_t DEFAULT_EFFECT = 0;
+#ifndef DEFAULT_EFFECT
+#define DEFAULT_EFFECT 0;
 #endif
 
-typedef struct EffectState
+typedef struct EffectDataPacket
 {
   uint8_t loopPosition = 0;
-  uint8_t activeEffect = DEFAULT_EFFECT;
+  uint8_t activeEffect DEFAULT_EFFECT;
 
   int16_t sourceTransmitterId = 0; // If the sourceTransmitterId !== transmitterId it's a relay.
   int16_t transmitterId = 0;

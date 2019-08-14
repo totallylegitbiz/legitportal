@@ -48,7 +48,7 @@ int notRandom(uint16_t from, uint16_t to, uint16_t seed)
 
 void zeroOutOutputStrip()
 {
-  for (uint16_t i = 0; i < config.LED_CNT + config.LED_OFFSET; i++)
+  for (uint16_t i = 0; i < config.LED_CNT + LED_OFFSET; i++)
   {
     cleds[i] = CRGB(0, 0, 0);
   }
@@ -82,7 +82,7 @@ void copyLedsWithOffset()
 {
   for (uint16_t i = 0; i < config.LED_CNT; i++)
   {
-    cleds[i + config.LED_OFFSET] = leds[i];
+    cleds[i + LED_OFFSET] = leds[i];
   }
 }
 
@@ -90,7 +90,7 @@ void copyLedsWithOffsetGamma()
 {
   for (uint16_t i = 0; i < config.LED_CNT; i++)
   {
-    const int idx = i + config.LED_OFFSET;
+    const int idx = i + LED_OFFSET;
     cleds[idx].r = dim8_video(leds[idx].r);
     cleds[idx].g = dim8_video(leds[idx].g);
     cleds[idx].b = dim8_video(leds[idx].b);

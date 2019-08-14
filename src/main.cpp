@@ -2,11 +2,8 @@
 #include <FastLED.h>
 #include <Config.h>
 
-EffectState effectState;
+EffectDataPacket effectState;
 const Config config = getConfig();
-
-CRGB cleds[MAX_LEDS];
-CRGB leds[MAX_LEDS]; // This is our local copy of leds.
 
 #include <LEDStrip.h>
 #include <Effects.h>
@@ -29,7 +26,7 @@ void setButtonState()
     effectState.age = 0;
     lastDataCreationTs = 0;
     effectState.sourceTransmitterId = config.TRANSMITTER_ID; // Set it to us, this ain't a relay.
-    transmitEffectState(&effectState);                       // Force a transmission loop
+    transmitEffectDataPacket(&effectState);                  // Force a transmission loop
   }
 
   lastButtonState = currentButtonState;

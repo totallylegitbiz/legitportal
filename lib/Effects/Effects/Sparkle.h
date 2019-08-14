@@ -1,6 +1,6 @@
 RunEvery runEvery(20);
 
-void sparkleEffectLoop(struct EffectState *effectState, int sat)
+void sparkleEffectLoop(struct EffectDataPacket *effectState, int sat)
 {
 
   const int SPARKLE_BATCH_CNT = config.LED_CNT / 2;

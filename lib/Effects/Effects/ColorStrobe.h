@@ -1,6 +1,6 @@
 
 
-void colorStrobeEffectLoop(struct EffectState *effectState)
+void colorStrobeEffectLoop(struct EffectDataPacket *effectState)
 {
 
   const CRGB RED = CRGB(255, 0, 0);

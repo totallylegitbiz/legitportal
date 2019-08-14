@@ -1,6 +1,6 @@
 
 
-void strobeEffectLoop(struct EffectState *effectState, CRGB colorOff, CRGB colorOn, uint16_t loopMs)
+void strobeEffectLoop(struct EffectDataPacket *effectState, CRGB colorOff, CRGB colorOn, uint16_t loopMs)
 {
   const uint8_t loopPosition = effectState->loopPosition % loopMs;
 
@@ -18,7 +18,7 @@ void strobeEffectLoop(struct EffectState *effectState, CRGB colorOff, CRGB color
   copyLedsWithOffset();
 }
 
-// void strobeEffectLoop(struct EffectState *effectState)
+// void strobeEffectLoop(struct EffectDataPacket *effectState)
 // {
 //     const uint16_t loopMs = 10000;
 //     const uint8_t loopPosition = effectState->loopPosition % loopMs;

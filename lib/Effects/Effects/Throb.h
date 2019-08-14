@@ -1,6 +1,6 @@
 
 
-void throbEffectLoop(struct EffectState *effectState, int hue)
+void throbEffectLoop(struct EffectDataPacket *effectState, int hue)
 {
   const uint16_t loopMs = 3000;
   const uint8_t loopPosition = effectState->loopPosition % loopMs;

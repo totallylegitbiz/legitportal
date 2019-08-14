@@ -1,6 +1,6 @@
 
 
-void candyCaneEffectLoop(struct EffectState *effectState)
+void candyCaneEffectLoop(struct EffectDataPacket *effectState)
 {
 
   // drawDash((LED_CNT/2)+1, 0, CHSV(0, 255, 255));

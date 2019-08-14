@@ -1,7 +1,7 @@
 
 #include <RealCandle.h>
 
-void candleEffectLoop(struct EffectState *effectState, uint8_t steps)
+void candleEffectLoop(struct EffectDataPacket *effectState, uint8_t steps)
 {
   const uint16_t loopMs = 60000; // 60 second loop
   const uint8_t loopPosition = effectState->loopPosition % loopMs;

@@ -1,5 +1,5 @@
 
-void patternLoopEffectLoop(struct EffectState *effectState, uint8_t stepDelays[], const CHSV stepColors[], uint8_t stepCnt)
+void patternLoopEffectLoop(struct EffectDataPacket *effectState, uint8_t stepDelays[], const CHSV stepColors[], uint8_t stepCnt)
 {
   uint16_t loopMs = 0;
   uint8_t step = 0;

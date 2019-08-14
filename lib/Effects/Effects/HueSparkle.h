@@ -1,6 +1,6 @@
 
 
-void hueSparkleEffectLoop(struct EffectState *effectState)
+void hueSparkleEffectLoop(struct EffectDataPacket *effectState)
 {
   const uint16_t loopMs = 60 * 1000;
   const uint8_t loopPosition = effectState->loopPosition % loopMs;

@@ -3,7 +3,7 @@
 uint8_t lastSparkleRefreshMs = 0;
 uint8_t lastFadeRefreshMs = 0;
 
-void fadeSparkleEffectLoop(struct EffectState *effectState, bool isFadeDown)
+void fadeSparkleEffectLoop(struct EffectDataPacket *effectState, bool isFadeDown)
 {
 
   const uint8_t sparkleRefreshHz = config.LED_CNT * 5;

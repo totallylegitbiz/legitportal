@@ -1,6 +1,7 @@
 .DEFAULT_GOAL := default
 upload: 
-	platformio run --target upload -e ${ENV} --upload-port ${PORT}
+	platformio run --target upload --upload-port ${PORT}
+	# platformio run --target upload -e ${ENV} --upload-port ${PORT}
 monitor: 
 	platformio device monitor --port ${PORT}
 upload-monitor: 

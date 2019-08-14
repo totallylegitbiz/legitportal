@@ -51,7 +51,7 @@ const uint8_t SOLID_8_EFFECT = 108;
 const uint8_t SOLID_9_EFFECT = 109;
 const uint8_t SOLID_10_EFFECT = 110;
 
-void effectRenderLoop(uint8_t effectId, struct EffectState *effectState)
+void effectRenderLoop(uint8_t effectId, struct EffectDataPacket *effectState)
 {
 
   switch (effectId)
@@ -134,7 +134,7 @@ void effectRenderLoop(uint8_t effectId, struct EffectState *effectState)
   }
 }
 
-void effectLoop(struct EffectState *effectState)
+void effectLoop(struct EffectDataPacket *effectState)
 {
 
   if (millis() < lastRefreshMs + (1000 / effectRefreshHz))
