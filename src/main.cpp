@@ -39,8 +39,6 @@ void setup()
 
   Serial.begin(9600);
 
-  randomSeed(analogRead(0));
-
   effectSetup();
 
   pinMode(config.EFFECT_BUTTON_PIN, INPUT);
@@ -102,6 +100,8 @@ void loop()
   }
 
   effectLoop(&effectState);
+
+  transmitterLoop(&effectState);
 
   FastLED.show();
 }

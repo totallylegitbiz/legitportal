@@ -39,11 +39,18 @@ void fadeUp(uint8_t by)
 
 int notRandom(uint16_t from, uint16_t to, uint16_t seed)
 {
+
   randomSeed(seed);
   const uint16_t rand = random(from, to);
-  randomSeed(analogRead(0));
+  randomSeed(analogRead(UNUSED_PIN));
 
   return rand;
+}
+
+int yesRandom(uint16_t from, uint16_t to)
+{
+  reseedRandom();
+  return random(from, to);
 }
 
 void zeroOutOutputStrip()

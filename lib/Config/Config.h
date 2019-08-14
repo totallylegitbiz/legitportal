@@ -1,6 +1,7 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
+#include <Random.h>
 #ifndef ELED_CNT
 #error SET ELED_CNT PLEASE
 #endif
@@ -20,6 +21,8 @@ const uint8_t LED_PIN = 8;
 
 CRGB cleds[LED_CNT];
 CRGB leds[LED_CNT]; // This is our local copy of leds.
+
+const int UNUSED_PIN = A3;
 
 // This is the base config.
 typedef struct Config
@@ -45,7 +48,7 @@ typedef struct Config
   const int DIP_PIN_3 = 5;
 
   // Sensor Pin
-  const int SENSOR_PIN = A7;
+  const int SENSOR_PIN = A3;
 
   // RADIO
   const int RADIO_CE_PIN = 9;
@@ -54,7 +57,7 @@ typedef struct Config
   // EFFECT BUTTON
   const int EFFECT_BUTTON_PIN = 6;
 
-  int TRANSMITTER_ID = random(1, 65535);
+  uint16_t TRANSMITTER_ID;
 };
 
 uint8_t getDipValue(Config config)
@@ -78,7 +81,10 @@ Config getConfig()
 {
   Config outConfig;
 
+  reseedRandom();
+
   outConfig.DEVICE_TYPE = getDipValue(outConfig);
+  outConfig.TRANSMITTER_ID = random(1, 65535);
 
   switch (outConfig.DEVICE_TYPE)
   {
@@ -90,16 +96,16 @@ Config getConfig()
   return outConfig;
 }
 
-#ifndef EDEFAULT_EFFECT
-#define EDEFAULT_EFFECT 0;
+#if !(EDEFAULT_EFFECT + 0)
+#define EDEFAULT_EFFECT 0
 #endif
 
 typedef struct EffectDataPacket
 {
   uint8_t loopPosition = 0;
   uint8_t activeEffect = EDEFAULT_EFFECT;
-  int16_t sourceTransmitterId = 0; // If the sourceTransmitterId !== transmitterId it's a relay.
-  int16_t transmitterId = 0;
+  int16_t sourceTransmitterId; // If the sourceTransmitterId !== transmitterId it's a relay.
+  int16_t transmitterId;
   uint32_t age = 0;
 };
 

@@ -11,8 +11,8 @@ const byte address[6] = "00001";
 const uint16_t pingIntervalMin = 500;
 const uint16_t pingIntervalMax = 1000;
 
-uint8_t pingIntervalMs = random(pingIntervalMin, pingIntervalMax); // How often will we ping.
-uint32_t pingLastPingMs = 0;                                       // Time of the last ping
+uint16_t pingIntervalMs = random(pingIntervalMin, pingIntervalMax); // How often will we ping.
+uint32_t pingLastPingMs = 0;                                        // Time of the last ping
 uint32_t dataLastReceived = 0;
 const uint16_t txFailureResetMs = 10 * 1000; // After 10 seconds of failures, reset
 uint32_t lastSuccessfulTx = 0;
@@ -23,7 +23,7 @@ EffectDataPacket nextEffectDataPacket;
 
 // Dealing with presync
 bool hasGottenSync = false;
-const uint8_t syncTimeout = random(pingIntervalMs * 2, pingIntervalMs * 5); //Wait until at most double the timeout until starting to transmit.
+const uint8_t syncTimeout = yesRandom(pingIntervalMs * 2, pingIntervalMs * 5); //Wait until at most double the timeout until starting to transmit.
 
 void blink(int pin)
 {
@@ -64,13 +64,13 @@ void radioSetup()
   radio.printDetails();
 
   Serial.println("READY!");
-  randomSeed(analogRead(0));
   nextEffectDataPacket.loopPosition = 0;
   nextEffectDataPacket.activeEffect = 0;
 }
 
 void transmitterSetup()
 {
+
   setupStatusLED();
   radioSetup();
 }
@@ -91,8 +91,10 @@ void transmitEffectDataPacket(struct EffectDataPacket *effectState)
 
   bool ok = radio.write(&objEffectDataPacket, sizeof(objEffectDataPacket));
 
-  pingIntervalMs = random(pingIntervalMin, pingIntervalMax);
+  pingIntervalMs = yesRandom(pingIntervalMin, pingIntervalMax);
 
+  Serial.print("Package: age=");
+  Serial.println(objEffectDataPacket.age);
   if (ok)
   {
     Serial.println(": sent");
@@ -112,7 +114,7 @@ void transmitEffectDataPacket(struct EffectDataPacket *effectState)
 
   radio.startListening();
 
-  pingIntervalMs = random(pingIntervalMin, pingIntervalMax);
+  pingIntervalMs = yesRandom(pingIntervalMin, pingIntervalMax);
 }
 
 void transmitterReceiveLoop(struct EffectDataPacket *effectState)
@@ -120,8 +122,11 @@ void transmitterReceiveLoop(struct EffectDataPacket *effectState)
 
   if (radio.available())
   {
-    Serial.println("INCOMING");
+    Serial.print("INCOMING: ");
     radio.read(&nextEffectDataPacket, sizeof(nextEffectDataPacket));
+
+    Serial.print(" txId: ");
+    Serial.println(nextEffectDataPacket.transmitterId);
 
     if (nextEffectDataPacket.transmitterId == 0)
     {
@@ -221,7 +226,7 @@ void transmitterReceiveLoop(struct EffectDataPacket *effectState)
 void transmitterTransmitLoop(struct EffectDataPacket *effectState)
 {
 
-  const uint8_t dataGracePeriod = pingIntervalMs * 3;
+  const uint16_t dataGracePeriod = pingIntervalMs * 3;
 
   const bool isWithinGracePeriod = millis() < dataLastReceived + dataGracePeriod;
   const bool isDataFresh = millis() < (dataLastReceived + pingIntervalMax);
@@ -239,4 +244,10 @@ void transmitterTransmitLoop(struct EffectDataPacket *effectState)
     transmitEffectDataPacket(effectState);
     pingLastPingMs = millis();
   }
+}
+
+void transmitterLoop(struct EffectDataPacket *effectState)
+{
+  transmitterTransmitLoop(effectState);
+  transmitterReceiveLoop(effectState);
 }
