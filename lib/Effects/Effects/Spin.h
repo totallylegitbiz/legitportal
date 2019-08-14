@@ -24,24 +24,5 @@ void spinEffectLoop(struct EffectDataPacket *effectState, uint16_t loopMs)
     }
   }
 
-  for (int i = 0; i < lines; i++)
-  {
-
-    const int offset = ledOffset + (i * lineIdx);
-
-    if (i % 2)
-    {
-      drawDash(lineWidth, offset, CHSV(i * (255 / lines), 255, 255));
-    }
-    else
-    {
-      drawDash(lineWidth, LED_CNT - offset, CHSV(i * (255 / lines), 255, 255));
-    }
-  }
-
-  // drawDash(lineWidth, ledOffset, CHSV(0, 255, 255));
-  // drawDash(lineWidth, LED_CNT - ledOffset, CHSV(85, 255, 255));
-  // drawDash(lineWidth, ledOffset + lineIdx, CHSV(171, 255, 255));
-
   copyLedsWithOffset();
 }

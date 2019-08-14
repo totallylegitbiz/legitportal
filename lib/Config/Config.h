@@ -30,7 +30,7 @@ typedef struct Config
   bool DIAGNOSTIC_MODE = false;
 
   // Effect Loop config
-  const uint16_t EFFECT_LOOP_MS = 60 * 1000;
+  const uint32_t EFFECT_LOOP_MS = 60 * 1000;
   const uint8_t LED_BRIGHTNESS = 20; // 0-255 for overall brightness.
 
   // RGB Status LED
@@ -90,14 +90,14 @@ Config getConfig()
   return outConfig;
 }
 
-#ifndef DEFAULT_EFFECT
-#define DEFAULT_EFFECT 0;
+#ifndef EDEFAULT_EFFECT
+#define EDEFAULT_EFFECT 0;
 #endif
 
 typedef struct EffectDataPacket
 {
   uint8_t loopPosition = 0;
-  uint8_t activeEffect = DEFAULT_EFFECT;
+  uint8_t activeEffect = EDEFAULT_EFFECT;
   int16_t sourceTransmitterId = 0; // If the sourceTransmitterId !== transmitterId it's a relay.
   int16_t transmitterId = 0;
   uint32_t age = 0;
