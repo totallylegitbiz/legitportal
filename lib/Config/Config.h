@@ -98,7 +98,6 @@ typedef struct EffectDataPacket
 {
   uint8_t loopPosition = 0;
   uint8_t activeEffect = DEFAULT_EFFECT;
-
   int16_t sourceTransmitterId = 0; // If the sourceTransmitterId !== transmitterId it's a relay.
   int16_t transmitterId = 0;
   uint32_t age = 0;

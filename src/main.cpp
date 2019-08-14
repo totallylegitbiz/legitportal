@@ -103,10 +103,5 @@ void loop()
 
   effectLoop(&effectState);
 
-  // for (uint16_t i = 0; i < LED_CNT; i++)
-  // {
-  //   cleds[LED_CNT] = CHSV(100, 255, 255);
-  // }
-
   FastLED.show();
 }

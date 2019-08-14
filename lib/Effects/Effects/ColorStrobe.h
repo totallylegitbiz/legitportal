@@ -1,9 +1,6 @@
 void colorStrobeEffectLoop(struct EffectDataPacket *effectState)
 {
 
-  const CRGB RED = CRGB(255, 0, 0);
-  const CRGB BLUE = CRGB(255, 0, 0);
-
   const uint8_t blinkTs = 20;
   const uint8_t steps = 10;
   const uint16_t loopMs = 1000;

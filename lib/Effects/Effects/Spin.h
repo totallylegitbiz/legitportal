@@ -1,21 +1,11 @@
-
-
 void spinEffectLoop(struct EffectDataPacket *effectState, uint16_t loopMs)
 {
   const uint16_t loopPosition = effectState->loopPosition % loopMs;
   const uint16_t ledOffset = LED_CNT * (float(loopPosition) / loopMs);
 
-  // zeroOutStrip();
+  zeroOutStrip();
 
-  // colorOutStrip(CRGB(255,255,255));
-
-  // Red blue dash
-  // drawDash(LED_CNT/3, ledOffset, CRGB(0, 220, 255));
-  // drawDash(LED_CNT/3, LED_CNT - ledOffset, CRGB(255, 0, 0));
-
-  // Red blue dash
-
-  const int lines = 5;
+  const int lines = 2;
   const int lineWidth = LED_CNT / 7;
   const int lineIdx = LED_CNT / lines;
 
