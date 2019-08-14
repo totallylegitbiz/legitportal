@@ -1,52 +1,46 @@
-#include <EffectTypes.h>
 
-const unsigned int sparkleRefreshHz = LED_CNT * 5 ;
-unsigned int lastSparkleRefreshMs = 0;
 
-const unsigned int fadeRefreshHz = sparkleRefreshHz;
-unsigned int lastFadeRefreshMs = 0;
+uint8_t lastSparkleRefreshMs = 0;
+uint8_t lastFadeRefreshMs = 0;
 
-const unsigned int fadeSparkleLoopMs = 600000;
-
-void fadeSparkleEffectLoop(struct EffectState *effectState, bool isFadeDown)
+void fadeSparkleEffectLoop(struct EffectDataPacket *effectState, bool isFadeDown)
 {
 
-    const unsigned int loopPosition = effectState->loopPosition % fadeSparkleLoopMs;
-   
-    const unsigned int hue1 = 128;  
-    const unsigned int hue2 = 224;  
-    const float loopPercent = float(loopPosition) / fadeSparkleLoopMs;
+  const uint8_t sparkleRefreshHz = LED_CNT * 5;
+  const uint8_t fadeRefreshHz = sparkleRefreshHz;
+  const uint16_t fadeSparkleLoopMs = 600000;
+  const uint8_t loopPosition = effectState->loopPosition % fadeSparkleLoopMs;
 
-    const unsigned int hue = hue1 + (float(hue2-hue1)*abs((loopPercent  / .5)-1.0));
+  const uint8_t hue1 = 128;
+  const uint8_t hue2 = 224;
 
-    const int fadeAmt = 1;
+  const float loopPercent = float(loopPosition) / fadeSparkleLoopMs;
+  const uint8_t hue = hue1 + (float(hue2 - hue1) * abs((loopPercent / .5) - 1.0));
 
-    if (millis() > lastSparkleRefreshMs + (1000 / sparkleRefreshHz))
+  const int fadeAmt = 1;
+
+  if (millis() > lastSparkleRefreshMs + (1000 / sparkleRefreshHz))
+  {
+
+    const uint8_t blinkIdx = notRandom(0, LED_CNT - 1, effectState->loopPosition);
+
+    leds[blinkIdx] = CHSV(hue, 255, 255);
+
+    lastSparkleRefreshMs = millis();
+  }
+
+  if (millis() > lastFadeRefreshMs + (1000 / fadeRefreshHz))
+  {
+    if (isFadeDown)
     {
-
-      const unsigned int blinkIdx = notRandom(0,LED_CNT - 1, effectState->loopPosition);
-      
-      leds[blinkIdx] = CHSV(hue, 255,255);
-  
-      lastSparkleRefreshMs = millis();
+      fadeDown(fadeAmt);
     }
-
-    if (millis() > lastFadeRefreshMs + (1000 / fadeRefreshHz))
+    else
     {
-      if (isFadeDown) {
-        fadeDown(fadeAmt);
-      } else {
-        fadeUp(fadeAmt);
-      }
-      lastFadeRefreshMs =  millis();
+      fadeUp(fadeAmt);
     }
+    lastFadeRefreshMs = millis();
+  }
 
-
-    copyLedsWithOffsetGamma();
- 
-
+  copyLedsWithOffsetGamma();
 }
-
-
-
-

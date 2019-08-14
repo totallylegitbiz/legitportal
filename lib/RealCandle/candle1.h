@@ -1,4 +1,4 @@
-extern const uint8_t PROGMEM candle1[] = {0,
+extern const uint8_t PROGMEM candle1[] = {
 80,
 97,
 90,
@@ -1307,4 +1307,6 @@ extern const uint8_t PROGMEM candle1[] = {0,
 86,
 87,
 87,
-88};const int candle1Size = 1310;
+88
+};
+const int candle1Size = 1309;

@@ -1,20 +1,17 @@
-#include <EffectTypes.h>
-
-void hueSpinEffectLoop(struct EffectState *effectState, unsigned int loopMs)
+void hueSpinEffectLoop(struct EffectDataPacket *effectState, uint16_t loopMs)
 {
-    const unsigned int loopPosition = effectState->loopPosition % loopMs;
-    const float loopPercent = float(loopPosition) / loopMs;
+  const uint8_t loopPosition = effectState->loopPosition % loopMs;
+  const float loopPercent = float(loopPosition) / loopMs;
 
-    const int loopOffset = loopPercent * LED_CNT;
+  const int loopOffset = loopPercent * LED_CNT;
 
-    for (int i = 0; i < LED_CNT; i++)
-    {
-        const float ledPercent = float(i) / LED_CNT;
-        const unsigned int hueOffset = ledPercent * 255;
-        const unsigned int idx = (i + loopOffset) % LED_CNT;
-        leds[idx] = CHSV(hueOffset, 255, 255);
-    }
+  for (uint16_t i = 0; i < LED_CNT; i++)
+  {
+    const float ledPercent = float(i) / LED_CNT;
+    const uint8_t hueOffset = ledPercent * 255;
+    const uint8_t idx = (i + loopOffset) % LED_CNT;
+    leds[idx] = CHSV(hueOffset, 255, 255);
+  }
 
-      copyLedsWithOffset();
-      
+  copyLedsWithOffset();
 }

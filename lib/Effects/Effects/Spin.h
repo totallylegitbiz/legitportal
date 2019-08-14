@@ -1,22 +1,28 @@
-#include <EffectTypes.h>
-
-void spinEffectLoop(struct EffectState *effectState)
+void spinEffectLoop(struct EffectDataPacket *effectState, uint16_t loopMs)
 {
+  const uint16_t loopPosition = effectState->loopPosition % loopMs;
+  const uint16_t ledOffset = LED_CNT * (float(loopPosition) / loopMs);
 
-    // Time for this effect to loop;
+  zeroOutStrip();
 
-    const unsigned int loopMs = 1000;
-    const unsigned int loopPosition = effectState->loopPosition % loopMs;
+  const int lines = 2;
+  const int lineWidth = LED_CNT / 7;
+  const int lineIdx = LED_CNT / lines;
 
-    // const float loopPerfect = float(effectState.loopPosition) / EFFECT_LOOP_MS;
+  for (int i = 0; i < lines; i++)
+  {
 
-    const int ledOffset = LED_CNT * (float(loopPosition) / loopMs);
+    const int offset = ledOffset + (i * lineIdx);
 
-    for (int i = 0; i < LED_CNT; i++)
+    if (i % 2)
     {
-        leds[i] = CHSV(0, 0, 0);
+      drawDashWithoutAdd(lineWidth, offset, CHSV(i * (255 / lines), 255, 255));
     }
+    else
+    {
+      drawDashWithoutAdd(lineWidth, LED_CNT - offset, CHSV(i * (255 / lines), 255, 255));
+    }
+  }
 
-    leds[ledOffset] = CHSV(0, 0, 100);
-      copyLedsWithOffset();
+  copyLedsWithOffset();
 }

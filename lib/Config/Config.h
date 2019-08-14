@@ -1,83 +1,106 @@
-#ifndef INC_CONFIG
-#define INC_CONFIG
+#ifndef CONFIG_H
+#define CONFIG_H
 
-const bool DIAGNOSTIC_MODE = false;
-// Effect Loop config
-const unsigned int EFFECT_LOOP_MS = (unsigned int)60 * 1000;
-const uint8_t LED_BRIGHTNESS = 20; // 0-255 for overall brightness.
-
-#ifndef BUILD_TARGET
-#define BUILD_TARGET 0
+#ifndef ELED_CNT
+#error SET ELED_CNT PLEASE
 #endif
 
-#if BUILD_TARGET == 1
+const uint8_t MAX_LEDS = 200; // This is the max number of LEDs for any target.
 
-/**
- * 
- *  This is the old configuration. CE/CSN/LED pins differ
- * 
- */
+const uint8_t BIKE = 0;
+const uint8_t CHILL_DOME = 1;
+const uint8_t DEEP_PLAYA = 2;
+const uint8_t CAMP = 3;
+const uint8_t PULSE_REMOTE = 4;
+const uint8_t PORTAL = 5;
 
-const int RED_LED_PIN = A0;
-const int GREEN_LED_PIN = A1;
-const int BLUE_LED_PIN = A2;
+const uint8_t LED_OFFSET = 0;
+const uint16_t LED_CNT = ELED_CNT;
+const uint8_t LED_PIN = 8;
 
-const int DIP_PIN_0 = 2;
-const int DIP_PIN_1 = 3;
-const int DIP_PIN_2 = 4;
-const int DIP_PIN_3 = 5;
+CRGB cleds[LED_CNT];
+CRGB leds[LED_CNT]; // This is our local copy of leds.
 
-const int PULSE_SENSOR_PIN = A7;
+// This is the base config.
+typedef struct Config
+{
 
-const int LED_PIN = 6; // This differs
+  uint8_t DEVICE_TYPE = BIKE;
 
-// Led strip
-const unsigned int LED_CNT = 98;
-const unsigned int LED_OFFSET = 0; //25;
+  bool DIAGNOSTIC_MODE = false;
 
-// RADIO
-const int RADIO_CE_PIN = 7;  // This differs
-const int RADIO_CSN_PIN = 8; // This differs
+  // Effect Loop config
+  const uint32_t EFFECT_LOOP_MS = 60 * 1000;
+  const uint8_t LED_BRIGHTNESS = 20; // 0-255 for overall brightness.
 
-// EFFECT BUTTON
-const int EFFECT_BUTTON_PIN = 10; // This differs
+  // RGB Status LED
+  const int RED_LED_PIN = A0;
+  const int GREEN_LED_PIN = A1;
+  const int BLUE_LED_PIN = A2;
 
-#else
+  // Dip Config
+  const int DIP_PIN_0 = 2;
+  const int DIP_PIN_1 = 3;
+  const int DIP_PIN_2 = 4;
+  const int DIP_PIN_3 = 5;
 
-/**
- * 
- *  This is current configuration
- * 
- */
-const int RED_LED_PIN = A0;
-const int GREEN_LED_PIN = A1;
-const int BLUE_LED_PIN = A2;
+  // Sensor Pin
+  const int SENSOR_PIN = A7;
 
-const int DIP_PIN_0 = 2;
-const int DIP_PIN_1 = 3;
-const int DIP_PIN_2 = 4;
-const int DIP_PIN_3 = 5;
+  // RADIO
+  const int RADIO_CE_PIN = 9;
+  const int RADIO_CSN_PIN = 10;
 
-// Pulse
-const int PULSE_SENSOR_PIN = A7;
+  // EFFECT BUTTON
+  const int EFFECT_BUTTON_PIN = 6;
 
-// // LED strip control pin
-const int LED_PIN = 8;
+  int TRANSMITTER_ID = random(1, 65535);
+};
 
-// // Led strip
-// const unsigned int LED_CNT = 98;
-// const unsigned int LED_OFFSET = 0; //25;
+uint8_t getDipValue(Config config)
+{
+  // DIP
+  pinMode(config.DIP_PIN_0, INPUT_PULLUP);
+  pinMode(config.DIP_PIN_1, INPUT_PULLUP);
+  pinMode(config.DIP_PIN_2, INPUT_PULLUP);
+  pinMode(config.DIP_PIN_3, INPUT_PULLUP);
 
-const unsigned int LED_CNT = 98;
-const unsigned int LED_OFFSET = 0; //25;
+  const bool d0 = digitalRead(config.DIP_PIN_0);
+  const bool d1 = digitalRead(config.DIP_PIN_1);
+  const bool d2 = digitalRead(config.DIP_PIN_2);
+  const bool d3 = digitalRead(config.DIP_PIN_3);
 
-// RADIO
-const int RADIO_CE_PIN = 9;
-const int RADIO_CSN_PIN = 10;
+  // Very simple bit math
+  return !d0 + (!d1 * 2) + (!d2 * 4) + (!d3 * 8);
+}
 
-// EFFECT BUTTON
-const int EFFECT_BUTTON_PIN = 6;
+Config getConfig()
+{
+  Config outConfig;
 
+  outConfig.DEVICE_TYPE = getDipValue(outConfig);
+
+  switch (outConfig.DEVICE_TYPE)
+  {
+  case BIKE:
+    // Bike specific
+    break;
+  }
+
+  return outConfig;
+}
+
+#ifndef EDEFAULT_EFFECT
+#define EDEFAULT_EFFECT 0;
 #endif
+
+typedef struct EffectDataPacket
+{
+  uint8_t loopPosition = 0;
+  uint8_t activeEffect = EDEFAULT_EFFECT;
+  int16_t sourceTransmitterId = 0; // If the sourceTransmitterId !== transmitterId it's a relay.
+  int16_t transmitterId = 0;
+  uint32_t age = 0;
+};
 
 #endif

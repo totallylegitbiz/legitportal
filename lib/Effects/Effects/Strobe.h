@@ -1,27 +1,27 @@
-#include <EffectTypes.h>
 
-void strobeEffectLoop(struct EffectState *effectState, CRGB colorOff, CRGB colorOn, int loopMs)
+
+void strobeEffectLoop(struct EffectDataPacket *effectState, CRGB colorOff, CRGB colorOn, uint16_t loopMs)
 {
-    const unsigned int loopPosition = effectState->loopPosition % loopMs;
+  const uint8_t loopPosition = effectState->loopPosition % loopMs;
 
-    for (int i = 0; i < LED_CNT; i++)
+  for (uint16_t i = 0; i < LED_CNT; i++)
+  {
+    if (loopPosition < loopMs / 2)
     {
-        if (loopPosition < loopMs / 2)
-        {
-            leds[i] = colorOff;
-        }
-        else
-        {
-            leds[i] = colorOn;
-        }
+      leds[i] = colorOff;
     }
-      copyLedsWithOffset();
+    else
+    {
+      leds[i] = colorOn;
+    }
+  }
+  copyLedsWithOffset();
 }
 
-// void strobeEffectLoop(struct EffectState *effectState)
+// void strobeEffectLoop(struct EffectDataPacket *effectState)
 // {
-//     const unsigned int loopMs = 10000;
-//     const unsigned int loopPosition = effectState->loopPosition % loopMs;
+//     const uint16_t loopMs = 10000;
+//     const uint8_t loopPosition = effectState->loopPosition % loopMs;
 
 //     const float loopPercent = float(loopPosition) / loopMs;
 

@@ -1,25 +1,29 @@
 
-void patternLoopEffectLoop(struct EffectState *effectState, unsigned int stepDelays[], const CHSV stepColors[], unsigned int stepCnt )
+void patternLoopEffectLoop(struct EffectDataPacket *effectState, uint16_t stepDelays[], const CHSV stepColors[], uint8_t stepCnt)
 {
-  unsigned int loopMs = 0;
-  unsigned int step = 0;
+  uint16_t loopMs = 0;
+  uint8_t step = 0;
 
-  for (unsigned int i = 0; i < stepCnt; i++ ) {
+  for (uint8_t i = 0; i < stepCnt; i++)
+  {
     loopMs += stepDelays[i];
   }
 
-  const unsigned int loopPosition = effectState->loopPosition % loopMs;
+  const uint8_t loopPosition = effectState->loopPosition % loopMs;
 
-  unsigned int loopCnt = 0;
+  uint8_t loopCnt = 0;
 
-  for (unsigned int i = 0; i < stepCnt ; i++ ) {
+  for (uint8_t i = 0; i < stepCnt; i++)
+  {
     loopCnt += stepDelays[i];
-    if (loopPosition > loopCnt ) {
+    if (loopPosition > loopCnt)
+    {
       step++;
     }
   }
 
-  for (int i = 0; i < LED_CNT; i++) {
+  for (int i = 0; i < LED_CNT; i++)
+  {
     leds[i] = stepColors[step];
   }
 
