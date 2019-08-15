@@ -2,8 +2,11 @@
 #define CONFIG_H
 
 #include <Random.h>
+
 #ifndef ELED_CNT
 #error SET ELED_CNT PLEASE
+#else
+const uint16_t LED_CNT = ELED_CNT;
 #endif
 
 const uint8_t MAX_LEDS = 200; // This is the max number of LEDs for any target.
@@ -16,7 +19,7 @@ const uint8_t PULSE_REMOTE = 4;
 const uint8_t PORTAL = 5;
 
 const uint8_t LED_OFFSET = 0;
-const uint16_t LED_CNT = ELED_CNT;
+
 const uint8_t LED_PIN = 8;
 
 CRGB cleds[LED_CNT];
@@ -102,10 +105,10 @@ Config getConfig()
 
 typedef struct EffectDataPacket
 {
-  uint8_t loopPosition = 0;
+  uint32_t loopPosition = 0;
   uint8_t activeEffect = EDEFAULT_EFFECT;
-  int16_t sourceTransmitterId; // If the sourceTransmitterId !== transmitterId it's a relay.
-  int16_t transmitterId;
+  uint16_t sourceTransmitterId; // If the sourceTransmitterId !== transmitterId it's a relay.
+  uint16_t transmitterId;
   uint32_t age = 0;
 };
 

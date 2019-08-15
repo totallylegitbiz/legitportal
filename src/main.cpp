@@ -24,9 +24,10 @@ void setButtonState()
 
     effectState.activeEffect = (effectState.activeEffect + 1) % EFFECT_CNT;
     effectState.age = 0;
-    lastDataCreationTs = 0;
+    lastDataCreationTs = millis();
     effectState.sourceTransmitterId = config.TRANSMITTER_ID; // Set it to us, this ain't a relay.
-    transmitEffectDataPacket(&effectState);                  // Force a transmission loop
+    effectState.transmitterId = config.TRANSMITTER_ID;       // Set it to us, this ain't a relay.
+    transmitEffectDataPacket(&effectState, true);            // Force a transmission loop
   }
 
   lastButtonState = currentButtonState;
@@ -52,7 +53,7 @@ void setup()
 
   ledStripSetup();
 
-  transmitterSetup();
+  transmitterSetup(&effectState);
 
   Serial.print("### SETUP COMPLETE for transmitter id: ");
   Serial.println(config.TRANSMITTER_ID);
