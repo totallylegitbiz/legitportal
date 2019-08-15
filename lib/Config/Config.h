@@ -100,7 +100,7 @@ Config getConfig()
 }
 
 #if !(EDEFAULT_EFFECT + 0)
-#define EDEFAULT_EFFECT 0
+#define EDEFAULT_EFFECT 255
 #endif
 
 typedef struct EffectDataPacket

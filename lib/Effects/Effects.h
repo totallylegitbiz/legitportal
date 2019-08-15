@@ -60,7 +60,8 @@ void effectRenderLoop(uint8_t effectId, struct EffectDataPacket *effectState)
     throbEffectLoop(effectState, 0);
     break;
   case DOT_SPIN_EFFECT:
-    spinEffectLoop(effectState, 2000);
+    // spinEffectLoop(effectState, 2000);
+    throbEffectLoop(effectState, 100);
     break;
   case HUE_SPIN_EFFECT:
     hueSpinEffectLoop(effectState, 5000);

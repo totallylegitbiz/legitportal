@@ -23,7 +23,7 @@ EffectDataPacket nextEffectDataPacket;
 
 // Dealing with presync
 bool hasGottenSync = false;
-const uint8_t syncTimeout = yesRandom(pingIntervalMs * 2, pingIntervalMs * 5); //Wait until at most double the timeout until starting to transmit.
+const uint32_t syncTimeout = pingIntervalMax * 2; //Wait until at most double the timeout until starting to transmit.
 
 void blink(int pin)
 {
@@ -90,6 +90,8 @@ void transmitEffectDataPacket(struct EffectDataPacket *effectState, bool force =
   if (force)
   {
     objEffectDataPacket.age = 0;
+    effectState->age = 0;
+    lastDataCreationTs = millis();
   }
   else
   {
@@ -136,8 +138,6 @@ void transmitterReceiveLoop(struct EffectDataPacket *effectState)
       return;
     }
 
-    hasGottenSync = true; // We got a sync!
-
     uint32_t nextEffectLoopClockOffset = nextEffectDataPacket.loopPosition - (millis() % config.EFFECT_LOOP_MS);
 
     bool hasEffectChanged = effectState->activeEffect != nextEffectDataPacket.activeEffect;
@@ -154,14 +154,21 @@ void transmitterReceiveLoop(struct EffectDataPacket *effectState)
       return;
     }
 
-    if (millis() - nextEffectDataPacket.age < lastDataCreationTs)
+    // If local age is less than received age, continue.
+    // if local age is < recieved age it is statle.
+
+    uint16_t localDataAge = millis() - lastDataCreationTs;
+
+    if (hasGottenSync && localDataAge < nextEffectDataPacket.age)
     {
       // This new data is older than mine, not applying, but relaying.
+      // If we haven't gotten sync, skip.
       Serial.print("Marked stale. age: ");
       Serial.print(nextEffectDataPacket.age);
       Serial.print(" lastDataCreationTs ago ");
       Serial.println(millis() - lastDataCreationTs);
 
+      // Marked stale. age: 0 lastDataCreationTs ago 265332
       if (shouldRelay)
       {
         transmitEffectDataPacket(effectState);
@@ -204,11 +211,15 @@ void transmitterReceiveLoop(struct EffectDataPacket *effectState)
     {
       transmitEffectDataPacket(effectState);
     }
+
+    hasGottenSync = true; // We got a sync!
   }
 
   if (!hasGottenSync && millis() > syncTimeout)
   {
     Serial.println("Sync timeout reached, starting..");
+    Serial.print("syncTimeout: ");
+    Serial.println(syncTimeout);
     hasGottenSync = true;
     effectState->activeEffect = 0;
     effectState->sourceTransmitterId = config.TRANSMITTER_ID; // Since we are assuming our own effect, we are the source now.
@@ -228,11 +239,6 @@ void transmitterTransmitLoop(struct EffectDataPacket *effectState)
   const bool isWithinPingInterval = millis() > (pingIntervalMs + pingLastPingMs);
 
   const bool shouldPing = isWithinPingInterval && (isDataFresh || !isWithinGracePeriod);
-
-  // if (!isDataFresh)
-  // {
-  //     Serial.println("Has stale data...");
-  // }
 
   if (hasGottenSync && shouldPing)
   {

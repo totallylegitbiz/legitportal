@@ -11,11 +11,39 @@ const Config config = getConfig();
 
 bool lastButtonState = false; // Default is not pressed.
 int lastRecievedOffset = 0;
+bool isPoweredOn = true;
+
+uint32_t buttonPressedSince = 0;
 
 void setButtonState()
 {
+
+  const uint8_t buttonLongPressMs = 500;
+
   // Button Logic
   boolean currentButtonState = !digitalRead(config.EFFECT_BUTTON_PIN);
+
+  if (currentButtonState && !lastButtonState)
+  {
+    // Changed state
+    buttonPressedSince = millis();
+
+    if (!isPoweredOn)
+    {
+      // Handle when device is powered off, to reset it.
+      Serial.println("Powering up...");
+      resetFunc();
+    }
+  }
+
+  if (currentButtonState && (millis() - buttonPressedSince) > buttonLongPressMs)
+  {
+    Serial.println("Powering down...");
+    isPoweredOn = false;
+    FastLED.clear();
+    radio.stopListening();
+    return;
+  }
 
   if (lastButtonState && currentButtonState != lastButtonState)
   {
@@ -23,8 +51,6 @@ void setButtonState()
     Serial.println("Click");
 
     effectState.activeEffect = (effectState.activeEffect + 1) % EFFECT_CNT;
-    effectState.age = 0;
-    lastDataCreationTs = millis();
     effectState.sourceTransmitterId = config.TRANSMITTER_ID; // Set it to us, this ain't a relay.
     effectState.transmitterId = config.TRANSMITTER_ID;       // Set it to us, this ain't a relay.
     transmitEffectDataPacket(&effectState, true);            // Force a transmission loop
@@ -98,6 +124,11 @@ void loop()
   {
     // Button doesn't work until we get button sync
     setButtonState();
+  }
+
+  if (!isPoweredOn)
+  {
+    return;
   }
 
   effectLoop(&effectState);
