@@ -36,16 +36,18 @@ void setButtonState()
     }
   }
 
-  if (currentButtonState && (millis() - buttonPressedSince) > buttonLongPressMs)
+  // Shuts down the controller.
+  if (isPoweredOn && currentButtonState && (millis() - buttonPressedSince) > buttonLongPressMs)
   {
     Serial.println("Powering down...");
     isPoweredOn = false;
     FastLED.clear();
+    FastLED.show();
     radio.stopListening();
     return;
   }
 
-  if (lastButtonState && currentButtonState != lastButtonState)
+  if (isPoweredOn && lastButtonState && currentButtonState != lastButtonState)
   {
     // BUTTON WAS CLICKED
     Serial.println("Click");
@@ -134,6 +136,4 @@ void loop()
   effectLoop(&effectState);
 
   transmitterLoop(&effectState);
-
-  FastLED.show();
 }

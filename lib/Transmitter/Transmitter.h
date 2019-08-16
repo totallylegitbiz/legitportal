@@ -49,8 +49,14 @@ void radioSetup()
 
   radio.begin();
   radio.setDataRate(RF24_250KBPS);
-  radio.setPALevel(RF24_PA_MIN);
+  radio.setPALevel(RF24_PA_MAX);
   radio.setAutoAck(false);
+
+  // Not sure what this does.
+  radio.setCRCLength(RF24_CRC_8);
+
+  // Disable dynamic payloads
+  // write_register(DYNPD, 0);
 
   radio.disableDynamicPayloads();
   radio.setRetries(15, 15);

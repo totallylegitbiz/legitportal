@@ -1,6 +1,8 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
+#define DEBUG 1
+
 #include <Random.h>
 
 #ifndef ELED_CNT
@@ -37,7 +39,12 @@ typedef struct Config
 
   // Effect Loop config
   const uint32_t EFFECT_LOOP_MS = 60 * 1000;
-  const uint8_t LED_BRIGHTNESS = 20; // 0-255 for overall brightness.
+
+  // LED
+  const uint8_t LED_BRIGHTNESS = 255; // 0-255 for overall brightness.
+  // Parameters for  FastLED.setMaxPowerInVoltsAndMilliamps
+  const uint8_t MAX_VOLTS = 5;
+  const uint8_t MAX_AMP = 50;
 
   // RGB Status LED
   const int RED_LED_PIN = A0;
@@ -111,5 +118,13 @@ typedef struct EffectDataPacket
   uint16_t transmitterId;
   uint32_t age = 0;
 };
+
+#ifdef DEBUG
+#define SERIAL_PRINT(x) Serial.print(x)
+#define SERIAL_PRINTLN(x) Serial.println(x)
+#else
+#define SERIAL_PRINT(x)
+#define SERIAL_PRINTLN(x)
+#endif
 
 #endif

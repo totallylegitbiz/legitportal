@@ -3,7 +3,7 @@
 const int EFFECT_CNT = 5;
 
 int effectLoopClockOffset = 0;
-const uint8_t effectRefreshHz = 60; // Updates 60 times a second.
+const uint8_t effectRefreshHz = 100; // Updates 100 times a second.
 uint32_t lastRefreshMs = 0;
 
 void effectSetup()
@@ -51,6 +51,9 @@ const uint8_t SOLID_8_EFFECT = 108;
 const uint8_t SOLID_9_EFFECT = 109;
 const uint8_t SOLID_10_EFFECT = 110;
 
+// TODO(jorgelo): Do something like this.
+// const uint8_t BIKE_EFFECTS[] = {CANDLE_EFFECT, POLICE_EFFECT, HUE_SPIN_EFFECT};
+
 void effectRenderLoop(uint8_t effectId, struct EffectDataPacket *effectState)
 {
 
@@ -67,7 +70,8 @@ void effectRenderLoop(uint8_t effectId, struct EffectDataPacket *effectState)
     hueSpinEffectLoop(effectState, 5000);
     break;
   case STOBE_FLASH_EFFECT:
-    strobeEffectLoop(effectState, CRGB(0, 0, 0), CRGB(100, 100, 100), 100);
+    policeEffectLoop(effectState);
+    // strobeEffectLoop(effectState, CRGB(0, 0, 0), CRGB(100, 100, 100), 100);
     break;
   case BLUE_RED_FLASH_EFFECT:
     strobeEffectLoop(effectState, CRGB(255, 0, 0), CRGB(0, 0, 255), 100);
@@ -146,4 +150,5 @@ void effectLoop(struct EffectDataPacket *effectState)
   lastRefreshMs = millis();
 
   effectRenderLoop(effectState->activeEffect, effectState);
+  FastLED.show();
 }

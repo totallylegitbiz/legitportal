@@ -1,6 +1,7 @@
 void hueSpinEffectLoop(struct EffectDataPacket *effectState, uint16_t loopMs)
 {
-  const uint8_t loopPosition = effectState->loopPosition % loopMs;
+
+  const uint16_t loopPosition = effectState->loopPosition % loopMs;
   const float loopPercent = float(loopPosition) / loopMs;
 
   const uint16_t loopOffset = loopPercent * LED_CNT;
