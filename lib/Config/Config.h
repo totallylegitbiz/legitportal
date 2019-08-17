@@ -49,10 +49,10 @@ typedef struct Config
   const uint32_t EFFECT_LOOP_MS = 60 * 1000;
 
   // LED
-  const uint8_t LED_BRIGHTNESS = 255; // 0-255 for overall brightness.
+  // const uint8_t LED_BRIGHTNESS = 255; // 0-255 for overall brightness.
   // Parameters for  FastLED.setMaxPowerInVoltsAndMilliamps
   const uint8_t MAX_VOLTS = 5;
-  const uint32_t MAX_MAMP = 50;
+  const uint32_t MAX_MAMP = 50; // TODO(jorgelo): Make this a build flag?
 
   // RGB Status LED
   const int RED_LED_PIN = A0;
@@ -144,6 +144,7 @@ typedef struct EffectDataPacket
   uint8_t activeEffect = EDEFAULT_EFFECT;
   uint16_t sourceTransmitterId; // If the sourceTransmitterId !== transmitterId it's a relay.
   uint16_t transmitterId;
+  DeviceRole role;
   uint32_t age = 0;
 };
 

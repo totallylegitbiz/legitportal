@@ -25,6 +25,9 @@ EffectDataPacket nextEffectDataPacket;
 bool hasGottenSync = false;
 const uint32_t syncTimeout = pingIntervalMax * 2; //Wait until at most double the timeout until starting to transmit.
 
+// Temporary override.
+uint32_t overRideUntilTs = 0;
+
 void blink(int pin)
 {
   digitalWrite(pin, HIGH);
@@ -78,6 +81,7 @@ void transmitterSetup(struct EffectDataPacket *effectState)
 {
 
   effectState->transmitterId = config.TRANSMITTER_ID; // Set it to us, this ain't a relay.
+  effectState->role = config.ROLE;
 
   setupStatusLED();
   radioSetup();
@@ -142,6 +146,11 @@ void transmitterReceiveLoop(struct EffectDataPacket *effectState)
       Serial.println("Ignoring invalid transmission...");
 
       return;
+    }
+
+    if (nextEffectDataPacket.role == DeviceRole::CAMP)
+    {
+      // This is a CAMP device. Camp devices over ride local settings.
     }
 
     uint32_t nextEffectLoopClockOffset = nextEffectDataPacket.loopPosition - (millis() % config.EFFECT_LOOP_MS);
