@@ -81,6 +81,7 @@ void radioSetup()
 void transmitterSetup(struct EffectDataPacket *effectState)
 {
 
+  Serial.println("### Transmitter setup: ");
   effectState->transmitterId = config.TRANSMITTER_ID; // Set it to us, this ain't a relay.
   effectState->role = config.ROLE;
 
@@ -89,6 +90,9 @@ void transmitterSetup(struct EffectDataPacket *effectState)
 
   setupStatusLED();
   radioSetup();
+
+  Serial.print("### SETUP COMPLETE for transmitter id: ");
+  Serial.println(config.TRANSMITTER_ID);
 }
 
 void (*resetFunc)(void) = 0;

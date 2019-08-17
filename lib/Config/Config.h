@@ -46,7 +46,7 @@ typedef struct Config
   bool DIAGNOSTIC_MODE = false;
 
   // Effect Loop config
-  const uint32_t EFFECT_LOOP_MS = 60 * 1000;
+  const uint32_t EFFECT_LOOP_MS = 300000; // 5 minute loop
 
   // LED
   // const uint8_t LED_BRIGHTNESS = 255; // 0-255 for overall brightness.
