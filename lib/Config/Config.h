@@ -147,8 +147,8 @@ typedef struct EffectDataPacket
 };
 
 #ifdef DEBUG
-#define SERIAL_PRINT(x) Serial.print(x)
-#define SERIAL_PRINTLN(x) Serial.println(x)
+#define SERIAL_PRINT(x) SERIAL_PRINT(x)
+#define SERIAL_PRINTLN(x) SERIAL_PRINTln(x)
 #define SERIAL_BEGIN(x) Serial.begin(x)
 #else
 #define SERIAL_PRINT(x)

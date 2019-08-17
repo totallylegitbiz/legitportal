@@ -35,7 +35,7 @@ void setButtonState()
     if (!isPoweredOn)
     {
       // Handle when device is powered off, to reset it.
-      Serial.println("Powering up...");
+      SERIAL_PRINTLN("Powering up...");
       resetFunc();
     }
   }
@@ -43,7 +43,7 @@ void setButtonState()
   // Shuts down the controller.
   if (isPoweredOn && currentButtonState && (millis() - buttonPressedSinceTs) > buttonLongPressMs)
   {
-    Serial.println("Powering down...");
+    SERIAL_PRINTLN("Powering down...");
     isPoweredOn = false;
     FastLED.clear();
     FastLED.show();
@@ -54,7 +54,7 @@ void setButtonState()
   if (isPoweredOn && lastButtonState && currentButtonState != lastButtonState)
   {
     // BUTTON WAS CLICKED
-    Serial.println("Click");
+    SERIAL_PRINTLN("Click");
 
     effectState.activeEffect = (effectState.activeEffect + 1) % EFFECT_CNT;
 
@@ -71,7 +71,7 @@ void setup()
 
   // Setup config.
 
-  Serial.begin(9600);
+  SERIAL_BEGIN(9600);
 
   effectSetup();
 
@@ -91,7 +91,7 @@ void setup()
     ledStripSetup();
   }
 
-  Serial.println("### Device setup complete.");
+  SERIAL_PRINTLN("### Device setup complete.");
 }
 
 int prevMemory = 0;
@@ -103,8 +103,8 @@ void loop()
 
   if (prevMemory != mem)
   {
-    Serial.print("freeMemory()=");
-    Serial.println(mem);
+    SERIAL_PRINT("freeMemory()=");
+    SERIAL_PRINTLN(mem);
     prevMemory = mem;
   }
   effectState.loopPosition = (millis() + effectLoopClockOffset) % config.EFFECT_LOOP_MS;

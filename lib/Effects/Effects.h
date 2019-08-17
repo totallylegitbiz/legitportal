@@ -125,8 +125,8 @@ void effectRenderLoop(uint8_t effectId, struct EffectDataPacket *effectState)
     sparkleEffectLoop(effectState, 200);
     break;
   default:
-    Serial.print("Please set effect count correctly, received: ");
-    Serial.println(effectState->activeEffect);
+    SERIAL_PRINT("Please set effect count correctly, received: ");
+    SERIAL_PRINTLN(effectState->activeEffect);
     throbEffectLoop(effectState, 200);
   }
 }
@@ -145,7 +145,7 @@ void effectLoop(struct EffectDataPacket *effectState)
 
   if (overRideUntilTs > 0 && millis() > overRideUntilTs)
   {
-    Serial.println("Ending override..");
+    SERIAL_PRINTLN("Ending override..");
     overRideUntilTs = 0;
   }
 

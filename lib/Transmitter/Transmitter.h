@@ -73,7 +73,7 @@ void radioSetup()
   printf_begin();
   radio.printDetails();
 
-  Serial.println("READY!");
+  SERIAL_PRINTLN("READY!");
   nextEffectDataPacket.loopPosition = 0;
   nextEffectDataPacket.activeEffect = 0;
 }
@@ -81,18 +81,18 @@ void radioSetup()
 void transmitterSetup(struct EffectDataPacket *effectState)
 {
 
-  Serial.println("### Transmitter setup: ");
+  SERIAL_PRINTLN("### Transmitter setup: ");
   effectState->transmitterId = config.TRANSMITTER_ID; // Set it to us, this ain't a relay.
   effectState->role = config.ROLE;
 
-  Serial.print("@@@ ROLE:");
-  Serial.println((int)config.ROLE);
+  SERIAL_PRINT("@@@ ROLE:");
+  SERIAL_PRINTLN((int)config.ROLE);
 
   setupStatusLED();
   radioSetup();
 
-  Serial.print("### SETUP COMPLETE for transmitter id: ");
-  Serial.println(config.TRANSMITTER_ID);
+  SERIAL_PRINT("### SETUP COMPLETE for transmitter id: ");
+  SERIAL_PRINTLN(config.TRANSMITTER_ID);
 }
 
 void (*resetFunc)(void) = 0;
@@ -117,16 +117,16 @@ void transmitEffectDataPacket(struct EffectDataPacket *effectState, bool force =
   }
 
   bool ok = radio.write(&objEffectDataPacket, sizeof(objEffectDataPacket));
-  Serial.print("TX: ");
+  SERIAL_PRINT("TX: ");
   if (ok)
   {
-    Serial.println(": sent");
+    SERIAL_PRINTLN(": sent");
     pingLastPingMs = millis(); // Successfully sent..
     lastSuccessfulTx = millis();
   }
   else
   {
-    Serial.println(": failed!!!!");
+    SERIAL_PRINTLN(": failed!!!!");
     // recievedStatusEffect(BlackLightFluorescent, 250);
     pingLastPingMs = millis() + (pingIntervalMs * 2); // Delay for another two intervals;
     if (millis() > lastSuccessfulTx + txFailureResetMs)
@@ -151,7 +151,7 @@ void transmitterReceiveLoop(struct EffectDataPacket *effectState)
     if (nextEffectDataPacket.transmitterId == 0)
     {
       // Somehow we have an invalid transmitterId, ignore it.
-      Serial.println("Ignoring invalid transmission...");
+      SERIAL_PRINTLN("Ignoring invalid transmission...");
 
       return;
     }
@@ -161,24 +161,24 @@ void transmitterReceiveLoop(struct EffectDataPacket *effectState)
 
     uint32_t nextEffectLoopClockOffset = nextEffectDataPacket.loopPosition - (millis() % config.EFFECT_LOOP_MS);
 
-    Serial.print("TX from role: ");
-    Serial.println((int)nextEffectDataPacket.role);
-    Serial.print("isSameRoleAsMe: ");
-    Serial.println(isSameRoleAsMe);
+    SERIAL_PRINT("TX from role: ");
+    SERIAL_PRINTLN((int)nextEffectDataPacket.role);
+    SERIAL_PRINT("isSameRoleAsMe: ");
+    SERIAL_PRINTLN(isSameRoleAsMe);
 
     if (!isSameRoleAsMe && nextEffectDataPacket.role == DeviceRole::CAMP)
     {
       // This is a CAMP device. Camp devices override local settings for 20 seconds after the last ping.
       // Camp device data is not relayed, just set the over ride.
-      Serial.println("Received a message from CAMP");
+      SERIAL_PRINTLN("Received a message from CAMP");
       overRideUntilTs = millis() + OVERRIDE_TIMEOUT;
     }
 
     if (!isOverRide && !isSameRoleAsMe)
     {
       // I'm gonna ignore this.
-      Serial.print("Mis-matched role, ignoring: DEVICE_ROLE=");
-      Serial.println((int)nextEffectDataPacket.role);
+      SERIAL_PRINT("Mis-matched role, ignoring: DEVICE_ROLE=");
+      SERIAL_PRINTLN((int)nextEffectDataPacket.role);
 
       return;
     }
@@ -192,8 +192,8 @@ void transmitterReceiveLoop(struct EffectDataPacket *effectState)
     if (isFromMe)
     {
       // This is from me, ignore it.
-      Serial.print("Ignoring my own relayed transmssion. Drift: ");
-      Serial.println(effectLoopClockOffset - nextEffectLoopClockOffset);
+      SERIAL_PRINT("Ignoring my own relayed transmssion. Drift: ");
+      SERIAL_PRINTLN(effectLoopClockOffset - nextEffectLoopClockOffset);
       return;
     }
 
@@ -206,10 +206,10 @@ void transmitterReceiveLoop(struct EffectDataPacket *effectState)
     {
       // This new data is older than mine, not applying, but relaying.
       // If we haven't gotten sync, skip.
-      Serial.print("Marked stale. age: ");
-      Serial.print(nextEffectDataPacket.age);
-      Serial.print(" lastDataCreationTs ago ");
-      Serial.println(millis() - lastDataCreationTs);
+      SERIAL_PRINT("Marked stale. age: ");
+      SERIAL_PRINT(nextEffectDataPacket.age);
+      SERIAL_PRINT(" lastDataCreationTs ago ");
+      SERIAL_PRINTLN(millis() - lastDataCreationTs);
 
       // Marked stale. age: 0 lastDataCreationTs ago 265332
       if (shouldRelay)
@@ -221,10 +221,10 @@ void transmitterReceiveLoop(struct EffectDataPacket *effectState)
 
     if (hasEffectChanged)
     {
-      Serial.print("EFFECT CHANGE! from: ");
-      Serial.print(effectState->activeEffect);
-      Serial.print(" to ");
-      Serial.println(nextEffectDataPacket.activeEffect);
+      SERIAL_PRINT("EFFECT CHANGE! from: ");
+      SERIAL_PRINT(effectState->activeEffect);
+      SERIAL_PRINT(" to ");
+      SERIAL_PRINTLN(nextEffectDataPacket.activeEffect);
     }
 
     // We only relay if the activeEffect has changed or the souce changed;
@@ -240,15 +240,15 @@ void transmitterReceiveLoop(struct EffectDataPacket *effectState)
     lastDataCreationTs = millis() - effectState->age;
     dataLastReceived = millis();
 
-    Serial.print("RX: #");
-    Serial.print(nextEffectDataPacket.transmitterId);
-    Serial.print(" -> ");
-    Serial.print(" loopPosition: ");
-    Serial.print(nextEffectDataPacket.loopPosition);
-    Serial.print(" age: ");
-    Serial.print(nextEffectDataPacket.age);
-    Serial.print(" activeEffect: ");
-    Serial.println(nextEffectDataPacket.activeEffect);
+    SERIAL_PRINT("RX: #");
+    SERIAL_PRINT(nextEffectDataPacket.transmitterId);
+    SERIAL_PRINT(" -> ");
+    SERIAL_PRINT(" loopPosition: ");
+    SERIAL_PRINT(nextEffectDataPacket.loopPosition);
+    SERIAL_PRINT(" age: ");
+    SERIAL_PRINT(nextEffectDataPacket.age);
+    SERIAL_PRINT(" activeEffect: ");
+    SERIAL_PRINTLN(nextEffectDataPacket.activeEffect);
 
     if (shouldRelay)
     {
@@ -260,9 +260,9 @@ void transmitterReceiveLoop(struct EffectDataPacket *effectState)
 
   if (!hasGottenSync && millis() > syncTimeout)
   {
-    Serial.println("Sync timeout reached, starting..");
-    Serial.print("syncTimeout: ");
-    Serial.println(syncTimeout);
+    SERIAL_PRINTLN("Sync timeout reached, starting..");
+    SERIAL_PRINT("syncTimeout: ");
+    SERIAL_PRINTLN(syncTimeout);
     hasGottenSync = true;
     effectState->activeEffect = 0;
     effectState->sourceTransmitterId = config.TRANSMITTER_ID; // Since we are assuming our own effect, we are the source now.
