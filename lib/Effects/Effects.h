@@ -150,5 +150,6 @@ void effectLoop(struct EffectDataPacket *effectState)
   lastRefreshMs = millis();
 
   effectRenderLoop(effectState->activeEffect, effectState);
-  FastLED.show();
+
+  show_at_max_brightness_for_power();
 }
