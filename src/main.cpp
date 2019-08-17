@@ -1,3 +1,13 @@
+#ifdef DEBUG
+#define SERIAL_PRINT(x) SERIAL_PRINT(x)
+#define SERIAL_PRINTLN(x) SERIAL_PRINTln(x)
+#define SERIAL_BEGIN(x) Serial.begin(x)
+#else
+#define SERIAL_PRINT(x)
+#define SERIAL_PRINTLN(x)
+#define SERIAL_BEGIN(x)
+#endif
+
 #include <SPI.h>
 #include <FastLED.h>
 #include <Config.h>

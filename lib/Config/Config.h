@@ -146,14 +146,4 @@ typedef struct EffectDataPacket
   uint32_t age = 0;
 };
 
-#ifdef DEBUG
-#define SERIAL_PRINT(x) SERIAL_PRINT(x)
-#define SERIAL_PRINTLN(x) SERIAL_PRINTln(x)
-#define SERIAL_BEGIN(x) Serial.begin(x)
-#else
-#define SERIAL_PRINT(x)
-#define SERIAL_PRINTLN(x)
-#define SERIAL_BEGIN(x)
-#endif
-
 #endif
