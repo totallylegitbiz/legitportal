@@ -11,7 +11,6 @@ bool isPoweredOn = true;
 
 // Temporary override settings;
 uint32_t overRideUntilTs = 0;
-uint8_t overRideEffect = 0;
 
 uint32_t buttonPressedSince = 0;
 
@@ -22,7 +21,7 @@ uint32_t buttonPressedSince = 0;
 void setButtonState()
 {
 
-  const uint8_t buttonLongPressMs = 500;
+  const uint16_t buttonLongPressMs = 2000;
 
   // Button Logic
   boolean currentButtonState = !digitalRead(config.EFFECT_BUTTON_PIN);
@@ -57,6 +56,7 @@ void setButtonState()
     Serial.println("Click");
 
     effectState.activeEffect = (effectState.activeEffect + 1) % EFFECT_CNT;
+
     effectState.sourceTransmitterId = config.TRANSMITTER_ID; // Set it to us, this ain't a relay.
     effectState.transmitterId = config.TRANSMITTER_ID;       // Set it to us, this ain't a relay.
     transmitEffectDataPacket(&effectState, true);            // Force a transmission loop

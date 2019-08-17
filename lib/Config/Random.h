@@ -10,7 +10,7 @@ void reseedRandom(void)
   int8_t i;
   unsigned int seed;
 
-  for (i = 0; i < sizeof(raw.b); ++i)
+  for (unsigned long i = 0; i < sizeof(raw.b); ++i)
   {
     raw.b[i] = EEPROM.read(i);
   }
@@ -23,7 +23,7 @@ void reseedRandom(void)
 
   randomSeed(seed);
 
-  for (i = 0; i < sizeof(raw.b); ++i)
+  for (unsigned long i = 0; i < sizeof(raw.b); ++i)
   {
     EEPROM.write(i, raw.b[i]);
   }

@@ -27,7 +27,7 @@ void strobeEffectLoop(struct EffectDataPacket *effectState, CRGB colorOff, CRGB 
 
 //     const int hue = floor((loopPercent * 255) / 5) * 5;
 
-//     for (int i = 0; i < LED_CNT; i++)
+//     for (uint16_t i = 0; i < LED_CNT; i++)
 //     {
 //         leds[i] = CHSV(hue, 255, 50);
 //     }

@@ -52,7 +52,8 @@ void radioSetup()
 
   radio.begin();
   radio.setDataRate(RF24_250KBPS);
-  radio.setPALevel(RF24_PA_MAX);
+  // radio.setPALevel(RF24_PA_MAX);
+  radio.setPALevel(RF24_PA_MIN);
   radio.setAutoAck(false);
 
   // Not sure what this does.
@@ -112,7 +113,7 @@ void transmitEffectDataPacket(struct EffectDataPacket *effectState, bool force =
   }
 
   bool ok = radio.write(&objEffectDataPacket, sizeof(objEffectDataPacket));
-
+  Serial.print("TX: ");
   if (ok)
   {
     Serial.println(": sent");
@@ -152,30 +153,37 @@ void transmitterReceiveLoop(struct EffectDataPacket *effectState)
     }
 
     const bool isSameRoleAsMe = nextEffectDataPacket.role == effectState->role;
+    const bool isOverRide = !isSameRoleAsMe && nextEffectDataPacket.role == DeviceRole::CAMP;
+
+    uint32_t nextEffectLoopClockOffset = nextEffectDataPacket.loopPosition - (millis() % config.EFFECT_LOOP_MS);
+
+    Serial.print("TX from role: ");
+    Serial.println((int)nextEffectDataPacket.role);
+    Serial.print("isSameRoleAsMe: ");
+    Serial.println(isSameRoleAsMe);
 
     if (!isSameRoleAsMe && nextEffectDataPacket.role == DeviceRole::CAMP)
     {
       // This is a CAMP device. Camp devices override local settings for 20 seconds after the last ping.
       // Camp device data is not relayed, just set the over ride.
+      Serial.println("Received a message from CAMP");
       overRideUntilTs = millis() + OVERRIDE_TIMEOUT;
-      overRideEffect = nextEffectDataPacket.activeEffect;
-      return;
     }
 
-    if (!isSameRoleAsMe)
+    if (!isOverRide && !isSameRoleAsMe)
     {
       // I'm gonna ignore this.
-      Serial.println("Mis-matched role, ignoring...");
+      Serial.print("Mis-matched role, ignoring: DEVICE_ROLE=");
+      Serial.println((int)nextEffectDataPacket.role);
+
       return;
     }
-
-    uint32_t nextEffectLoopClockOffset = nextEffectDataPacket.loopPosition - (millis() % config.EFFECT_LOOP_MS);
 
     bool hasEffectChanged = effectState->activeEffect != nextEffectDataPacket.activeEffect;
     bool hasSourceChanged = effectState->sourceTransmitterId != nextEffectDataPacket.sourceTransmitterId;
     bool isFromMe = nextEffectDataPacket.sourceTransmitterId == config.TRANSMITTER_ID;
 
-    bool shouldRelay = (hasEffectChanged || hasSourceChanged);
+    bool shouldRelay = !isOverRide && (hasEffectChanged || hasSourceChanged);
 
     if (isFromMe)
     {
@@ -190,7 +198,7 @@ void transmitterReceiveLoop(struct EffectDataPacket *effectState)
 
     uint16_t localDataAge = millis() - lastDataCreationTs;
 
-    if (hasGottenSync && localDataAge < nextEffectDataPacket.age)
+    if (!isOverRide && hasGottenSync && localDataAge < nextEffectDataPacket.age)
     {
       // This new data is older than mine, not applying, but relaying.
       // If we haven't gotten sync, skip.
@@ -280,6 +288,10 @@ void transmitterTransmitLoop(struct EffectDataPacket *effectState)
 
 void transmitterLoop(struct EffectDataPacket *effectState)
 {
-  transmitterTransmitLoop(effectState);
+  if (millis() > overRideUntilTs)
+  {
+    // Only transmit when we don't have an active over ride.
+    transmitterTransmitLoop(effectState);
+  }
   transmitterReceiveLoop(effectState);
 }

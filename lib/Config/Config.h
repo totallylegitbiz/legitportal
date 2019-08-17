@@ -100,7 +100,7 @@ DeviceRole getDeviceRole()
 {
 
 #ifndef EDEVICE_ROLE
-  return DeviceRole::BIKE; // We default to bike
+#error Please set DEVICE_ROLE
 #else
   switch ((DeviceRole)EDEVICE_ROLE)
   {

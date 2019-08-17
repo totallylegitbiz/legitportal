@@ -22,7 +22,7 @@ void patternLoopEffectLoop(struct EffectDataPacket *effectState, uint16_t stepDe
     }
   }
 
-  for (int i = 0; i < LED_CNT; i++)
+  for (uint16_t i = 0; i < LED_CNT; i++)
   {
     leds[i] = stepColors[step];
   }

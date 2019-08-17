@@ -2,7 +2,7 @@
 
 const int EFFECT_CNT = 5;
 
-int effectLoopClockOffset = 0;
+uint32_t effectLoopClockOffset = 0;
 const uint8_t effectRefreshHz = 100; // Updates 100 times a second.
 uint32_t lastRefreshMs = 0;
 
@@ -13,7 +13,7 @@ void effectSetup()
 
 void recievedStatusEffect(CRGB color, int d)
 {
-  for (int i = 0; i < LED_CNT; i++)
+  for (uint16_t i = 0; i < LED_CNT; i++)
   {
     leds[i] = color;
   }
@@ -149,15 +149,13 @@ void effectLoop(struct EffectDataPacket *effectState)
 
   lastRefreshMs = millis();
 
-  if (millis() < overRideUntilTs)
+  effectRenderLoop(effectState->activeEffect, effectState);
+
+  if (overRideUntilTs > 0 && millis() > overRideUntilTs)
   {
-    // We have an active over ride.
-    effectRenderLoop(overRideEffect, effectState);
-  }
-  else
-  {
-    effectRenderLoop(effectState->activeEffect, effectState);
+    Serial.println("Ending override..");
     overRideUntilTs = 0;
   }
+
   show_at_max_brightness_for_power();
 }
