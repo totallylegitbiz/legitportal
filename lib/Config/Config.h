@@ -99,10 +99,10 @@ uint8_t getDipValue(Config config)
 DeviceRole getDeviceRole()
 {
 
-#ifndef EROLE
+#ifndef EDEVICE_ROLE
   return DeviceRole::BIKE; // We default to bike
 #else
-  switch (EROLE)
+  switch ((DeviceRole)EDEVICE_ROLE)
   {
   case DeviceRole::BIKE:
     return DeviceRole::BIKE;

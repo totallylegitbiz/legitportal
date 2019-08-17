@@ -149,7 +149,15 @@ void effectLoop(struct EffectDataPacket *effectState)
 
   lastRefreshMs = millis();
 
-  effectRenderLoop(effectState->activeEffect, effectState);
-
+  if (millis() < overRideUntilTs)
+  {
+    // We have an active over ride.
+    effectRenderLoop(overRideEffect, effectState);
+  }
+  else
+  {
+    effectRenderLoop(effectState->activeEffect, effectState);
+    overRideUntilTs = 0;
+  }
   show_at_max_brightness_for_power();
 }

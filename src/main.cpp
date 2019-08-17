@@ -5,15 +5,19 @@
 EffectDataPacket effectState;
 const Config config = getConfig();
 
-#include <LEDStrip.h>
-#include <Effects.h>
-#include <Transmitter.h>
-
 bool lastButtonState = false; // Default is not pressed.
 int lastRecievedOffset = 0;
 bool isPoweredOn = true;
 
+// Temporary override settings;
+uint32_t overRideUntilTs = 0;
+uint8_t overRideEffect = 0;
+
 uint32_t buttonPressedSince = 0;
+
+#include <LEDStrip.h>
+#include <Effects.h>
+#include <Transmitter.h>
 
 void setButtonState()
 {

@@ -26,7 +26,7 @@ bool hasGottenSync = false;
 const uint32_t syncTimeout = pingIntervalMax * 2; //Wait until at most double the timeout until starting to transmit.
 
 // Temporary override.
-uint32_t overRideUntilTs = 0;
+const uint16_t OVERRIDE_TIMEOUT = 10000; // 10 seconds after device stops receiving messages.
 
 void blink(int pin)
 {
@@ -82,6 +82,9 @@ void transmitterSetup(struct EffectDataPacket *effectState)
 
   effectState->transmitterId = config.TRANSMITTER_ID; // Set it to us, this ain't a relay.
   effectState->role = config.ROLE;
+
+  Serial.print("@@@ ROLE:");
+  Serial.println((int)config.ROLE);
 
   setupStatusLED();
   radioSetup();
@@ -148,9 +151,22 @@ void transmitterReceiveLoop(struct EffectDataPacket *effectState)
       return;
     }
 
-    if (nextEffectDataPacket.role == DeviceRole::CAMP)
+    const bool isSameRoleAsMe = nextEffectDataPacket.role == effectState->role;
+
+    if (!isSameRoleAsMe && nextEffectDataPacket.role == DeviceRole::CAMP)
     {
-      // This is a CAMP device. Camp devices over ride local settings.
+      // This is a CAMP device. Camp devices override local settings for 20 seconds after the last ping.
+      // Camp device data is not relayed, just set the over ride.
+      overRideUntilTs = millis() + OVERRIDE_TIMEOUT;
+      overRideEffect = nextEffectDataPacket.activeEffect;
+      return;
+    }
+
+    if (!isSameRoleAsMe)
+    {
+      // I'm gonna ignore this.
+      Serial.println("Mis-matched role, ignoring...");
+      return;
     }
 
     uint32_t nextEffectLoopClockOffset = nextEffectDataPacket.loopPosition - (millis() % config.EFFECT_LOOP_MS);
