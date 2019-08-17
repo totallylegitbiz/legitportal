@@ -90,9 +90,6 @@ void setup()
 void diagnoticModeLoop()
 {
 
-  Serial.print("DIP: ");
-  Serial.println(getDipValue(config));
-
   Serial.println("RED");
   analogWrite(config.RED_LED_PIN, 255);
   recievedStatusEffect(CRGB(255, 0, 0), 500);

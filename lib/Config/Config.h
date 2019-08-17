@@ -29,11 +29,19 @@ CRGB leds[LED_CNT]; // This is our local copy of leds.
 
 const int UNUSED_PIN = A3;
 
+enum class DeviceRole
+{
+  BIKE = 0,
+  CAMP = 1,
+  // CHILL_DOME = 2,
+  // DEEP_PLAYA = 3,
+  // PULSE_REMOTE = 5,
+  // PORTAL = 6,
+};
+
 // This is the base config.
 typedef struct Config
 {
-
-  uint8_t DEVICE_TYPE = BIKE;
 
   bool DIAGNOSTIC_MODE = false;
 
@@ -68,6 +76,7 @@ typedef struct Config
   const int EFFECT_BUTTON_PIN = 6;
 
   uint16_t TRANSMITTER_ID;
+  DeviceRole ROLE = DeviceRole::BIKE;
 };
 
 uint8_t getDipValue(Config config)
@@ -87,19 +96,38 @@ uint8_t getDipValue(Config config)
   return !d0 + (!d1 * 2) + (!d2 * 4) + (!d3 * 8);
 }
 
+DeviceRole getDeviceRole()
+{
+
+#ifndef EROLE
+  return DeviceRole::BIKE; // We default to bike
+#else
+  switch (EROLE)
+  {
+  case DeviceRole::BIKE:
+    return DeviceRole::BIKE;
+  case DeviceRole::CAMP:
+    return DeviceRole::CAMP;
+  }
+#endif
+}
+
 Config getConfig()
 {
   Config outConfig;
 
   reseedRandom();
 
-  outConfig.DEVICE_TYPE = getDipValue(outConfig);
+  outConfig.ROLE = getDeviceRole();
   outConfig.TRANSMITTER_ID = random(1, 65535);
 
-  switch (outConfig.DEVICE_TYPE)
+  switch (outConfig.ROLE)
   {
-  case BIKE:
+  case DeviceRole::BIKE:
     // Bike specific
+    break;
+  case DeviceRole::CAMP:
+    // Camp specific
     break;
   }
 
