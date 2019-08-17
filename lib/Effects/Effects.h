@@ -56,7 +56,6 @@ const uint8_t SOLID_10_EFFECT = 110;
 
 void effectRenderLoop(uint8_t effectId, struct EffectDataPacket *effectState)
 {
-
   switch (effectId)
   {
   case LOADING_EFFECT: // This is the loading one.

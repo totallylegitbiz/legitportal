@@ -90,6 +90,8 @@ void setup()
   {
     ledStripSetup();
   }
+
+  Serial.println("### Device setup complete.");
 }
 
 void diagnoticModeLoop()
@@ -122,23 +124,23 @@ void loop()
   //   return;
   // }
 
-  // effectState.loopPosition = (millis() + effectLoopClockOffset) % config.EFFECT_LOOP_MS;
+  effectState.loopPosition = (millis() + effectLoopClockOffset) % config.EFFECT_LOOP_MS;
 
-  // if (hasGottenSync)
-  // {
-  //   // Button doesn't work until we get button sync
-  //   setButtonState();
-  // }
+  if (hasGottenSync)
+  {
+    // Button doesn't work until we get button sync
+    setButtonState();
+  }
 
-  // if (!isPoweredOn)
-  // {
-  //   return;
-  // }
+  if (!isPoweredOn)
+  {
+    return;
+  }
 
-  // if (LED_CNT > 0)
-  // {
-  //   effectLoop(&effectState);
-  // }
+  if (LED_CNT > 0)
+  {
+    effectLoop(&effectState);
+  }
 
-  // transmitterLoop(&effectState);
+  transmitterLoop(&effectState);
 }
