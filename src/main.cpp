@@ -94,9 +94,19 @@ void setup()
   Serial.println("### Device setup complete.");
 }
 
+int prevMemory = 0;
+
 void loop()
 {
 
+  const int mem = freeMemory();
+
+  if (prevMemory != mem)
+  {
+    Serial.print("freeMemory()=");
+    Serial.println(mem);
+    prevMemory = mem;
+  }
   effectState.loopPosition = (millis() + effectLoopClockOffset) % config.EFFECT_LOOP_MS;
 
   if (hasGottenSync)

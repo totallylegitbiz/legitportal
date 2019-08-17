@@ -3,7 +3,7 @@
 const int EFFECT_CNT = 5;
 
 uint32_t effectLoopClockOffset = 0;
-const uint8_t effectRefreshHz = 100; // Updates 100 times a second.
+const uint8_t effectRefreshHz = 60; // Updates 60 times a second.
 uint32_t lastRefreshMs = 0;
 
 void effectSetup()
@@ -46,6 +46,7 @@ const uint8_t SOLID_10_EFFECT = 110;
 
 void effectRenderLoop(uint8_t effectId, struct EffectDataPacket *effectState)
 {
+
   switch (effectId)
   {
   case LOADING_EFFECT: // This is the loading one.
@@ -56,7 +57,8 @@ void effectRenderLoop(uint8_t effectId, struct EffectDataPacket *effectState)
     throbEffectLoop(effectState, 100);
     break;
   case HUE_SPIN_EFFECT:
-    hueSpinEffectLoop(effectState, 5000);
+    candleEffectLoop(effectState, 1); // No steps
+    // hueSpinEffectLoop(effectState, 5000);
     break;
   case STOBE_FLASH_EFFECT:
     policeEffectLoop(effectState);
@@ -123,8 +125,9 @@ void effectRenderLoop(uint8_t effectId, struct EffectDataPacket *effectState)
     sparkleEffectLoop(effectState, 200);
     break;
   default:
-    Serial.println("Please set effect count correctly");
+    Serial.print("Please set effect count correctly, received: ");
     Serial.println(effectState->activeEffect);
+    throbEffectLoop(effectState, 200);
   }
 }
 

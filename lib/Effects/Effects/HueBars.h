@@ -1,13 +1,10 @@
-
-#include <FastLED.h>
-
 void hueBarsEffectLoop(struct EffectDataPacket *effectState, uint16_t loopMs)
 {
 
   const float loopPercent = float(effectState->loopPosition % loopMs) / loopMs;
   // const float huePercent = float(effectState->loopPosition) / config.EFFECT_LOOP_MS;
 
-  const uint8_t lines = LED_CNT / 30;
+  const uint8_t lines = ceil(LED_CNT / 30);
 
   const int offset = loopPercent * LED_CNT;
 

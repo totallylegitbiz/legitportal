@@ -4,7 +4,7 @@
 void candleEffectLoop(struct EffectDataPacket *effectState, uint8_t steps)
 {
   const uint16_t loopMs = 60000; // 60 second loop
-  const uint8_t loopPosition = effectState->loopPosition % loopMs;
+  const uint32_t loopPosition = effectState->loopPosition % loopMs;
   const float loopPercent = float(loopPosition) / loopMs;
 
   const uint8_t hue = 20;
@@ -13,12 +13,12 @@ void candleEffectLoop(struct EffectDataPacket *effectState, uint8_t steps)
   const int idx = loopPercent * candle2Size;
 
   const uint16_t stepLoopMs = 500;
-  const uint8_t stepLoopPosition = effectState->loopPosition % stepLoopMs;
+  const uint16_t stepLoopPosition = effectState->loopPosition % stepLoopMs;
   const float stepLoopPercent = float(stepLoopPosition) / stepLoopMs;
 
   const uint8_t step = stepLoopPercent * steps;
 
-  for (uint16_t i = 0; i < LED_CNT; i++)
+  for (uint8_t i = 0; i < LED_CNT; i++)
   {
     const uint8_t ledOffset = notRandom(0, LED_CNT - 1, i);
     const int candleIdx = (idx + ledOffset) % candle2Size;

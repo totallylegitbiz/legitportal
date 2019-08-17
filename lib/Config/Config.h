@@ -57,10 +57,10 @@ typedef struct Config
   const int BLUE_LED_PIN = A2;
 
   // Dip Config
-  const int DIP_PIN_0 = 2;
-  const int DIP_PIN_1 = 3;
-  const int DIP_PIN_2 = 4;
-  const int DIP_PIN_3 = 5;
+  // const int DIP_PIN_0 = 2;
+  // const int DIP_PIN_1 = 3;
+  // const int DIP_PIN_2 = 4;
+  // const int DIP_PIN_3 = 5;
 
   // Sensor Pin
   const int SENSOR_PIN = A3;
@@ -76,22 +76,22 @@ typedef struct Config
   DeviceRole ROLE = DeviceRole::BIKE;
 };
 
-uint8_t getDipValue(Config config)
-{
-  // DIP
-  pinMode(config.DIP_PIN_0, INPUT_PULLUP);
-  pinMode(config.DIP_PIN_1, INPUT_PULLUP);
-  pinMode(config.DIP_PIN_2, INPUT_PULLUP);
-  pinMode(config.DIP_PIN_3, INPUT_PULLUP);
+// uint8_t getDipValue(Config config)
+// {
+//   // DIP
+//   pinMode(config.DIP_PIN_0, INPUT_PULLUP);
+//   pinMode(config.DIP_PIN_1, INPUT_PULLUP);
+//   pinMode(config.DIP_PIN_2, INPUT_PULLUP);
+//   pinMode(config.DIP_PIN_3, INPUT_PULLUP);
 
-  const bool d0 = digitalRead(config.DIP_PIN_0);
-  const bool d1 = digitalRead(config.DIP_PIN_1);
-  const bool d2 = digitalRead(config.DIP_PIN_2);
-  const bool d3 = digitalRead(config.DIP_PIN_3);
+//   const bool d0 = digitalRead(config.DIP_PIN_0);
+//   const bool d1 = digitalRead(config.DIP_PIN_1);
+//   const bool d2 = digitalRead(config.DIP_PIN_2);
+//   const bool d3 = digitalRead(config.DIP_PIN_3);
 
-  // Very simple bit math
-  return !d0 + (!d1 * 2) + (!d2 * 4) + (!d3 * 8);
-}
+//   // Very simple bit math
+//   return !d0 + (!d1 * 2) + (!d2 * 4) + (!d3 * 8);
+// }
 
 DeviceRole getDeviceRole()
 {
@@ -125,7 +125,7 @@ Config getConfig()
     break;
   case DeviceRole::CAMP:
     // Camp specific
-    outConfig.MAX_MAMP = 10000;
+    outConfig.MAX_MAMP = 1000;
     break;
   }
 
@@ -149,9 +149,11 @@ typedef struct EffectDataPacket
 #ifdef DEBUG
 #define SERIAL_PRINT(x) Serial.print(x)
 #define SERIAL_PRINTLN(x) Serial.println(x)
+#define SERIAL_BEGIN(x) Serial.begin(x)
 #else
 #define SERIAL_PRINT(x)
 #define SERIAL_PRINTLN(x)
+#define SERIAL_BEGIN(x)
 #endif
 
 #endif
