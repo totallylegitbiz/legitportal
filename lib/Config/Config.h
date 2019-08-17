@@ -52,7 +52,7 @@ typedef struct Config
   // const uint8_t LED_BRIGHTNESS = 255; // 0-255 for overall brightness.
   // Parameters for  FastLED.setMaxPowerInVoltsAndMilliamps
   const uint8_t MAX_VOLTS = 5;
-  const uint32_t MAX_MAMP = 50; // TODO(jorgelo): Make this a build flag?
+  uint32_t MAX_MAMP = 50; // TODO(jorgelo): Make this a build flag?
 
   // RGB Status LED
   const int RED_LED_PIN = A0;
@@ -128,6 +128,7 @@ Config getConfig()
     break;
   case DeviceRole::CAMP:
     // Camp specific
+    outConfig.MAX_MAMP = 10000;
     break;
   }
 

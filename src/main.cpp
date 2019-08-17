@@ -12,7 +12,8 @@ bool isPoweredOn = true;
 // Temporary override settings;
 uint32_t overRideUntilTs = 0;
 
-uint32_t buttonPressedSince = 0;
+// How long the button has been held since ts.
+uint32_t buttonPressedSinceTs = 0;
 
 #include <LEDStrip.h>
 #include <Effects.h>
@@ -29,7 +30,7 @@ void setButtonState()
   if (currentButtonState && !lastButtonState)
   {
     // Changed state
-    buttonPressedSince = millis();
+    buttonPressedSinceTs = millis();
 
     if (!isPoweredOn)
     {
@@ -40,7 +41,7 @@ void setButtonState()
   }
 
   // Shuts down the controller.
-  if (isPoweredOn && currentButtonState && (millis() - buttonPressedSince) > buttonLongPressMs)
+  if (isPoweredOn && currentButtonState && (millis() - buttonPressedSinceTs) > buttonLongPressMs)
   {
     Serial.println("Powering down...");
     isPoweredOn = false;
