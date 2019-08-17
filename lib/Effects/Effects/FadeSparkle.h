@@ -42,5 +42,5 @@ void fadeSparkleEffectLoop(struct EffectDataPacket *effectState, bool isFadeDown
     lastFadeRefreshMs = millis();
   }
 
-  copyLedsWithOffsetGamma();
+  // copyLedsWithOffsetGamma();
 }

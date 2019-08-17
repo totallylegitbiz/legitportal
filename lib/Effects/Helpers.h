@@ -53,20 +53,17 @@ int yesRandom(uint16_t from, uint16_t to)
   return random(from, to);
 }
 
-void zeroOutOutputStrip()
-{
-  for (uint16_t i = 0; i < LED_CNT + LED_OFFSET; i++)
-  {
-    cleds[i] = CRGB(0, 0, 0);
-  }
-}
+// void zeroOutOutputStrip()
+// {
+//   for (uint16_t i = 0; i < LED_CNT + LED_OFFSET; i++)
+//   {
+//     cleds[i] = CRGB(0, 0, 0);
+//   }
+// }
 
 void zeroOutStrip()
 {
-  for (uint16_t i = 0; i < LED_CNT; i++)
-  {
-    leds[i] = CRGB(0, 0, 0);
-  }
+  FastLED.clear();
 }
 
 void colorOutStrip(CRGB color)
@@ -87,22 +84,22 @@ void colorOutStrip(CHSV color)
 
 void copyLedsWithOffset()
 {
-  for (uint16_t i = 0; i < LED_CNT; i++)
-  {
-    cleds[i + LED_OFFSET] = leds[i];
-  }
+  // for (uint16_t i = 0; i < LED_CNT; i++)
+  // {
+  //   cleds[i + LED_OFFSET] = leds[i];
+  // }
 }
 
-void copyLedsWithOffsetGamma()
-{
-  for (uint16_t i = 0; i < LED_CNT; i++)
-  {
-    const int idx = i + LED_OFFSET;
-    cleds[idx].r = dim8_video(leds[idx].r);
-    cleds[idx].g = dim8_video(leds[idx].g);
-    cleds[idx].b = dim8_video(leds[idx].b);
-  }
-}
+// void copyLedsWithOffsetGamma()
+// {
+//   for (uint16_t i = 0; i < LED_CNT; i++)
+//   {
+//     const int idx = i + LED_OFFSET;
+//     cleds[idx].r = dim8_video(leds[idx].r);
+//     cleds[idx].g = dim8_video(leds[idx].g);
+//     cleds[idx].b = dim8_video(leds[idx].b);
+//   }
+// }
 
 class RunEvery
 {

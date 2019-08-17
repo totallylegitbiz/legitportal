@@ -11,16 +11,6 @@ void effectSetup()
   zeroOutStrip();
 }
 
-void recievedStatusEffect(CRGB color, int d)
-{
-  for (uint16_t i = 0; i < LED_CNT; i++)
-  {
-    leds[i] = color;
-  }
-  copyLedsWithOffset();
-  delay(d);
-}
-
 #include <Effects/All.h>
 
 const uint8_t LOADING_EFFECT = 255;

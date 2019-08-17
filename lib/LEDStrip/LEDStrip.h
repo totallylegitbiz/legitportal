@@ -4,7 +4,7 @@ void ledStripSetup()
 {
 
   Serial.println("Setting up LED Strip...");
-  FastLED.addLeds<WS2812, LED_PIN, GRB>(cleds, LED_CNT);
+  FastLED.addLeds<WS2812, LED_PIN, GRB>(leds, LED_CNT);
   // FastLED.setBrightness(config.LED_BRIGHTNESS);
 
   FastLED.setMaxPowerInVoltsAndMilliamps(config.MAX_VOLTS, 100);

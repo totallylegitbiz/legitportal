@@ -24,7 +24,7 @@ const uint8_t LED_OFFSET = 0;
 
 const uint8_t LED_PIN = 8;
 
-CRGB cleds[LED_CNT];
+// CRGB cleds[LED_CNT];
 CRGB leds[LED_CNT]; // This is our local copy of leds.
 
 const int UNUSED_PIN = A3;
@@ -42,9 +42,6 @@ enum class DeviceRole
 // This is the base config.
 typedef struct Config
 {
-
-  bool DIAGNOSTIC_MODE = false;
-
   // Effect Loop config
   const uint32_t EFFECT_LOOP_MS = 300000; // 5 minute loop
 

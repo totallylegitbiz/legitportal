@@ -94,35 +94,8 @@ void setup()
   Serial.println("### Device setup complete.");
 }
 
-void diagnoticModeLoop()
-{
-
-  Serial.println("RED");
-  analogWrite(config.RED_LED_PIN, 255);
-  recievedStatusEffect(CRGB(255, 0, 0), 500);
-
-  analogWrite(config.RED_LED_PIN, 0);
-  analogWrite(config.BLUE_LED_PIN, 0);
-
-  Serial.println("RED");
-  analogWrite(config.GREEN_LED_PIN, 255);
-  recievedStatusEffect(CRGB(0, 255, 0), 500);
-  analogWrite(config.GREEN_LED_PIN, 0);
-
-  Serial.println("BLUE");
-  analogWrite(config.BLUE_LED_PIN, 255);
-  recievedStatusEffect(CRGB(0, 0, 255), 500);
-  analogWrite(config.BLUE_LED_PIN, 0);
-}
-
 void loop()
 {
-
-  // if (config.DIAGNOSTIC_MODE)
-  // {
-  //   diagnoticModeLoop();
-  //   return;
-  // }
 
   effectState.loopPosition = (millis() + effectLoopClockOffset) % config.EFFECT_LOOP_MS;
 
