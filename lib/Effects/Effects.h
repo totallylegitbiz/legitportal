@@ -1,7 +1,5 @@
 #include <Helpers.h>
 
-const int EFFECT_CNT = 5;
-
 uint32_t effectLoopClockOffset = 0;
 const uint8_t effectRefreshHz = 60; // Updates 60 times a second.
 uint32_t lastRefreshMs = 0;
@@ -42,7 +40,7 @@ const uint8_t SOLID_9_EFFECT = 109;
 const uint8_t SOLID_10_EFFECT = 110;
 
 // TODO(jorgelo): Do something like this.
-// const uint8_t BIKE_EFFECTS[] = {CANDLE_EFFECT, POLICE_EFFECT, HUE_SPIN_EFFECT};
+const uint8_t EFFECTS[] = {CANDLE_EFFECT, POLICE_EFFECT, HUE_SPIN_EFFECT};
 
 void effectRenderLoop(uint8_t effectId, struct EffectDataPacket *effectState)
 {

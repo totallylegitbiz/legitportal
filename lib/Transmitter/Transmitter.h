@@ -52,8 +52,13 @@ void radioSetup()
 
   radio.begin();
   radio.setDataRate(RF24_250KBPS);
-  // radio.setPALevel(RF24_PA_MAX);
+
+#if (EDEBUG + 0)
   radio.setPALevel(RF24_PA_MIN);
+#else
+  radio.setPALevel(RF24_PA_MAX);
+#endif
+
   radio.setAutoAck(false);
 
   // Not sure what this does.

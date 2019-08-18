@@ -66,7 +66,7 @@ void setButtonState()
     // BUTTON WAS CLICKED
     SERIAL_PRINTLN("Click");
 
-    effectState.activeEffect = (effectState.activeEffect + 1) % EFFECT_CNT;
+    effectState.activeEffect = (effectState.activeEffect + 1) % sizeof(EFFECTS);
 
     effectState.sourceTransmitterId = config.TRANSMITTER_ID; // Set it to us, this ain't a relay.
     effectState.transmitterId = config.TRANSMITTER_ID;       // Set it to us, this ain't a relay.
