@@ -145,6 +145,7 @@ void effectLoop(struct EffectDataPacket *effectState)
   {
     SERIAL_PRINTLN("Ending override..");
     overRideUntilTs = 0;
+    effectState->effectModifier = 0;
   }
 
   show_at_max_brightness_for_power();

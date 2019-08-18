@@ -136,10 +136,6 @@ void loop()
       transmitEffectDataPacket(&effectState, true);
     }
   }
-  else
-  {
-    effectState.effectModifier = 0;
-  }
 
   effectState.loopPosition = (millis() + effectLoopClockOffset) % config.EFFECT_LOOP_MS;
 

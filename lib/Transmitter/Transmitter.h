@@ -122,7 +122,11 @@ void transmitEffectDataPacket(struct EffectDataPacket *effectState, bool force =
   }
 
   bool ok = radio.write(&objEffectDataPacket, sizeof(objEffectDataPacket));
+
   SERIAL_PRINT("TX: ");
+
+  SERIAL_PRINT("effectModifiter->");
+  SERIAL_PRINT(objEffectDataPacket.effectModifier);
   if (ok)
   {
     SERIAL_PRINTLN(": sent");
@@ -162,9 +166,10 @@ void transmitterReceiveLoop(struct EffectDataPacket *effectState)
     }
 
     const bool isSameRoleAsMe = nextEffectDataPacket.role == effectState->role;
-    const bool isOverRide = !isSameRoleAsMe && nextEffectDataPacket.role == DeviceRole::CAMP;
 
     const bool isRemote = nextEffectDataPacket.role == DeviceRole::ATARI;
+
+    const bool isOverRide = isRemote || (!isSameRoleAsMe && nextEffectDataPacket.role == DeviceRole::CAMP);
 
     uint32_t nextEffectLoopClockOffset = nextEffectDataPacket.loopPosition - (millis() % config.EFFECT_LOOP_MS);
 
@@ -181,7 +186,7 @@ void transmitterReceiveLoop(struct EffectDataPacket *effectState)
       overRideUntilTs = millis() + OVERRIDE_TIMEOUT;
     }
 
-    if (!isOverRide && !isSameRoleAsMe)
+    if (!isRemote && !isOverRide && !isSameRoleAsMe)
     {
       // I'm gonna ignore this.
       SERIAL_PRINT("Mis-matched role, ignoring: DEVICE_ROLE=");
@@ -194,7 +199,7 @@ void transmitterReceiveLoop(struct EffectDataPacket *effectState)
     bool hasSourceChanged = effectState->sourceTransmitterId != nextEffectDataPacket.sourceTransmitterId;
     bool isFromMe = nextEffectDataPacket.sourceTransmitterId == config.TRANSMITTER_ID;
 
-    bool shouldRelay = !isOverRide && (hasEffectChanged || hasSourceChanged);
+    bool shouldRelay = isRemote || (!isOverRide && (hasEffectChanged || hasSourceChanged));
 
     if (isFromMe)
     {
@@ -238,6 +243,10 @@ void transmitterReceiveLoop(struct EffectDataPacket *effectState)
 
     // Copy over the state to our local state.
     effectState->activeEffect = nextEffectDataPacket.activeEffect;
+    Serial.println("nextEffectDataPacket.effectModifier ->");
+    Serial.println(nextEffectDataPacket.effectModifier);
+
+    effectState->effectModifier = nextEffectDataPacket.effectModifier;
     effectState->sourceTransmitterId = nextEffectDataPacket.sourceTransmitterId;
     effectState->age = nextEffectDataPacket.age;
 
@@ -252,6 +261,8 @@ void transmitterReceiveLoop(struct EffectDataPacket *effectState)
     SERIAL_PRINT(" -> ");
     SERIAL_PRINT(" loopPosition: ");
     SERIAL_PRINT(nextEffectDataPacket.loopPosition);
+    SERIAL_PRINT(" effectModifier: ");
+    SERIAL_PRINT(nextEffectDataPacket.effectModifier);
     SERIAL_PRINT(" age: ");
     SERIAL_PRINT(nextEffectDataPacket.age);
     SERIAL_PRINT(" activeEffect: ");
@@ -300,16 +311,16 @@ void transmitterTransmitLoop(struct EffectDataPacket *effectState)
 void transmitterLoop(struct EffectDataPacket *effectState)
 {
 
-  const bool writeOnly = config.ROLE == DeviceRole::ATARI;
+  // const bool writeOnly = config.ROLE == DeviceRole::ATARI;
 
   if (millis() > overRideUntilTs)
   {
     // Only transmit when we don't have an active over ride.
     transmitterTransmitLoop(effectState);
   }
-  if (!writeOnly)
-  {
-    // If it's atari, don't receive, doesn't mattter.
-    transmitterReceiveLoop(effectState);
-  }
+  // if (!writeOnly)
+  // {
+  // If it's atari, don't receive, doesn't mattter.
+  transmitterReceiveLoop(effectState);
+  // }
 }

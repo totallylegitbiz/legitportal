@@ -2,7 +2,11 @@
 
 void throbEffectLoop(struct EffectDataPacket *effectState, int hue)
 {
-  const uint16_t loopMs = 3000;
+
+  const float modifierPercet = (float)effectState->effectModifier / 1024;
+
+  const uint16_t loopMs = 3000 - (modifierPercet * 3000);
+
   const uint16_t loopPosition = effectState->loopPosition % loopMs;
   const float loopPercent = float(loopPosition) / loopMs;
   const uint8_t intensity = abs(cos(PI * .5 * loopPercent * 2) * 255);
