@@ -164,6 +164,8 @@ void transmitterReceiveLoop(struct EffectDataPacket *effectState)
     const bool isSameRoleAsMe = nextEffectDataPacket.role == effectState->role;
     const bool isOverRide = !isSameRoleAsMe && nextEffectDataPacket.role == DeviceRole::CAMP;
 
+    const bool isRemote = nextEffectDataPacket.role == DeviceRole::ATARI;
+
     uint32_t nextEffectLoopClockOffset = nextEffectDataPacket.loopPosition - (millis() % config.EFFECT_LOOP_MS);
 
     SERIAL_PRINT("TX from role: ");
@@ -297,10 +299,17 @@ void transmitterTransmitLoop(struct EffectDataPacket *effectState)
 
 void transmitterLoop(struct EffectDataPacket *effectState)
 {
+
+  const bool writeOnly = config.ROLE == DeviceRole::ATARI;
+
   if (millis() > overRideUntilTs)
   {
     // Only transmit when we don't have an active over ride.
     transmitterTransmitLoop(effectState);
   }
-  transmitterReceiveLoop(effectState);
+  if (!writeOnly)
+  {
+    // If it's atari, don't receive, doesn't mattter.
+    transmitterReceiveLoop(effectState);
+  }
 }

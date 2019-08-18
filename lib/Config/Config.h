@@ -33,6 +33,7 @@ enum class DeviceRole
 {
   BIKE = 0,
   CAMP = 1,
+  ATARI = 3,
   // CHILL_DOME = 2,
   // DEEP_PLAYA = 3,
   // PULSE_REMOTE = 5,
@@ -63,7 +64,7 @@ typedef struct Config
   // const int DIP_PIN_3 = 5;
 
   // Sensor Pin
-  const int SENSOR_PIN = A3;
+  const int SENSOR_PIN = A7;
 
   // RADIO
   const int RADIO_CE_PIN = 9;
@@ -105,6 +106,10 @@ DeviceRole getDeviceRole()
     return DeviceRole::BIKE;
   case DeviceRole::CAMP:
     return DeviceRole::CAMP;
+  case DeviceRole::ATARI:
+    return DeviceRole::ATARI;
+  default:
+    SERIAL_PRINTLN("DEVICE_ROLE not found");
   }
 #endif
 }
@@ -140,6 +145,7 @@ typedef struct EffectDataPacket
 {
   uint32_t loopPosition = 0;
   uint8_t activeEffect = EDEFAULT_EFFECT;
+  uint16_t effectModifier = 0;
   uint16_t sourceTransmitterId; // If the sourceTransmitterId !== transmitterId it's a relay.
   uint16_t transmitterId;
   DeviceRole role;

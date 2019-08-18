@@ -106,8 +106,12 @@ void setup()
 
 int prevMemory = 0;
 
+uint16_t prevSensorVal = 0;
+
 void loop()
 {
+
+  const bool isRemote = effectState.role == DeviceRole::ATARI;
 
   const int mem = freeMemory();
 
@@ -117,6 +121,26 @@ void loop()
     SERIAL_PRINTLN(mem);
     prevMemory = mem;
   }
+
+  if (isRemote)
+  {
+    const uint16_t sensorVal = analogRead(config.SENSOR_PIN);
+
+    if (abs(prevSensorVal - sensorVal) > 5)
+    {
+      // Value changed,
+      effectState.effectModifier = sensorVal;
+      SERIAL_PRINT("sensorVal = ");
+      SERIAL_PRINTLN(sensorVal);
+      prevSensorVal = sensorVal;
+      transmitEffectDataPacket(&effectState, true);
+    }
+  }
+  else
+  {
+    effectState.effectModifier = 0;
+  }
+
   effectState.loopPosition = (millis() + effectLoopClockOffset) % config.EFFECT_LOOP_MS;
 
   if (hasGottenSync)
