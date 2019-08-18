@@ -1,6 +1,6 @@
-#ifdef DEBUG
-#define SERIAL_PRINT(x) SERIAL_PRINT(x)
-#define SERIAL_PRINTLN(x) SERIAL_PRINTln(x)
+#if (EDEBUG + 0)
+#define SERIAL_PRINT(x) Serial.print(x)
+#define SERIAL_PRINTLN(x) Serial.println(x)
 #define SERIAL_BEGIN(x) Serial.begin(x)
 #else
 #define SERIAL_PRINT(x)
