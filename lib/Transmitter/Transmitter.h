@@ -178,11 +178,11 @@ void transmitterReceiveLoop(struct EffectDataPacket *effectState)
     SERIAL_PRINT("isSameRoleAsMe: ");
     SERIAL_PRINTLN(isSameRoleAsMe);
 
-    if (!isSameRoleAsMe && nextEffectDataPacket.role == DeviceRole::CAMP)
+    if (isOverRide)
     {
       // This is a CAMP device. Camp devices override local settings for 20 seconds after the last ping.
       // Camp device data is not relayed, just set the over ride.
-      SERIAL_PRINTLN("Received a message from CAMP");
+      SERIAL_PRINTLN("Received overide.");
       overRideUntilTs = millis() + OVERRIDE_TIMEOUT;
     }
 
