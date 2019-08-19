@@ -8,48 +8,48 @@ void policeEffectLoop(struct EffectDataPacket *effectState)
   const uint8_t blueHue = 160;
   const uint8_t redHue = 0;
 
+  const uint8_t lowIntensity = 22;
+  const uint8_t highIntensity = 255;
+
   const bool side = effectState->transmitterId % 2;
 
-  uint16_t stepDelays[] = {
-      shortDelay,
-      medDelay,
-      shortDelay,
-      longDelay,
-      shortDelay,
-      medDelay,
-      shortDelay,
-      longDelay,
+  const bool isEven = side % 2;
+  const uint8_t hue = isEven ? blueHue : redHue;
+
+  const CHSV stepColors[] = {
+      CHSV(hue, 255, lowIntensity),
+      CHSV(hue, 255, highIntensity),
+      CHSV(hue, 255, lowIntensity),
+      CHSV(hue, 255, highIntensity),
+      CHSV(hue, 255, lowIntensity),
+      CHSV(hue, 255, lowIntensity),
   };
 
-  if (side == 0)
+  if (isEven)
   {
-    const CHSV stepColors[] = {
-        CHSV(redHue, 255, 255),
-        CHSV(0, 255, 0), // Black
-        CHSV(redHue, 255, 255),
-        CHSV(0, 255, 0), // Black
-        CHSV(blueHue, 255, 255),
-        CHSV(0, 255, 0), // Black
-        CHSV(blueHue, 255, 255),
-        CHSV(0, 255, 0), // Black
+    uint16_t stepDelays[] = {
+        0,
+        shortDelay,
+        medDelay,
+        shortDelay,
+        longDelay,
+        shortDelay + medDelay + shortDelay + longDelay,
     };
 
-    patternLoopEffectLoop(effectState, stepDelays, stepColors, 8);
+    patternLoopEffectLoop(effectState, stepDelays, stepColors, 6);
   }
   else
   {
 
-    const CHSV stepColors[] = {
-        CHSV(blueHue, 255, 255),
-        CHSV(0, 255, 0), // Black
-        CHSV(blueHue, 255, 255),
-        CHSV(0, 255, 0), // Black
-        CHSV(redHue, 255, 255),
-        CHSV(0, 255, 0), // Black
-        CHSV(redHue, 255, 255),
-        CHSV(0, 255, 0), // Black
+    uint16_t stepDelays[] = {
+        shortDelay + medDelay + shortDelay + longDelay,
+        shortDelay,
+        medDelay,
+        shortDelay,
+        longDelay,
+        0,
     };
 
-    patternLoopEffectLoop(effectState, stepDelays, stepColors, 8);
+    patternLoopEffectLoop(effectState, stepDelays, stepColors, 6);
   }
 }

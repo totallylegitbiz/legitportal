@@ -16,7 +16,7 @@ const uint8_t LOADING_EFFECT = 255;
 const uint8_t DOT_SPIN_EFFECT = 0;
 const uint8_t HUE_SPIN_EFFECT = 1;
 const uint8_t STOBE_FLASH_EFFECT = 2;
-const uint8_t BLUE_RED_FLASH_EFFECT = 3;
+// const uint8_t BLUE_RED_FLASH_EFFECT = 3;
 const uint8_t STOBE_SLOW_EFFECT = 4;
 const uint8_t HUE_SPARKLE_LIGHT_EFFECT = 5;
 const uint8_t HUE_SPARKLE_DARK_EFFECT = 6;
@@ -42,9 +42,10 @@ const uint8_t SOLID_10_EFFECT = 110;
 
 // TODO(jorgelo): Do something like this.
 const uint8_t EFFECTS[] = {
+    POLICE_EFFECT,
+    STOBE_SLOW_EFFECT,
     HUE_SPIN_EFFECT,
     STOBE_FLASH_EFFECT,
-    BLUE_RED_FLASH_EFFECT,
     STOBE_SLOW_EFFECT,
     HUE_SPARKLE_LIGHT_EFFECT,
     HUE_SPARKLE_DARK_EFFECT,
@@ -80,17 +81,6 @@ void effectRenderLoop(uint8_t effectIdx, struct EffectDataPacket *effectState)
     effectId = EFFECTS[effectIdx];
   }
 
-  // Serial.print("effectIdx:");
-  // Serial.println(effectIdx);
-
-  // Serial.print("effectId:");
-  // Serial.println(effectId);
-  // Serial.print("EFFECTS[effectIdx]:");
-  // Serial.println(EFFECTS[effectIdx]);
-
-  // Serial.print("effectId:");
-  // Serial.println(effectId);
-
   switch (effectId)
   {
   case LOADING_EFFECT: // This is the loading one.
@@ -106,9 +96,6 @@ void effectRenderLoop(uint8_t effectIdx, struct EffectDataPacket *effectState)
   case STOBE_FLASH_EFFECT:
     policeEffectLoop(effectState);
     // strobeEffectLoop(effectState, CRGB(0, 0, 0), CRGB(100, 100, 100), 100);
-    break;
-  case BLUE_RED_FLASH_EFFECT:
-    strobeEffectLoop(effectState, CRGB(255, 0, 0), CRGB(0, 0, 255), 100);
     break;
   case STOBE_SLOW_EFFECT:
     strobeEffectLoop(effectState, CRGB(0, 0, 0), CRGB(50, 50, 50), 500);
