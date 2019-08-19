@@ -26,6 +26,7 @@ const uint8_t PURPLE_BLUES_EFFECT = 9;
 const uint8_t HUE_BARS_EFFECT = 10;
 const uint8_t SPARKLE_WHITE = 20;
 const uint8_t SPARKLE_RAINBOW = 21;
+const uint8_t SLOW_HUE = 22;
 
 // Solid colors
 const uint8_t SOLID_0_EFFECT = 100;
@@ -42,6 +43,7 @@ const uint8_t SOLID_10_EFFECT = 110;
 
 // TODO(jorgelo): Do something like this.
 const uint8_t EFFECTS[] = {
+    SLOW_HUE,
     HUE_BARS_EFFECT,
     PURPLE_BLUES_EFFECT,
     POLICE_EFFECT,
@@ -95,8 +97,10 @@ void effectRenderLoop(uint8_t effectIdx, struct EffectDataPacket *effectState)
   case HUE_SPIN_EFFECT:
     hueSpinEffectLoop(effectState, 5000);
     break;
+  case SLOW_HUE:
+    hueCycleEffectLoop(effectState, config.EFFECT_LOOP_MS, 169, 255);
+    break;
   case STOBE_FLASH_EFFECT:
-    // policeEffectLoop(effectState);
     strobeEffectLoop(effectState, CRGB(0, 0, 0), CRGB(100, 100, 100), 100);
     break;
   case STOBE_SLOW_EFFECT:

@@ -13,6 +13,6 @@ void hueBarsEffectLoop(struct EffectDataPacket *effectState, uint16_t loopMs)
     const float linePercent = float(i) / lines;
     const uint8_t baseIdx = (int((linePercent)*LED_CNT) + offset) % 255;
 
-    drawDash(20, baseIdx, CHSV(20, 255, 255));
+    drawDash(5, baseIdx, CHSV(20, 255, 255));
   }
 }

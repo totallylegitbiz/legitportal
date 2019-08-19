@@ -7,7 +7,7 @@
   ],
   "settings": {
     "terminal.integrated.env.osx": {
-      "PATH": "/Users/jorge/.platformio/penv/bin:/Users/jorge/.platformio/penv:/Users/jorge/.nvm/versions/node/v10.15.3/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/jorge/Library/Android/sdk/platform-tools:/Users/jorge/Library/Android/sdk/tools/bin",
+      "PATH": "/Users/jorge/.platformio/penv/bin:/Users/jorge/.platformio/penv:/usr/local/opt/libpq/bin:./node_modules/.bin:/Users/jorge/bin:/Users/jorge/.yarn/bin:/Users/jorge/.nvm/versions/node/v10.6.0/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/jorge/Library/Android/sdk/emulator:/Users/jorge/Library/Android/sdk/tools:/Users/jorge/Library/Android/sdk/tools/bin:/Users/jorge/Library/Android/sdk/platform-tools:/bin",
       "PLATFORMIO_CALLER": "vscode"
     },
     "editor.tabSize": 2
