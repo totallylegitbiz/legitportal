@@ -28,6 +28,9 @@ const uint32_t syncTimeout = pingIntervalMax * 2; //Wait until at most double th
 // Temporary override.
 const uint16_t OVERRIDE_TIMEOUT = 10000; // 10 seconds after device stops receiving messages.
 
+const uint16_t MAX_AGE = 10000;
+const uint16_t MAX_AGE_GRACE = 5000;
+
 void blink(int pin)
 {
   digitalWrite(pin, HIGH);
@@ -115,6 +118,7 @@ void transmitEffectDataPacket(struct EffectDataPacket *effectState, bool force =
     objEffectDataPacket.age = 0;
     effectState->age = 0;
     lastDataCreationTs = millis();
+    effectState->sourceTransmitterId = effectState->transmitterId;
   }
   else
   {
@@ -212,7 +216,7 @@ void transmitterReceiveLoop(struct EffectDataPacket *effectState)
     // If local age is less than received age, continue.
     // if local age is < recieved age it is statle.
 
-    uint16_t localDataAge = millis() - lastDataCreationTs;
+    uint32_t localDataAge = millis() - lastDataCreationTs;
 
     if (!isOverRide && hasGottenSync && localDataAge < nextEffectDataPacket.age)
     {
@@ -301,9 +305,20 @@ void transmitterTransmitLoop(struct EffectDataPacket *effectState)
 
   const bool shouldPing = isWithinPingInterval && (isDataFresh || !isWithinGracePeriod);
 
+  const bool isMine = effectState->sourceTransmitterId == effectState->transmitterId;
+
   if (hasGottenSync && shouldPing)
   {
-    transmitEffectDataPacket(effectState);
+    if (isMine)
+    {
+      // This is mine, ping an update with a new age.
+      transmitEffectDataPacket(effectState, true);
+    }
+    else
+    {
+      // Transmit as it.
+      transmitEffectDataPacket(effectState);
+    }
     pingLastPingMs = millis();
   }
 }
@@ -316,7 +331,24 @@ void transmitterLoop(struct EffectDataPacket *effectState)
   if (millis() > overRideUntilTs)
   {
     // Only transmit when we don't have an active over ride.
-    transmitterTransmitLoop(effectState);
+    // if ()
+    // MAX_AGE
+    // MAX_AGE_GRACE
+
+    if (effectState->age > MAX_AGE)
+    {
+      // Alright, this is old.
+      const bool isMine = effectState->sourceTransmitterId == effectState->transmitterId;
+
+      if (isMine || effectState->age > MAX_AGE)
+      {
+        // This is mine, ping an update with a new age.
+        transmitEffectDataPacket(effectState, true);
+      };
+    }
+
+    if (lastSuccessfulTx -)
+      transmitterTransmitLoop(effectState);
   }
   // if (!writeOnly)
   // {
