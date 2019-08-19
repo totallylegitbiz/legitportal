@@ -11,6 +11,7 @@ void effectSetup()
 
 #include <Effects/All.h>
 
+int cnt = 0;
 const uint8_t LOADING_EFFECT = 255;
 const uint8_t DOT_SPIN_EFFECT = 0;
 const uint8_t HUE_SPIN_EFFECT = 1;
@@ -40,20 +41,55 @@ const uint8_t SOLID_9_EFFECT = 109;
 const uint8_t SOLID_10_EFFECT = 110;
 
 // TODO(jorgelo): Do something like this.
-const uint8_t EFFECTS[] = {POLICE_EFFECT, HUE_SPARKLE_LIGHT_EFFECT, CANDLE_EFFECT, PURPLE_BLUES_EFFECT};
+const uint8_t EFFECTS[] = {
+    HUE_SPIN_EFFECT,
+    STOBE_FLASH_EFFECT,
+    BLUE_RED_FLASH_EFFECT,
+    STOBE_SLOW_EFFECT,
+    HUE_SPARKLE_LIGHT_EFFECT,
+    HUE_SPARKLE_DARK_EFFECT,
+    SPARKLE_RAINBOW,
+    SPARKLE_WHITE,
+    HUE_BARS_EFFECT,
+    POLICE_EFFECT,
+    CANDLE_EFFECT,
+    SOLID_0_EFFECT,
+    SOLID_1_EFFECT,
+    SOLID_2_EFFECT,
+    SOLID_3_EFFECT,
+    SOLID_4_EFFECT,
+    SOLID_5_EFFECT,
+    SOLID_6_EFFECT,
+    SOLID_7_EFFECT,
+    SOLID_8_EFFECT,
+    SOLID_9_EFFECT,
+    SOLID_10_EFFECT,
+    PURPLE_BLUES_EFFECT,
+};
 
-void effectRenderLoop(uint8_t effectId, struct EffectDataPacket *effectState)
+void effectRenderLoop(uint8_t effectIdx, struct EffectDataPacket *effectState)
 {
-  uint8_t effectIdx;
+  uint8_t effectId;
 
-  if (effectId == 255)
+  if (effectIdx == 255)
   {
-    effectIdx = 255;
+    effectId = 255;
   }
   else
   {
-    effectIdx = EFFECTS[effectId];
+    effectId = EFFECTS[effectIdx];
   }
+
+  Serial.print("effectIdx:");
+  Serial.println(effectIdx);
+
+  Serial.print("effectId:");
+  Serial.println(effectId);
+  Serial.print("EFFECTS[effectIdx]:");
+  Serial.println(EFFECTS[effectIdx]);
+
+  // Serial.print("effectId:");
+  // Serial.println(effectId);
 
   switch (effectIdx)
   {
@@ -105,26 +141,29 @@ void effectRenderLoop(uint8_t effectId, struct EffectDataPacket *effectState)
   case SOLID_2_EFFECT:
     solidEffectLoop(effectState, CHSV(50, 255, 255));
     break;
-  case SOLID_4_EFFECT:
+  case SOLID_3_EFFECT:
     solidEffectLoop(effectState, CHSV(75, 255, 255));
     break;
-  case SOLID_5_EFFECT:
+  case SOLID_4_EFFECT:
     solidEffectLoop(effectState, CHSV(100, 255, 255));
     break;
-  case SOLID_6_EFFECT:
+  case SOLID_5_EFFECT:
     solidEffectLoop(effectState, CHSV(125, 255, 255));
     break;
-  case SOLID_7_EFFECT:
+  case SOLID_6_EFFECT:
     solidEffectLoop(effectState, CHSV(150, 255, 255));
     break;
-  case SOLID_8_EFFECT:
+  case SOLID_7_EFFECT:
     solidEffectLoop(effectState, CHSV(175, 255, 255));
     break;
-  case SOLID_9_EFFECT:
+  case SOLID_8_EFFECT:
     solidEffectLoop(effectState, CHSV(200, 255, 255));
     break;
-  case SOLID_10_EFFECT:
+  case SOLID_9_EFFECT:
     solidEffectLoop(effectState, CHSV(225, 255, 255));
+    break;
+  case SOLID_10_EFFECT:
+    solidEffectLoop(effectState, CHSV(250, 255, 255));
     break;
   case SPARKLE_WHITE:
     sparkleEffectLoop(effectState, 0);
@@ -133,8 +172,8 @@ void effectRenderLoop(uint8_t effectId, struct EffectDataPacket *effectState)
     sparkleEffectLoop(effectState, 200);
     break;
   default:
-    SERIAL_PRINT("Please set effect count correctly, received: ");
-    SERIAL_PRINTLN(effectState->activeEffect);
+    SERIAL_PRINT("Please set effect count correctly, received: effectIdx = ");
+    SERIAL_PRINTLN(effectIdx);
     throbEffectLoop(effectState, 200);
   }
 }

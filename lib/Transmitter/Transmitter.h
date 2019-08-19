@@ -23,7 +23,7 @@ EffectDataPacket nextEffectDataPacket;
 
 // Dealing with presync
 bool hasGottenSync = false;
-const uint32_t syncTimeout = pingIntervalMax * 2; //Wait until at most double the timeout until starting to transmit.
+const uint32_t syncTimeout = 0; // pingIntervalMax * 2; //Wait until at most double the timeout until starting to transmit.
 
 // Temporary override.
 const uint16_t OVERRIDE_TIMEOUT = 10000; // 10 seconds after device stops receiving messages.
@@ -347,8 +347,7 @@ void transmitterLoop(struct EffectDataPacket *effectState)
       };
     }
 
-    if (lastSuccessfulTx -)
-      transmitterTransmitLoop(effectState);
+    transmitterTransmitLoop(effectState);
   }
   // if (!writeOnly)
   // {
