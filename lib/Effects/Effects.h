@@ -40,12 +40,22 @@ const uint8_t SOLID_9_EFFECT = 109;
 const uint8_t SOLID_10_EFFECT = 110;
 
 // TODO(jorgelo): Do something like this.
-const uint8_t EFFECTS[] = {CANDLE_EFFECT, POLICE_EFFECT, HUE_SPIN_EFFECT};
+const uint8_t EFFECTS[] = {POLICE_EFFECT, HUE_SPARKLE_LIGHT_EFFECT, CANDLE_EFFECT, PURPLE_BLUES_EFFECT};
 
 void effectRenderLoop(uint8_t effectId, struct EffectDataPacket *effectState)
 {
+  uint8_t effectIdx;
 
-  switch (effectId)
+  if (effectId == 255)
+  {
+    effectIdx = 255;
+  }
+  else
+  {
+    effectIdx = EFFECTS[effectId];
+  }
+
+  switch (effectIdx)
   {
   case LOADING_EFFECT: // This is the loading one.
     throbEffectLoop(effectState, 0);

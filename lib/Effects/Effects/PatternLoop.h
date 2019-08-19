@@ -9,9 +9,9 @@ void patternLoopEffectLoop(struct EffectDataPacket *effectState, uint16_t stepDe
     loopMs += stepDelays[i];
   }
 
-  const uint8_t loopPosition = effectState->loopPosition % loopMs;
+  const uint16_t loopPosition = effectState->loopPosition % loopMs;
 
-  uint8_t loopCnt = 0;
+  uint16_t loopCnt = 0;
 
   for (uint8_t i = 0; i < stepCnt; i++)
   {
@@ -26,6 +26,4 @@ void patternLoopEffectLoop(struct EffectDataPacket *effectState, uint16_t stepDe
   {
     leds[i] = stepColors[step];
   }
-
-  copyLedsWithOffset();
 }
