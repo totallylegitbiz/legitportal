@@ -94,8 +94,8 @@ void effectRenderLoop(uint8_t effectIdx, struct EffectDataPacket *effectState)
     hueSpinEffectLoop(effectState, 5000);
     break;
   case STOBE_FLASH_EFFECT:
-    policeEffectLoop(effectState);
-    // strobeEffectLoop(effectState, CRGB(0, 0, 0), CRGB(100, 100, 100), 100);
+    // policeEffectLoop(effectState);
+    strobeEffectLoop(effectState, CRGB(0, 0, 0), CRGB(100, 100, 100), 100);
     break;
   case STOBE_SLOW_EFFECT:
     strobeEffectLoop(effectState, CRGB(0, 0, 0), CRGB(50, 50, 50), 500);
