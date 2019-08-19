@@ -16,4 +16,5 @@
 #include <Effects/Solid.h>
 #include <Effects/Sparkle.h>
 #include <Effects/HueCycle.h>
+#include <Effects/GroupSolid.h>
 #endif
