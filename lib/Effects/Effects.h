@@ -80,18 +80,18 @@ void effectRenderLoop(uint8_t effectIdx, struct EffectDataPacket *effectState)
     effectId = EFFECTS[effectIdx];
   }
 
-  Serial.print("effectIdx:");
-  Serial.println(effectIdx);
+  // Serial.print("effectIdx:");
+  // Serial.println(effectIdx);
 
-  Serial.print("effectId:");
-  Serial.println(effectId);
-  Serial.print("EFFECTS[effectIdx]:");
-  Serial.println(EFFECTS[effectIdx]);
+  // Serial.print("effectId:");
+  // Serial.println(effectId);
+  // Serial.print("EFFECTS[effectIdx]:");
+  // Serial.println(EFFECTS[effectIdx]);
 
   // Serial.print("effectId:");
   // Serial.println(effectId);
 
-  switch (effectIdx)
+  switch (effectId)
   {
   case LOADING_EFFECT: // This is the loading one.
     throbEffectLoop(effectState, 0);
@@ -101,8 +101,7 @@ void effectRenderLoop(uint8_t effectIdx, struct EffectDataPacket *effectState)
     throbEffectLoop(effectState, 100);
     break;
   case HUE_SPIN_EFFECT:
-    candleEffectLoop(effectState, 1); // No steps
-    // hueSpinEffectLoop(effectState, 5000);
+    hueSpinEffectLoop(effectState, 5000);
     break;
   case STOBE_FLASH_EFFECT:
     policeEffectLoop(effectState);
