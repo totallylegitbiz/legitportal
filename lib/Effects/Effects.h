@@ -42,6 +42,8 @@ const uint8_t SOLID_10_EFFECT = 110;
 
 // TODO(jorgelo): Do something like this.
 const uint8_t EFFECTS[] = {
+    HUE_BARS_EFFECT,
+    PURPLE_BLUES_EFFECT,
     POLICE_EFFECT,
     STOBE_SLOW_EFFECT,
     HUE_SPIN_EFFECT,
