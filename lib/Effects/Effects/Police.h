@@ -8,7 +8,7 @@ void policeEffectLoop(struct EffectDataPacket *effectState)
   const uint8_t blueHue = 160;
   const uint8_t redHue = 0;
 
-  const uint8_t lowIntensity = 0;
+  const uint8_t lowIntensity = 10;
   const uint8_t highIntensity = 255;
 
   const bool side = effectState->transmitterId % 2;

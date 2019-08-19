@@ -127,6 +127,7 @@ Config getConfig()
   {
   case DeviceRole::BIKE:
     // Bike specific
+    outConfig.MAX_MAMP = 500;
     break;
   case DeviceRole::CAMP:
     // Camp specific
