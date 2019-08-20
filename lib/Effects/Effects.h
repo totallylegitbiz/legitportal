@@ -31,6 +31,8 @@ const uint8_t DASH_SPIN_SLOW = 23;
 const uint8_t DASH_SPIN_FAST = 24;
 const uint8_t DASH_SPIN_SLOW_HUE = 25;
 const uint8_t DASH_SPIN_FAST_HUE = 26;
+const uint8_t STOBE_FLASH_HUE_EFFECT = 27;
+const uint8_t STOBE_SLOW_HUE_EFFECT = 28;
 
 const uint8_t HUE_BARS_1_EFFECT = 40;
 const uint8_t HUE_BARS_2_EFFECT = 41;
@@ -64,6 +66,12 @@ const uint8_t SOLID_10_EFFECT = 110;
 
 // TODO(jorgelo): Do something like this.
 const uint8_t EFFECTS[] = {
+    SLOW_HUE, // Leave this first.
+    STOBE_FLASH_HUE_EFFECT,
+    STOBE_SLOW_EFFECT,
+    STOBE_FLASH_EFFECT,
+    STOBE_FLASH_HUE_EFFECT,
+    STOBE_SLOW_HUE_EFFECT,
     HUE_BARS_1_EFFECT,
     HUE_BARS_2_EFFECT,
     HUE_BARS_3_EFFECT,
@@ -72,7 +80,6 @@ const uint8_t EFFECTS[] = {
     HUE_BARS_6_EFFECT,
     HUE_BARS_7_EFFECT,
     HUE_BARS_8_EFFECT,
-    SLOW_HUE, // Leave this first.
     CANDLE_EFFECT,
     COLOR_GROUP,
     DASH_SPIN_FAST,
@@ -119,6 +126,8 @@ void effectRenderLoop(uint8_t effectIdx, struct EffectDataPacket *effectState)
 
   const uint8_t hue = effectState->transmitterId % 255;
 
+  const uint8_t flashHue = notRandom(0, 255, effectState->loopPosition);
+
   switch (effectId)
   {
   case LOADING_EFFECT: // This is the loading one.
@@ -155,9 +164,15 @@ void effectRenderLoop(uint8_t effectIdx, struct EffectDataPacket *effectState)
     hueCycleEffectLoop(effectState, config.EFFECT_LOOP_MS, 169, 255);
     break;
   case STOBE_FLASH_EFFECT:
-    strobeEffectLoop(effectState, CRGB(0, 0, 0), CRGB(100, 100, 100), 100);
+    strobeEffectLoop(effectState, CRGB(0, 0, 0), CHSV(flashHue, 255, 255), 500);
     break;
   case STOBE_SLOW_EFFECT:
+    strobeEffectLoop(effectState, CRGB(0, 0, 0), CRGB(50, 50, 50), 500);
+    break;
+  case STOBE_FLASH_HUE_EFFECT:
+    strobeEffectLoop(effectState, CRGB(0, 0, 0), CHSV(flashHue, 255, 255), 500);
+    break;
+  case STOBE_SLOW_HUE_EFFECT:
     strobeEffectLoop(effectState, CRGB(0, 0, 0), CRGB(50, 50, 50), 500);
     break;
   case HUE_SPARKLE_LIGHT_EFFECT:
