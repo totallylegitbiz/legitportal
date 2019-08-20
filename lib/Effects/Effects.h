@@ -35,6 +35,11 @@ const uint8_t DASH_SPIN_FAST_HUE = 26;
 // Group Effects
 const uint8_t COLOR_GROUP = 50;
 
+// Throbs
+const uint8_t THROB_01_EFFECT = 60;
+const uint8_t THROB_02_EFFECT = 61;
+const uint8_t THROB_03_EFFECT = 62;
+
 // Solid colors
 const uint8_t SOLID_0_EFFECT = 100;
 const uint8_t SOLID_1_EFFECT = 101;
@@ -51,26 +56,27 @@ const uint8_t SOLID_10_EFFECT = 110;
 // TODO(jorgelo): Do something like this.
 const uint8_t EFFECTS[] = {
     SLOW_HUE, // Leave this first.
-    PURPLE_BLUES_EFFECT,
-    DASH_SPIN_SLOW,
+
+    CANDLE_EFFECT,
+    COLOR_GROUP,
     DASH_SPIN_FAST,
-    DASH_SPIN_SLOW_HUE,
     DASH_SPIN_FAST_HUE,
+    DASH_SPIN_SLOW,
+    DASH_SPIN_SLOW_HUE,
+    HUE_BARS_EFFECT,
+    HUE_BARS_EFFECT,
+    HUE_SPARKLE_DARK_EFFECT,
+    HUE_SPARKLE_LIGHT_EFFECT,
+    HUE_SPIN_EFFECT,
+    POLICE_EFFECT,
+    PURPLE_BLUES_EFFECT,
     SPARKLE_RAINBOW,
     SPARKLE_WHITE,
-    COLOR_GROUP,
-    HUE_BARS_EFFECT,
-    PURPLE_BLUES_EFFECT,
-    POLICE_EFFECT,
-    HUE_SPIN_EFFECT,
     STOBE_FLASH_EFFECT,
     STOBE_SLOW_EFFECT,
-    HUE_SPARKLE_LIGHT_EFFECT,
-    HUE_SPARKLE_DARK_EFFECT,
-    SPARKLE_RAINBOW,
-    SPARKLE_WHITE,
-    HUE_BARS_EFFECT,
-    CANDLE_EFFECT,
+    THROB_01_EFFECT,
+    THROB_02_EFFECT,
+    THROB_03_EFFECT,
     SOLID_0_EFFECT,
     SOLID_1_EFFECT,
     SOLID_2_EFFECT,
@@ -97,10 +103,21 @@ void effectRenderLoop(uint8_t effectIdx, struct EffectDataPacket *effectState)
     effectId = EFFECTS[effectIdx];
   }
 
+  const uint8_t hue = effectState->transmitterId % 255;
+
   switch (effectId)
   {
   case LOADING_EFFECT: // This is the loading one.
     throbEffectLoop(effectState, 0);
+    break;
+  case THROB_01_EFFECT: // This is the loading one.
+    throbEffectLoop(effectState, hue, 500);
+    break;
+  case THROB_02_EFFECT: // This is the loading one.
+    throbEffectLoop(effectState, hue, 2500);
+    break;
+  case THROB_03_EFFECT: // This is the loading one.
+    throbEffectLoop(effectState, hue, 5000);
     break;
   case DASH_SPIN_SLOW: // This is the loading one.
     dashSpinEffectLoop(effectState, 1000);

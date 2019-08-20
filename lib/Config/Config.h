@@ -34,10 +34,6 @@ enum class DeviceRole
   BIKE = 0,
   CAMP = 1,
   ATARI = 3,
-  // CHILL_DOME = 2,
-  // DEEP_PLAYA = 3,
-  // PULSE_REMOTE = 5,
-  // PORTAL = 6,
 };
 
 // This is the base config.
@@ -47,7 +43,6 @@ typedef struct Config
   const uint32_t EFFECT_LOOP_MS = 300000; // 5 minute loop
 
   // LED
-  // const uint8_t LED_BRIGHTNESS = 255; // 0-255 for overall brightness.
   // Parameters for  FastLED.setMaxPowerInVoltsAndMilliamps
   const uint8_t MAX_VOLTS = 5;
   uint32_t MAX_MAMP = 50; // TODO(jorgelo): Make this a build flag?
