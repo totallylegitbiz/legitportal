@@ -29,8 +29,8 @@ const uint8_t SPARKLE_RAINBOW = 21;
 const uint8_t SLOW_HUE = 22;
 
 // Group Effects
-const uint8_t COLOR_GROUP_5 = 50;
-const uint8_t COLOR_GROUP_10 = 51;
+const uint8_t COLOR_GROUP = 50;
+// const uint8_t HUE_SPIN_GROUP = 51;
 
 // Solid colors
 const uint8_t SOLID_0_EFFECT = 100;
@@ -47,13 +47,13 @@ const uint8_t SOLID_10_EFFECT = 110;
 
 // TODO(jorgelo): Do something like this.
 const uint8_t EFFECTS[] = {
-    COLOR_GROUP_5,
-    COLOR_GROUP_10,
+    SPARKLE_RAINBOW,
+    SPARKLE_WHITE,
+    COLOR_GROUP,
     SLOW_HUE, // Leave this first.
     HUE_BARS_EFFECT,
     PURPLE_BLUES_EFFECT,
     POLICE_EFFECT,
-    STOBE_SLOW_EFFECT,
     HUE_SPIN_EFFECT,
     STOBE_FLASH_EFFECT,
     STOBE_SLOW_EFFECT,
@@ -96,11 +96,8 @@ void effectRenderLoop(uint8_t effectIdx, struct EffectDataPacket *effectState)
   case LOADING_EFFECT: // This is the loading one.
     throbEffectLoop(effectState, 0);
     break;
-  case COLOR_GROUP_5: // This is the loading one.
-    groupSolidColor(effectState, 5);
-    break;
-  case COLOR_GROUP_10: // This is the loading one.
-    groupSolidColor(effectState, 10);
+  case COLOR_GROUP: // This is the loading one.
+    groupSolidColor(effectState, 50);
     break;
   case DOT_SPIN_EFFECT:
     // spinEffectLoop(effectState, 2000);
@@ -173,7 +170,7 @@ void effectRenderLoop(uint8_t effectIdx, struct EffectDataPacket *effectState)
     sparkleEffectLoop(effectState, 0);
     break;
   case SPARKLE_RAINBOW:
-    sparkleEffectLoop(effectState, 200);
+    sparkleEffectLoop(effectState, 255);
     break;
   default:
     SERIAL_PRINT("Please set effect count correctly, received: effectIdx = ");

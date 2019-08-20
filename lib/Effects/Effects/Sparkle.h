@@ -1,29 +1,16 @@
-RunEvery runEvery(20);
 
-void sparkleEffectLoop(struct EffectDataPacket *effectState, int sat)
+void sparkleEffectLoop(struct EffectDataPacket *effectState, uint8_t sat)
 {
 
-  const int SPARKLE_BATCH_CNT = LED_CNT / 2;
+  const uint8_t SPARKLE_BATCH_CNT = LED_CNT / 10;
 
-  const uint16_t loopMs = 60000;
-  const uint8_t loopPosition = effectState->loopPosition % loopMs;
-
-  if (runEvery.shouldRun())
+  for (uint8_t i = 0; i < SPARKLE_BATCH_CNT; i++)
   {
-    for (int i = 0; i < SPARKLE_BATCH_CNT; i++)
-    {
-      const int idx = notRandom(0, LED_CNT - 1, loopPosition * i);
-      const int hue = notRandom(0, 255, loopPosition * i);
-      leds[idx] = CHSV(hue, sat, 255);
-    }
+    const uint16_t seed = effectState->loopPosition * i;
 
-    for (int i = 0; i < SPARKLE_BATCH_CNT / 3; i++)
-    {
-      const int blankIdx = notRandom(0, (LED_CNT - 1) * 5, loopPosition * i);
+    const uint16_t idx = notRandom(0, LED_CNT - 1, seed);
+    const uint8_t hue = notRandom(0, 255, seed);
 
-      leds[blankIdx % LED_CNT] = CHSV(0, 255, 0);
-    }
+    leds[idx] = CHSV(hue, sat, 255);
   }
-
-  copyLedsWithOffset();
 }
