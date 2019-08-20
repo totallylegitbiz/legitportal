@@ -32,6 +32,15 @@ const uint8_t DASH_SPIN_FAST = 24;
 const uint8_t DASH_SPIN_SLOW_HUE = 25;
 const uint8_t DASH_SPIN_FAST_HUE = 26;
 
+const uint8_t HUE_BARS_1_EFFECT = 40;
+const uint8_t HUE_BARS_2_EFFECT = 41;
+const uint8_t HUE_BARS_3_EFFECT = 42;
+const uint8_t HUE_BARS_4_EFFECT = 43;
+const uint8_t HUE_BARS_5_EFFECT = 44;
+const uint8_t HUE_BARS_6_EFFECT = 45;
+const uint8_t HUE_BARS_7_EFFECT = 46;
+const uint8_t HUE_BARS_8_EFFECT = 47;
+
 // Group Effects
 const uint8_t COLOR_GROUP = 50;
 
@@ -55,16 +64,21 @@ const uint8_t SOLID_10_EFFECT = 110;
 
 // TODO(jorgelo): Do something like this.
 const uint8_t EFFECTS[] = {
+    HUE_BARS_1_EFFECT,
+    HUE_BARS_2_EFFECT,
+    HUE_BARS_3_EFFECT,
+    HUE_BARS_4_EFFECT,
+    HUE_BARS_5_EFFECT,
+    HUE_BARS_6_EFFECT,
+    HUE_BARS_7_EFFECT,
+    HUE_BARS_8_EFFECT,
     SLOW_HUE, // Leave this first.
-
     CANDLE_EFFECT,
     COLOR_GROUP,
     DASH_SPIN_FAST,
     DASH_SPIN_FAST_HUE,
     DASH_SPIN_SLOW,
     DASH_SPIN_SLOW_HUE,
-    HUE_BARS_EFFECT,
-    HUE_BARS_EFFECT,
     HUE_SPARKLE_DARK_EFFECT,
     HUE_SPARKLE_LIGHT_EFFECT,
     HUE_SPIN_EFFECT,
@@ -134,10 +148,6 @@ void effectRenderLoop(uint8_t effectIdx, struct EffectDataPacket *effectState)
   case COLOR_GROUP: // This is the loading one.
     groupSolidColorEffectLoop(effectState, 50);
     break;
-  case DOT_SPIN_EFFECT:
-    // spinEffectLoop(effectState, 2000);
-    throbEffectLoop(effectState, 100);
-    break;
   case HUE_SPIN_EFFECT:
     hueSpinEffectLoop(effectState, 5000);
     break;
@@ -165,8 +175,29 @@ void effectRenderLoop(uint8_t effectIdx, struct EffectDataPacket *effectState)
   case PURPLE_BLUES_EFFECT:
     hueSparkleEffectLoop(effectState);
     break;
-  case HUE_BARS_EFFECT:
-    hueBarsEffectLoop(effectState, 10000);
+  case HUE_BARS_1_EFFECT:
+    hueBarsEffectLoop(effectState, 1500, 30000, 10);
+    break;
+  case HUE_BARS_2_EFFECT:
+    hueBarsEffectLoop(effectState, 2000, 5000, 5);
+    break;
+  case HUE_BARS_3_EFFECT:
+    hueBarsEffectLoop(effectState, 3000, 500, 10);
+    break;
+  case HUE_BARS_4_EFFECT:
+    hueBarsEffectLoop(effectState, 3000, 10, 10);
+    break;
+  case HUE_BARS_5_EFFECT:
+    hueBarsEffectLoop(effectState, 30000, 10, 40);
+    break;
+  case HUE_BARS_6_EFFECT:
+    hueBarsEffectLoop(effectState, 2000, 10, 10);
+    break;
+  case HUE_BARS_7_EFFECT:
+    hueBarsEffectLoop(effectState, 3000, 300, 30);
+    break;
+  case HUE_BARS_8_EFFECT:
+    hueBarsEffectLoop(effectState, 200, 100, 10);
     break;
   case SOLID_0_EFFECT:
     solidEffectLoop(effectState, CHSV(0, 255, 255));
