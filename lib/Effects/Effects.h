@@ -27,10 +27,13 @@ const uint8_t HUE_BARS_EFFECT = 10;
 const uint8_t SPARKLE_WHITE = 20;
 const uint8_t SPARKLE_RAINBOW = 21;
 const uint8_t SLOW_HUE = 22;
+const uint8_t DASH_SPIN_SLOW = 23;
+const uint8_t DASH_SPIN_FAST = 24;
+const uint8_t DASH_SPIN_SLOW_HUE = 25;
+const uint8_t DASH_SPIN_FAST_HUE = 26;
 
 // Group Effects
 const uint8_t COLOR_GROUP = 50;
-// const uint8_t HUE_SPIN_GROUP = 51;
 
 // Solid colors
 const uint8_t SOLID_0_EFFECT = 100;
@@ -47,10 +50,15 @@ const uint8_t SOLID_10_EFFECT = 110;
 
 // TODO(jorgelo): Do something like this.
 const uint8_t EFFECTS[] = {
+    SLOW_HUE, // Leave this first.
+    PURPLE_BLUES_EFFECT,
+    DASH_SPIN_SLOW,
+    DASH_SPIN_FAST,
+    DASH_SPIN_SLOW_HUE,
+    DASH_SPIN_FAST_HUE,
     SPARKLE_RAINBOW,
     SPARKLE_WHITE,
     COLOR_GROUP,
-    SLOW_HUE, // Leave this first.
     HUE_BARS_EFFECT,
     PURPLE_BLUES_EFFECT,
     POLICE_EFFECT,
@@ -62,7 +70,6 @@ const uint8_t EFFECTS[] = {
     SPARKLE_RAINBOW,
     SPARKLE_WHITE,
     HUE_BARS_EFFECT,
-    POLICE_EFFECT,
     CANDLE_EFFECT,
     SOLID_0_EFFECT,
     SOLID_1_EFFECT,
@@ -75,7 +82,6 @@ const uint8_t EFFECTS[] = {
     SOLID_8_EFFECT,
     SOLID_9_EFFECT,
     SOLID_10_EFFECT,
-    PURPLE_BLUES_EFFECT,
 };
 
 void effectRenderLoop(uint8_t effectIdx, struct EffectDataPacket *effectState)
@@ -96,8 +102,20 @@ void effectRenderLoop(uint8_t effectIdx, struct EffectDataPacket *effectState)
   case LOADING_EFFECT: // This is the loading one.
     throbEffectLoop(effectState, 0);
     break;
+  case DASH_SPIN_SLOW: // This is the loading one.
+    dashSpinEffectLoop(effectState, 1000);
+    break;
+  case DASH_SPIN_FAST: // This is the loading one.
+    dashSpinEffectLoop(effectState, 200);
+    break;
+  case DASH_SPIN_SLOW_HUE: // This is the loading one.
+    dashSpinEffectLoop(effectState, 10000, true);
+    break;
+  case DASH_SPIN_FAST_HUE: // This is the loading one.
+    dashSpinEffectLoop(effectState, 2000, true);
+    break;
   case COLOR_GROUP: // This is the loading one.
-    groupSolidColor(effectState, 50);
+    groupSolidColorEffectLoop(effectState, 50);
     break;
   case DOT_SPIN_EFFECT:
     // spinEffectLoop(effectState, 2000);

@@ -2,8 +2,9 @@
 void sparkleEffectLoop(struct EffectDataPacket *effectState, uint8_t sat)
 {
 
-  const uint8_t SPARKLE_BATCH_CNT = LED_CNT / 10;
+  const uint8_t SPARKLE_BATCH_CNT = LED_CNT;
 
+  zeroOutStrip();
   for (uint8_t i = 0; i < SPARKLE_BATCH_CNT; i++)
   {
     const uint16_t seed = effectState->loopPosition * i;

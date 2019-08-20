@@ -1,6 +1,6 @@
 
 
-void groupSolidColor(struct EffectDataPacket *effectState, uint8_t colorCnt)
+void groupSolidColorEffectLoop(struct EffectDataPacket *effectState, uint8_t colorCnt)
 {
 
   const uint8_t colorIdx = effectState->transmitterId % colorCnt;
