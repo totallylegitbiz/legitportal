@@ -40,7 +40,6 @@ const run = async () => {
 
 (async () => {
   do {
-    console.log("Running...");
     await run();
     await delay(500);
   } while (true);
