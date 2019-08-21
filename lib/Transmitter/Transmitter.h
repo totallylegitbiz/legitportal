@@ -6,7 +6,7 @@
 #include <RF24.h>
 
 //address through which two modules communicate.
-const byte address[6] = "AC28PR";
+const byte address[6] = "AC28PR"; // Generated randomly, hope it's unique!
 
 const uint16_t pingIntervalMin = 1000;
 const uint16_t pingIntervalMax = 5000;
@@ -31,12 +31,12 @@ const uint16_t OVERRIDE_TIMEOUT = 10000; // 10 seconds after device stops receiv
 const uint16_t MAX_AGE = 10000;
 const uint16_t MAX_AGE_GRACE = 5000;
 
-void blink(int pin)
-{
-  digitalWrite(pin, HIGH);
-  delay(50);
-  digitalWrite(pin, LOW);
-}
+// void blink(int pin)
+// {
+//   digitalWrite(pin, HIGH);
+//   delay(50);
+//   digitalWrite(pin, LOW);
+// }
 
 void setupStatusLED()
 {
@@ -45,9 +45,9 @@ void setupStatusLED()
   pinMode(config.BLUE_LED_PIN, OUTPUT);
   pinMode(LED_BUILTIN, OUTPUT);
 
-  blink(config.RED_LED_PIN);
-  blink(config.GREEN_LED_PIN);
-  blink(config.BLUE_LED_PIN);
+  // blink(config.RED_LED_PIN);
+  // blink(config.GREEN_LED_PIN);
+  // blink(config.BLUE_LED_PIN);
 }
 
 void radioSetup()
@@ -247,9 +247,6 @@ void transmitterReceiveLoop(struct EffectDataPacket *effectState)
 
     // Copy over the state to our local state.
     effectState->activeEffect = nextEffectDataPacket.activeEffect;
-    Serial.println("nextEffectDataPacket.effectModifier ->");
-    Serial.println(nextEffectDataPacket.effectModifier);
-
     effectState->effectModifier = nextEffectDataPacket.effectModifier;
     effectState->sourceTransmitterId = nextEffectDataPacket.sourceTransmitterId;
     effectState->age = nextEffectDataPacket.age;
@@ -282,9 +279,11 @@ void transmitterReceiveLoop(struct EffectDataPacket *effectState)
 
   if (!hasGottenSync && millis() > syncTimeout)
   {
+    // Sync timeout reached. Reset everything and transmit the current state.
     SERIAL_PRINTLN("Sync timeout reached, starting..");
     SERIAL_PRINT("syncTimeout: ");
     SERIAL_PRINTLN(syncTimeout);
+
     hasGottenSync = true;
     effectState->activeEffect = 0;
     effectState->sourceTransmitterId = config.TRANSMITTER_ID; // Since we are assuming our own effect, we are the source now.
@@ -311,7 +310,7 @@ void transmitterTransmitLoop(struct EffectDataPacket *effectState)
   {
     if (isMine)
     {
-      // This is mine, ping an update with a new age.
+      // This is mine, sending state again to fix clock drift.
       transmitEffectDataPacket(effectState, true);
     }
     else
@@ -326,14 +325,9 @@ void transmitterTransmitLoop(struct EffectDataPacket *effectState)
 void transmitterLoop(struct EffectDataPacket *effectState)
 {
 
-  // const bool writeOnly = config.ROLE == DeviceRole::ATARI;
-
   if (millis() > overRideUntilTs)
   {
     // Only transmit when we don't have an active over ride.
-    // if ()
-    // MAX_AGE
-    // MAX_AGE_GRACE
 
     if (effectState->age > MAX_AGE)
     {
@@ -349,9 +343,6 @@ void transmitterLoop(struct EffectDataPacket *effectState)
 
     transmitterTransmitLoop(effectState);
   }
-  // if (!writeOnly)
-  // {
-  // If it's atari, don't receive, doesn't mattter.
+
   transmitterReceiveLoop(effectState);
-  // }
 }
