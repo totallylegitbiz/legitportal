@@ -1,8 +1,14 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
+#define DEBUG 1
+
+#include <Random.h>
+
 #ifndef ELED_CNT
 #error SET ELED_CNT PLEASE
+#else
+const uint16_t LED_CNT = ELED_CNT;
 #endif
 
 const uint8_t MAX_LEDS = 200; // This is the max number of LEDs for any target.
@@ -15,23 +21,31 @@ const uint8_t PULSE_REMOTE = 4;
 const uint8_t PORTAL = 5;
 
 const uint8_t LED_OFFSET = 0;
-const uint16_t LED_CNT = ELED_CNT;
+
 const uint8_t LED_PIN = 8;
 
-CRGB cleds[LED_CNT];
+// CRGB cleds[LED_CNT];
 CRGB leds[LED_CNT]; // This is our local copy of leds.
+
+const int UNUSED_PIN = A3;
+
+enum class DeviceRole
+{
+  BIKE = 0,
+  CAMP = 1,
+  ATARI = 3,
+};
 
 // This is the base config.
 typedef struct Config
 {
-
-  uint8_t DEVICE_TYPE = BIKE;
-
-  bool DIAGNOSTIC_MODE = false;
-
   // Effect Loop config
-  const uint32_t EFFECT_LOOP_MS = 60 * 1000;
-  const uint8_t LED_BRIGHTNESS = 20; // 0-255 for overall brightness.
+  const uint32_t EFFECT_LOOP_MS = 300000; // 5 minute loop
+
+  // LED
+  // Parameters for  FastLED.setMaxPowerInVoltsAndMilliamps
+  const uint8_t MAX_VOLTS = 5;
+  uint32_t MAX_MAMP = 50; // TODO(jorgelo): Make this a build flag?
 
   // RGB Status LED
   const int RED_LED_PIN = A0;
@@ -39,10 +53,10 @@ typedef struct Config
   const int BLUE_LED_PIN = A2;
 
   // Dip Config
-  const int DIP_PIN_0 = 2;
-  const int DIP_PIN_1 = 3;
-  const int DIP_PIN_2 = 4;
-  const int DIP_PIN_3 = 5;
+  // const int DIP_PIN_0 = 2;
+  // const int DIP_PIN_1 = 3;
+  // const int DIP_PIN_2 = 4;
+  // const int DIP_PIN_3 = 5;
 
   // Sensor Pin
   const int SENSOR_PIN = A7;
@@ -54,52 +68,83 @@ typedef struct Config
   // EFFECT BUTTON
   const int EFFECT_BUTTON_PIN = 6;
 
-  int TRANSMITTER_ID = random(1, 65535);
+  uint16_t TRANSMITTER_ID;
+  DeviceRole ROLE = DeviceRole::BIKE;
 };
 
-uint8_t getDipValue(Config config)
+// uint8_t getDipValue(Config config)
+// {
+//   // DIP
+//   pinMode(config.DIP_PIN_0, INPUT_PULLUP);
+//   pinMode(config.DIP_PIN_1, INPUT_PULLUP);
+//   pinMode(config.DIP_PIN_2, INPUT_PULLUP);
+//   pinMode(config.DIP_PIN_3, INPUT_PULLUP);
+
+//   const bool d0 = digitalRead(config.DIP_PIN_0);
+//   const bool d1 = digitalRead(config.DIP_PIN_1);
+//   const bool d2 = digitalRead(config.DIP_PIN_2);
+//   const bool d3 = digitalRead(config.DIP_PIN_3);
+
+//   // Very simple bit math
+//   return !d0 + (!d1 * 2) + (!d2 * 4) + (!d3 * 8);
+// }
+
+DeviceRole getDeviceRole()
 {
-  // DIP
-  pinMode(config.DIP_PIN_0, INPUT_PULLUP);
-  pinMode(config.DIP_PIN_1, INPUT_PULLUP);
-  pinMode(config.DIP_PIN_2, INPUT_PULLUP);
-  pinMode(config.DIP_PIN_3, INPUT_PULLUP);
 
-  const bool d0 = digitalRead(config.DIP_PIN_0);
-  const bool d1 = digitalRead(config.DIP_PIN_1);
-  const bool d2 = digitalRead(config.DIP_PIN_2);
-  const bool d3 = digitalRead(config.DIP_PIN_3);
-
-  // Very simple bit math
-  return !d0 + (!d1 * 2) + (!d2 * 4) + (!d3 * 8);
+#ifndef EDEVICE_ROLE
+#error Please set DEVICE_ROLE
+#else
+  switch ((DeviceRole)EDEVICE_ROLE)
+  {
+  case DeviceRole::BIKE:
+    return DeviceRole::BIKE;
+  case DeviceRole::CAMP:
+    return DeviceRole::CAMP;
+  case DeviceRole::ATARI:
+    return DeviceRole::ATARI;
+  default:
+    SERIAL_PRINTLN("DEVICE_ROLE not found");
+  }
+#endif
 }
 
 Config getConfig()
 {
   Config outConfig;
 
-  outConfig.DEVICE_TYPE = getDipValue(outConfig);
+  reseedRandom();
 
-  switch (outConfig.DEVICE_TYPE)
+  outConfig.ROLE = getDeviceRole();
+  outConfig.TRANSMITTER_ID = random(1, 65535);
+
+  switch (outConfig.ROLE)
   {
-  case BIKE:
+  case DeviceRole::BIKE:
     // Bike specific
+    outConfig.MAX_MAMP = 500;
+    break;
+  case DeviceRole::CAMP:
+    // Camp specific
+    outConfig.MAX_MAMP = 1000;
     break;
   }
 
   return outConfig;
 }
 
-#ifndef EDEFAULT_EFFECT
-#define EDEFAULT_EFFECT 0;
+#if !(EDEFAULT_EFFECT + 0)
+#define EDEFAULT_EFFECT 255
 #endif
 
 typedef struct EffectDataPacket
 {
-  uint8_t loopPosition = 0;
+  uint32_t loopPosition = 0;
   uint8_t activeEffect = EDEFAULT_EFFECT;
-  int16_t sourceTransmitterId = 0; // If the sourceTransmitterId !== transmitterId it's a relay.
-  int16_t transmitterId = 0;
+  uint16_t effectModifier = 0;
+  uint16_t sourceTransmitterId; // If the sourceTransmitterId !== transmitterId it's a relay.
+  uint16_t transmitterId;
+  DeviceRole role;
   uint32_t age = 0;
 };
 

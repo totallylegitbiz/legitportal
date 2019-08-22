@@ -39,27 +39,31 @@ void fadeUp(uint8_t by)
 
 int notRandom(uint16_t from, uint16_t to, uint16_t seed)
 {
+
   randomSeed(seed);
   const uint16_t rand = random(from, to);
-  randomSeed(analogRead(0));
+  randomSeed(analogRead(UNUSED_PIN));
 
   return rand;
 }
 
-void zeroOutOutputStrip()
+int yesRandom(uint16_t from, uint16_t to)
 {
-  for (uint16_t i = 0; i < LED_CNT + LED_OFFSET; i++)
-  {
-    cleds[i] = CRGB(0, 0, 0);
-  }
+  reseedRandom();
+  return random(from, to);
 }
+
+// void zeroOutOutputStrip()
+// {
+//   for (uint16_t i = 0; i < LED_CNT + LED_OFFSET; i++)
+//   {
+//     cleds[i] = CRGB(0, 0, 0);
+//   }
+// }
 
 void zeroOutStrip()
 {
-  for (uint16_t i = 0; i < LED_CNT; i++)
-  {
-    leds[i] = CRGB(0, 0, 0);
-  }
+  FastLED.clear();
 }
 
 void colorOutStrip(CRGB color)
@@ -80,22 +84,22 @@ void colorOutStrip(CHSV color)
 
 void copyLedsWithOffset()
 {
-  for (uint16_t i = 0; i < LED_CNT; i++)
-  {
-    cleds[i + LED_OFFSET] = leds[i];
-  }
+  // for (uint16_t i = 0; i < LED_CNT; i++)
+  // {
+  //   cleds[i + LED_OFFSET] = leds[i];
+  // }
 }
 
-void copyLedsWithOffsetGamma()
-{
-  for (uint16_t i = 0; i < LED_CNT; i++)
-  {
-    const int idx = i + LED_OFFSET;
-    cleds[idx].r = dim8_video(leds[idx].r);
-    cleds[idx].g = dim8_video(leds[idx].g);
-    cleds[idx].b = dim8_video(leds[idx].b);
-  }
-}
+// void copyLedsWithOffsetGamma()
+// {
+//   for (uint16_t i = 0; i < LED_CNT; i++)
+//   {
+//     const int idx = i + LED_OFFSET;
+//     cleds[idx].r = dim8_video(leds[idx].r);
+//     cleds[idx].g = dim8_video(leds[idx].g);
+//     cleds[idx].b = dim8_video(leds[idx].b);
+//   }
+// }
 
 class RunEvery
 {
@@ -123,4 +127,23 @@ bool RunEvery::shouldRun()
   }
 
   return false;
+}
+
+#ifdef __arm__
+// should use uinstd.h to define sbrk but Due causes a conflict
+extern "C" char *sbrk(int incr);
+#else  // __ARM__
+extern char *__brkval;
+#endif // __arm__
+
+int freeMemory()
+{
+  char top;
+#ifdef __arm__
+  return &top - reinterpret_cast<char *>(sbrk(0));
+#elif defined(CORE_TEENSY) || (ARDUINO > 103 && ARDUINO != 151)
+  return &top - __brkval;
+#else  // __arm__
+  return __brkval ? &top - __brkval : &top - __malloc_heap_start;
+#endif // __arm__
 }

@@ -8,8 +8,8 @@ void fadeSparkleEffectLoop(struct EffectDataPacket *effectState, bool isFadeDown
 
   const uint8_t sparkleRefreshHz = LED_CNT * 5;
   const uint8_t fadeRefreshHz = sparkleRefreshHz;
-  const uint16_t fadeSparkleLoopMs = 600000;
-  const uint8_t loopPosition = effectState->loopPosition % fadeSparkleLoopMs;
+  const uint32_t fadeSparkleLoopMs = (uint32_t)600000;
+  const uint32_t loopPosition = effectState->loopPosition % fadeSparkleLoopMs;
 
   const uint8_t hue1 = 128;
   const uint8_t hue2 = 224;
@@ -41,6 +41,4 @@ void fadeSparkleEffectLoop(struct EffectDataPacket *effectState, bool isFadeDown
     }
     lastFadeRefreshMs = millis();
   }
-
-  copyLedsWithOffsetGamma();
 }

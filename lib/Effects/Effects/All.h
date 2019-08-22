@@ -15,4 +15,7 @@
 #include <Effects/CandyCane.h>
 #include <Effects/Solid.h>
 #include <Effects/Sparkle.h>
+#include <Effects/HueCycle.h>
+#include <Effects/GroupSolid.h>
+#include <Effects/DashSpin.h>
 #endif

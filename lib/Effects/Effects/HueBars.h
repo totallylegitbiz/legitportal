@@ -1,24 +1,18 @@
-
-#include <FastLED.h>
-
-void hueBarsEffectLoop(struct EffectDataPacket *effectState, uint16_t loopMs)
+void hueBarsEffectLoop(struct EffectDataPacket *effectState, uint16_t loopMs, uint16_t hueLoopMs, uint8_t width)
 {
+  const float loopPercent = (float)(effectState->loopPosition % loopMs) / loopMs;
+  const float hueLoopPercent = (float)(effectState->loopPosition % hueLoopMs) / hueLoopMs;
 
-  const float loopPercent = float(effectState->loopPosition % loopMs) / loopMs;
-  // const float huePercent = float(effectState->loopPosition) / config.EFFECT_LOOP_MS;
+  const uint8_t lines = ceil(LED_CNT / 30);
+  const uint16_t offset = loopPercent * LED_CNT;
 
-  const uint8_t lines = LED_CNT / 30;
+  zeroOutStrip();
 
-  const int offset = loopPercent * LED_CNT;
-
-  // zeroOutStrip();
   for (uint16_t i = 0; i < lines; i++)
   {
     const float linePercent = float(i) / lines;
-    const int baseIdx = (int((linePercent)*LED_CNT) + offset) % 255;
+    const uint8_t baseIdx = (int((linePercent)*LED_CNT) + offset) % 255;
 
-    drawDash(2, baseIdx, CHSV(20, 255, 255));
+    drawDash(width, baseIdx, CHSV(255 * hueLoopPercent, 255, 255));
   }
-
-  copyLedsWithOffset();
 }
