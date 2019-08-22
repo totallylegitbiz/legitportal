@@ -23,7 +23,12 @@ EffectDataPacket nextEffectDataPacket;
 
 // Dealing with presync
 bool hasGottenSync = false;
-const uint32_t syncTimeout = 0; //pingIntervalMax * 2; //Wait until at most double the timeout until starting to transmit.
+
+#if (EDEBUG + 0)
+const uint32_t syncTimeout = 0;
+#else
+const uint32_t syncTimeout = pingIntervalMax * 2;
+#endif
 
 // Temporary override.
 const uint16_t OVERRIDE_TIMEOUT = 10000; // 10 seconds after device stops receiving messages.
